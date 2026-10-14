@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Astral BD pipeline</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  /* Astral palette, taken from the logo */
+  --ink:#1A2B1F;        /* logo wordmark */
+  --ink-2:#55635A;      /* secondary text */
+  --ring:#3D4A42;       /* logo outer ring */
+  --blue:#3B7CF6;       /* logo star */
+  --blue-deep:#2558C9;
+  --sky:#6E9BF0;        /* logo inner ring and orbit line */
+  --wash:#EAF1FE;
+  --paper:#F3F5F8; --card:#FFFFFF; --line:#DDE3EA; --line-2:#ECF0F4;
+  --alert:#C4321F; --alert-wash:#FDECEA; --ok:#23794A;
+  --r-sm:8px; --r-md:12px; --r-lg:16px;
+  --shadow:0 1px 2px rgba(26,43,31,.06),0 4px 14px rgba(26,43,31,.05);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  font-feature-settings:'cv11','ss01';
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.01em}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+[hidden]{display:none!important}
+.muted{color:var(--ink-2)}
+
+/* header */
+.top{position:sticky;top:0;z-index:25;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:12px 28px;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:16px;min-width:0}
+.brand img{height:38px;width:auto;display:block}
+.brand .divider{width:1px;height:30px;background:var(--line)}
+.brand .title{display:flex;flex-direction:column;line-height:1.2}
+.brand h1{font-size:16px;font-weight:700}
+.mode{font-size:12.5px;color:var(--ink-2);display:inline-flex;align-items:center;gap:6px}
+.mode::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--sky)}
+.mode.live::before{background:var(--ok)}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:var(--r-sm);cursor:pointer;font-weight:500;line-height:1.2;min-height:36px;transition:background .12s,border-color .12s,box-shadow .12s}
+.btn:hover{background:#F7F9FB;border-color:#CBD3DC}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600;box-shadow:0 1px 2px rgba(37,88,201,.3)}
+.btn.primary:hover{background:var(--blue-deep);border-color:var(--blue-deep)}
+.btn.danger{color:var(--alert);border-color:#EFC2BC}
+.btn.danger:hover{background:var(--alert-wash)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.ghost:hover{background:var(--line-2)}
+.more{position:relative}
+.more summary{list-style:none}
+.more summary::-webkit-details-marker{display:none}
+.more .menu{position:absolute;right:0;top:calc(100% + 6px);z-index:20;min-width:230px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:6px;box-shadow:0 12px 32px rgba(26,43,31,.14)}
+.more .menu button{display:block;width:100%;text-align:left;border:0;background:none;padding:9px 11px;border-radius:6px;cursor:pointer}
+.more .menu button:hover{background:var(--wash)}
+.banner{max-width:1280px;margin:16px auto 0;padding:10px 14px;background:var(--wash);color:var(--blue-deep);border:1px solid #CFDDFB;border-radius:var(--r-sm);font-size:13px}
+.banner.warn{background:var(--alert-wash);color:var(--alert);border-color:#F3C9C3}
+.bannerwrap{padding:0 28px}
+
+main{padding:20px 28px 64px;max-width:1336px;margin:0 auto}
+
+/* pipeline strip: the logo's orbit line with a node per stage */
+.beamcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:18px 14px 16px;overflow-x:auto}
+.beamhead{display:flex;justify-content:space-between;align-items:baseline;padding:0 8px 6px}
+.beamhead h2{font-size:15px}
+.beamhead span{color:var(--ink-2);font-size:13px}
+.beam{position:relative;display:grid;grid-template-columns:repeat(8,1fr);min-width:680px}
+.beam::before{content:'';position:absolute;left:6.25%;right:6.25%;bottom:23px;height:4px;border-radius:2px;background:var(--sky)}
+.stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;padding:8px 4px 0;border-radius:var(--r-md);cursor:pointer}
+.stage:hover{background:#F6F8FC}
+.stage .n{font-size:26px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.stage .l{font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+.stage .dot{position:relative;z-index:1;margin:10px 0 9px;width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid var(--sky)}
+.stage.has .dot{background:var(--c);border-color:var(--c)}
+.stage.zero .n{color:#AEB8B1}
+.stage[aria-pressed="true"]{background:var(--wash)}
+.stage[aria-pressed="true"] .l{color:var(--blue-deep);font-weight:600}
+.stage[aria-pressed="true"] .dot{box-shadow:0 0 0 5px rgba(59,124,246,.22)}
+
+/* toolbar */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:20px 0 16px}
+.tabs{display:inline-flex;background:#E6EBF1;border-radius:10px;padding:4px;gap:2px}
+.tabs button{border:0;background:transparent;padding:7px 15px;border-radius:7px;cursor:pointer;font-weight:500;color:var(--ink-2)}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(26,43,31,.14)}
+.toolbar input[type=search],.toolbar select{height:38px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--card);padding:0 12px}
+.toolbar input[type=search]{flex:1 1 220px;min-width:180px;max-width:360px;padding-left:34px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2355635A' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='m11 11 3.5 3.5'/%3E%3C/svg%3E") no-repeat 11px 50%}
+
+/* table */
+.tablewrap{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);overflow-x:auto;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:separate;border-spacing:0;min-width:520px;table-layout:fixed}
+th:nth-child(1){width:26%}th:nth-child(2){width:16%}th:nth-child(3){width:14%}th:nth-child(4){width:9%}th:nth-child(5){width:26%}th:nth-child(6){width:9%}
+td{overflow-wrap:anywhere}
+th{text-align:left;font-weight:600;font-size:12.5px;color:var(--ink-2);padding:0;border-bottom:1px solid var(--line);background:#FAFBFC;white-space:nowrap}
+th .th{border:0;background:none;padding:11px 14px;width:100%;text-align:left;cursor:pointer;font-weight:600;color:inherit}
+th .th:hover{color:var(--ink)}
+th[aria-sort="ascending"] .th::after{content:' \2191';color:var(--blue)}
+th[aria-sort="descending"] .th::after{content:' \2193';color:var(--blue)}
+td{padding:12px 14px;border-bottom:1px solid var(--line-2);vertical-align:top}
+tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer;transition:background .1s}
+tbody tr:hover td{background:#F7F9FD}
+.co{border:0;background:none;padding:0;cursor:pointer;font-weight:600;text-align:left;color:var(--ink)}
+.co:hover{color:var(--blue-deep)}
+.sub{font-size:12.5px;color:var(--ink-2)}
+.pill{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;padding:3px 10px 3px 8px;border-radius:999px;background:#F2F5F9;font-size:13px;font-weight:500}
+.pill i{width:9px;height:9px;border-radius:50%}
+.fit{display:inline-flex;gap:3px;align-items:flex-end;height:14px}
+.fit i{width:5px;background:var(--line);border-radius:2px}
+.fit i:nth-child(1){height:6px}.fit i:nth-child(2){height:8px}.fit i:nth-child(3){height:10px}.fit i:nth-child(4){height:12px}.fit i:nth-child(5){height:14px}
+.fit i.on{background:var(--blue)}
+.due{margin-top:2px}
+.due.overdue{color:var(--alert);font-weight:600}
+.due.today{color:var(--blue-deep);font-weight:600}
+
+.grouphead{display:flex;align-items:center;gap:8px;margin:26px 0 10px}
+.grouphead:first-child{margin-top:0}
+.grouphead h2{font-size:15px}
+.grouphead .c{min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:#E6EBF1;color:var(--ink-2);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center}
+.grouphead.overdue h2{color:var(--alert)}
+.grouphead.overdue .c{background:var(--alert-wash);color:var(--alert)}
+.grouphead.today .c{background:var(--wash);color:var(--blue-deep)}
+
+.empty{background:var(--card);border:1px dashed #C3CDD8;border-radius:var(--r-lg);padding:44px 24px;text-align:center}
+.empty .mark{width:52px;height:52px;margin:0 auto 14px;display:block;opacity:.9}
+.empty h2{font-size:17px;margin-bottom:6px}
+.empty p{margin:0 auto 18px;max-width:46ch;color:var(--ink-2)}
+.empty .row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+/* board */
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);gap:12px;overflow-x:auto;padding-bottom:10px;align-items:start}
+.col{background:#E9EDF2;border:1px solid transparent;border-radius:var(--r-md);padding:10px;min-height:160px;transition:background .12s,border-color .12s}
+.col.over{background:var(--wash);border-color:var(--sky)}
+.col h3{font-size:13.5px;display:flex;align-items:center;justify-content:space-between;gap:7px;padding:2px 2px 4px}
+.col h3 .pill{background:transparent;padding:0;font-weight:600;font-size:13.5px}
+.col h3 .c{color:var(--ink-2);font-weight:600;font-size:12px;background:#fff;border-radius:999px;padding:1px 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin-top:8px;cursor:grab;box-shadow:0 1px 2px rgba(26,43,31,.05);transition:box-shadow .12s,transform .12s}
+.card:hover{box-shadow:0 6px 16px rgba(26,43,31,.1)}
+.card:active{cursor:grabbing}
+.card .co{display:block;margin-bottom:2px}
+.card.dragging{opacity:.45}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(26,43,31,.32);z-index:30}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--card);z-index:31;transform:translateX(100%);visibility:hidden;transition:transform .2s cubic-bezier(.2,.7,.2,1),visibility 0s .2s;box-shadow:-16px 0 40px rgba(26,43,31,.16)}
+.drawer.open{transform:none;visibility:visible;transition:transform .2s cubic-bezier(.2,.7,.2,1)}
+.drawer form{display:flex;flex-direction:column;height:100%}
+.dr-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.dr-head h2{font-size:18px}
+.dr-body{padding:18px 20px;overflow-y:auto;flex:1}
+.dr-foot{display:flex;gap:8px;align-items:center;padding:12px 20px;border-top:1px solid var(--line);background:#FAFBFC}
+.grow{flex:1}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}
+.grid .span2{grid-column:1/-1}
+label{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+label input,label select,label textarea{border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;padding:9px 11px;color:var(--ink);font-weight:400;font-size:14px;width:100%;transition:border-color .12s,box-shadow .12s}
+label input:focus,label select:focus,label textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,124,246,.18)}
+label textarea{resize:vertical}
+.doneWrap{display:flex;align-items:flex-end}
+.drawer h3{font-size:14px;margin:24px 0 8px}
+.activity{list-style:none;margin:0;padding:0 0 0 14px;border-left:2px solid var(--line-2)}
+.activity li{position:relative;padding:6px 0 10px}
+.activity li::before{content:'';position:absolute;left:-20px;top:11px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--sky)}
+.activity time{display:block;font-size:12px;color:var(--ink-2)}
+
+/* sign-in */
+dialog{border:0;border-radius:var(--r-lg);padding:28px;width:min(400px,92vw);box-shadow:0 24px 60px rgba(26,43,31,.28)}
+dialog::backdrop{background:rgba(26,43,31,.45)}
+dialog .logo{height:40px;width:auto;margin-bottom:16px}
+dialog h2{font-size:19px;margin-bottom:6px}
+dialog p{margin:0 0 14px;color:var(--ink-2)}
+dialog form{display:flex;flex-direction:column;gap:12px}
+.err{color:var(--alert);min-height:1.2em;margin:0!important}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:10px;z-index:50;max-width:92vw;box-shadow:0 10px 30px rgba(26,43,31,.3)}
+
+.only-sm{display:none!important}
+@media (max-width:900px){
+  .hide-sm{display:none}
+}
+@media (max-width:640px){
+  .more .menu .only-sm{display:block!important}
+}
+@media (max-width:640px){
+  .top{padding:10px 16px}
+  .bannerwrap{padding:0 16px}
+  main{padding:16px 16px 64px}
+  .brand img{height:30px}
+  .brand .divider,.brand .title h1{display:none}
+  .grid{grid-template-columns:1fr}
+  .top{flex-wrap:nowrap}
+  #btn-import,#btn-export{display:none}
+  .actions{flex-wrap:nowrap}
+  .brand .title{display:none}
+  table{min-width:0}
+  th:nth-child(1){width:40%}th:nth-child(3){width:27%}th:nth-child(5){width:33%}
+  td .pill{white-space:normal;overflow-wrap:normal;background:none;padding:0;align-items:baseline;font-size:12.5px}
+  th:nth-child(1){width:38%}th:nth-child(3){width:30%}th:nth-child(5){width:32%}
+  td,th .th{padding-left:12px;padding-right:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <img src="logo.png" alt="Astral Systems" width="105" height="38">
+    <span class="divider" aria-hidden="true"></span>
+    <div class="title">
+      <h1 id="app-name">BD pipeline</h1>
+      <span id="mode" class="mode"></span>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn" id="btn-import" type="button">Import CSV</button>
+    <button class="btn" id="btn-export" type="button">Export CSV</button>
+    <details class="more" id="more">
+      <summary class="btn">More</summary>
+      <div class="menu">
+        <button type="button" id="m-import" class="only-sm">Import CSV</button>
+        <button type="button" id="m-export" class="only-sm">Export CSV</button>
+        <button type="button" id="m-template">Download CSV template</button>
+        <button type="button" id="m-examples">Load example leads</button>
+        <button type="button" id="m-clear">Remove example leads</button>
+        <button type="button" id="m-signout" hidden>Sign out</button>
+      </div>
+    </details>
+    <button class="btn primary" id="btn-new" type="button">New lead</button>
+  </div>
+  <input type="file" id="file" accept=".csv,.tsv,.txt,text/csv" hidden>
+</header>
+
+<div class="bannerwrap"><div id="banner" class="banner" hidden></div></div>
+
+<main>
+  <section class="beamcard" aria-labelledby="beam-title">
+    <div class="beamhead"><h2 id="beam-title">Pipeline</h2><span id="beam-total"></span></div>
+    <nav id="beam" class="beam" aria-label="Filter by stage"></nav>
+  </section>
+
+  <div class="toolbar">
+    <div class="tabs" role="tablist" aria-label="View">
+      <button type="button" role="tab" data-view="due">Due this week</button>
+      <button type="button" role="tab" data-view="all">All leads</button>
+      <button type="button" role="tab" data-view="board">Board</button>
+    </div>
+    <input type="search" id="q" placeholder="Search company, contact or notes" aria-label="Search leads">
+    <select id="flt-group" aria-label="Customer group"></select>
+    <select id="flt-owner" aria-label="Owner"></select>
+    <button type="button" class="btn ghost" id="btn-clear" hidden>Clear filters</button>
+  </div>
+
+  <section id="view" role="tabpanel" aria-live="polite"></section>
+</main>
+
+<div id="scrim" class="scrim" hidden></div>
+<aside id="drawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-title" aria-hidden="true">
+  <form id="lead-form" novalidate>
+    <header class="dr-head">
+      <h2 id="dr-title">New lead</h2>
+      <button type="button" class="btn ghost" id="dr-close">Close</button>
+    </header>
+    <div class="dr-body">
+      <div class="grid">
+        <label class="span2">Company<input id="f-company" autocomplete="off"></label>
+        <label>Customer group<input id="f-group" list="dl-groups" autocomplete="off"></label>
+        <label>Source<input id="f-source" list="dl-sources" autocomplete="off"></label>
+        <label>Contact name<input id="f-contact" autocomplete="off"></label>
+        <label>Contact role<input id="f-role" autocomplete="off"></label>
+        <label>Email<input id="f-email" type="email" autocomplete="off"></label>
+        <label>Website<input id="f-website" inputmode="url" autocomplete="off"></label>
+        <label>Stage<select id="f-stage"></select></label>
+        <label>Fit (1 weak, 5 strong)<select id="f-fit"></select></label>
+        <label>Owner<select id="f-owner"></select></label>
+        <div></div>
+        <label class="span2">Next action<input id="f-next" autocomplete="off"></label>
+        <label>Next action date<input id="f-date" type="date"></label>
+        <div class="doneWrap"><button type="button" class="btn" id="btn-done">Done, set the next one</button></div>
+        <label class="span2">Notes<textarea id="f-notes" rows="4"></textarea></label>
+        <label class="span2">Log a note<input id="f-log" placeholder="e.g. Call with Sam, wants a quote for 200 samples" autocomplete="off"></label>
+      </div>
+      <h3>Activity</h3>
+      <ol id="activity" class="activity"></ol>
+    </div>
+    <footer class="dr-foot">
+      <button type="button" class="btn danger" id="btn-delete">Delete</button>
+      <span class="grow"></span>
+      <button type="button" class="btn" id="dr-cancel">Cancel</button>
+      <button type="submit" class="btn primary">Save lead</button>
+    </footer>
+  </form>
+</aside>
+<datalist id="dl-groups"></datalist>
+<datalist id="dl-sources"></datalist>
+
+<dialog id="signin">
+  <form id="signin-form">
+    <img class="logo" src="logo.png" alt="Astral Systems">
+    <h2>Sign in to BD pipeline</h2>
+    <p>Use the email address your admin added in Firebase.</p>
+    <label>Email<input id="si-email" type="email" autocomplete="username"></label>
+    <label>Password<input id="si-pass" type="password" autocomplete="current-password"></label>
+    <p id="si-err" class="err" role="alert"></p>
+    <button class="btn primary" type="submit">Sign in</button>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="config.js"></script>
+<script>
+(() => {
+'use strict';
+
+/* ---------- config & constants ---------- */
+const CFG = Object.assign({
+  appName: 'BD pipeline',
+  owners: [],
+  sources: ['AI research', 'Conference', 'LinkedIn', 'Inbound enquiry', 'Other'],
+  firebase: null
+}, window.CRM_CONFIG || {});
+
+const STAGES = [
+  { id: 'identified',   label: 'Identified',   color: '#B9CFFA' },
+  { id: 'contacted',    label: 'Contacted',    color: '#8FB2F6' },
+  { id: 'replied',      label: 'Replied',      color: '#6E9BF0' },
+  { id: 'call',         label: 'Call booked',  color: '#4F86F4' },
+  { id: 'requirements', label: 'Requirements', color: '#3B7CF6' },
+  { id: 'quoted',       label: 'Quoted',       color: '#2558C9' },
+  { id: 'won',          label: 'Won',          color: '#23794A' },
+  { id: 'lost',         label: 'Lost',         color: '#9AA49E' }
+];
+const stageOf = id => STAGES.find(s => s.id === id) || STAGES[0];
+const isClosed = l => l.stage === 'won' || l.stage === 'lost';
+
+/* ---------- small helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const uid = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'id-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const today = () => ymd(new Date());
+const parseYmd = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const diffDays = (a, b) => Math.round((parseYmd(a) - parseYmd(b)) / 86400000);
+const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return ymd(d); };
+function weekEnd() { const d = new Date(); const dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() + (6 - dow)); return ymd(d); }
+const dateFmt = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+const dateTimeFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+
+function bucket(l) {
+  if (isClosed(l)) return 'closed';
+  if (!l.nextDate) return 'none';
+  const t = today();
+  if (l.nextDate < t) return 'overdue';
+  if (l.nextDate === t) return 'today';
+  if (l.nextDate <= weekEnd()) return 'week';
+  return 'later';
+}
+function fmtDue(l) {
+  if (!l.nextDate) return '';
+  const d = diffDays(l.nextDate, today());
+  if (d < 0) return `Overdue ${-d}d`;
+  if (d === 0) return 'Today';
+  if (d === 1) return 'Tomorrow';
+  return dateFmt.format(parseYmd(l.nextDate));
+}
+function safeUrl(u) {
+  if (!u) return '';
+  try {
+    const x = new URL(/^https?:\/\//i.test(u) ? u : 'https://' + u);
+    return (x.protocol === 'http:' || x.protocol === 'https:') ? x.href : '';
+  } catch { return ''; }
+}
+
+function blankLead() {
+  const now = new Date().toISOString();
+  return { id: uid(), company: '', group: '', contact: '', role: '', email: '', website: '', source: '', fit: 3,
+           stage: 'identified', nextAction: '', nextDate: '', owner: '', notes: '', activity: [], created: now, updated: now };
+}
+function normalise(raw) {
+  const b = blankLead();
+  const l = Object.assign(b, raw || {});
+  l.fit = Math.min(5, Math.max(1, parseInt(l.fit, 10) || 3));
+  if (!STAGES.some(s => s.id === l.stage)) l.stage = 'identified';
+  if (!Array.isArray(l.activity)) l.activity = [];
+  ['company','group','contact','role','email','website','source','nextAction','nextDate','owner','notes'].forEach(k => { l[k] = l[k] == null ? '' : String(l[k]); });
+  return l;
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = msg; t.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.hidden = true; }, 3800);
+}
+
+/* ---------- stores ---------- */
+function createLocalStore() {
+  const KEY = 'astral-bd-crm-v1';
+  let mem = null;               // fallback if localStorage is blocked
+  let listener = null;
+  const read = () => {
+    if (mem) return mem;
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; }
+  };
+  const write = arr => {
+    if (mem) { mem = arr; return; }
+    try { localStorage.setItem(KEY, JSON.stringify(arr)); } catch { mem = arr; }
+  };
+  const emit = () => listener && listener(read());
+  window.addEventListener('storage', e => { if (e.key === KEY) emit(); });
+  return {
+    mode: 'demo', user: '',
+    subscribe(fn) { listener = fn; emit(); },
+    async save(l) { const a = read().slice(); const i = a.findIndex(x => x.id === l.id); if (i >= 0) a[i] = l; else a.push(l); write(a); emit(); },
+    async saveMany(ls) { const a = read().slice(); ls.forEach(l => { const i = a.findIndex(x => x.id === l.id); if (i >= 0) a[i] = l; else a.push(l); }); write(a); emit(); },
+    async remove(id) { write(read().filter(x => x.id !== id)); emit(); },
+    async removeMany(ids) { const s = new Set(ids); write(read().filter(x => !s.has(x.id))); emit(); }
+  };
+}
+
+async function createFirebaseStore(cfg, onSignedIn, onSignedOut, onError) {
+  const base = 'https://www.gstatic.com/firebasejs/10.14.1/';
+  const [appM, authM, fsM] = await Promise.all([
+    import(base + 'firebase-app.js'), import(base + 'firebase-auth.js'), import(base + 'firebase-firestore.js')
+  ]);
+  const app = appM.initializeApp(cfg);
+  const auth = authM.getAuth(app);
+  const db = fsM.getFirestore(app);
+  const col = fsM.collection(db, 'leads');
+  let unsub = null;
+  const store = {
+    mode: 'sync', user: '',
+    subscribe(fn) {
+      if (unsub) unsub();
+      unsub = fsM.onSnapshot(col, snap => fn(snap.docs.map(d => d.data())), err => onError(err));
+    },
+    async save(l) { await fsM.setDoc(fsM.doc(db, 'leads', l.id), l); },
+    async saveMany(ls) {
+      for (let i = 0; i < ls.length; i += 400) {
+        const b = fsM.writeBatch(db);
+        ls.slice(i, i + 400).forEach(l => b.set(fsM.doc(db, 'leads', l.id), l));
+        await b.commit();
+      }
+    },
+    async remove(id) { await fsM.deleteDoc(fsM.doc(db, 'leads', id)); },
+    async removeMany(ids) {
+      for (let i = 0; i < ids.length; i += 400) {
+        const b = fsM.writeBatch(db);
+        ids.slice(i, i + 400).forEach(id => b.delete(fsM.doc(db, 'leads', id)));
+        await b.commit();
+      }
+    },
+    async signIn(email, pass) { await authM.signInWithEmailAndPassword(auth, email, pass); },
+    async signOut() { if (unsub) { unsub(); unsub = null; } await authM.signOut(auth); }
+  };
+  authM.onAuthStateChanged(auth, user => {
+    if (user) { store.user = user.email || 'You'; onSignedIn(store); }
+    else { store.user = ''; onSignedOut(); }
+  });
+  return store;
+}
+
+/* ---------- state ---------- */
+const state = { leads: [], view: 'due', stage: null, group: '', owner: '', q: '', sort: { k: 'company', dir: 1 }, editing: null, isNew: false };
+let store = null;
+let lastFocus = null;
+
+/* ---------- filtering ---------- */
+function matches(l, ignoreStage) {
+  if (!ignoreStage && state.stage && l.stage !== state.stage) return false;
+  if (state.group && l.group !== state.group) return false;
+  if (state.owner && l.owner !== state.owner) return false;
+  if (state.q) {
+    const hay = [l.company, l.group, l.contact, l.role, l.email, l.nextAction, l.notes].join(' ').toLowerCase();
+    if (!state.q.toLowerCase().split(/\s+/).filter(Boolean).every(t => hay.includes(t))) return false;
+  }
+  return true;
+}
+
+/* ---------- rendering ---------- */
+function render() { renderBeam(); renderToolbar(); renderView(); }
+
+function renderBeam() {
+  const counts = {};
+  STAGES.forEach(st => counts[st.id] = 0);
+  const visible = state.leads.filter(l => matches(l, true));
+  visible.forEach(l => { counts[l.stage]++; });
+  const open = visible.filter(l => !isClosed(l)).length;
+  $('#beam-total').textContent = state.leads.length ? `${open} open, ${visible.length - open} closed` : '';
+  $('#beam').innerHTML = STAGES.map(st =>
+    `<button type="button" class="stage ${counts[st.id] ? 'has' : 'zero'}" style="--c:${st.color}" data-stage="${st.id}" aria-pressed="${state.stage === st.id}" aria-label="${esc(st.label)}: ${counts[st.id]} lead${counts[st.id] === 1 ? '' : 's'}">` +
+    `<span class="n">${counts[st.id]}</span><span class="l">${esc(st.label)}</span><span class="dot" aria-hidden="true"></span></button>`).join('');
+}
+
+function renderToolbar() {
+  document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.view === state.view)));
+  const groups = [...new Set(state.leads.map(l => l.group).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  if (state.group && !groups.includes(state.group)) state.group = '';
+  const owners = [...new Set([...CFG.owners, ...state.leads.map(l => l.owner).filter(Boolean)])];
+  if (state.owner && !owners.includes(state.owner)) state.owner = '';
+  $('#flt-group').innerHTML = '<option value="">All customer groups</option>' + groups.map(g => `<option value="${esc(g)}"${g === state.group ? ' selected' : ''}>${esc(g)}</option>`).join('');
+  $('#flt-owner').innerHTML = '<option value="">All owners</option>' + owners.map(o => `<option value="${esc(o)}"${o === state.owner ? ' selected' : ''}>${esc(o)}</option>`).join('');
+  $('#btn-clear').hidden = !(state.stage || state.group || state.owner || state.q);
+  $('#dl-groups').innerHTML = groups.map(g => `<option value="${esc(g)}">`).join('');
+}
+
+function fitHtml(n) {
+  return `<span class="fit" role="img" aria-label="Fit ${n} of 5">${[1,2,3,4,5].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
+}
+
+function rowHtml(l) {
+  const st = stageOf(l.stage), b = bucket(l);
+  return `<tr data-id="${esc(l.id)}">` +
+    `<td><button type="button" class="co" data-open="${esc(l.id)}">${esc(l.company || '(no name)')}</button>` +
+      (l.contact ? `<div class="sub">${esc(l.contact)}${l.role ? ', ' + esc(l.role) : ''}</div>` : '') + `</td>` +
+    `<td class="hide-sm">${esc(l.group)}</td>` +
+    `<td><span class="pill"><i style="background:${st.color}"></i>${esc(st.label)}</span></td>` +
+    `<td class="hide-sm">${fitHtml(l.fit)}</td>` +
+    `<td>${l.nextAction ? esc(l.nextAction) : '<span class="muted">Not set</span>'}` +
+      (l.nextDate ? `<div class="sub due ${b}">${esc(fmtDue(l))}</div>` : '') + `</td>` +
+    `<td class="hide-sm">${esc(l.owner)}</td></tr>`;
+}
+
+const COLS = [
+  { k: 'company', t: 'Company' }, { k: 'group', t: 'Customer group', cls: 'hide-sm' }, { k: 'stage', t: 'Stage' },
+  { k: 'fit', t: 'Fit', cls: 'hide-sm' }, { k: 'next', t: 'Next action' }, { k: 'owner', t: 'Owner', cls: 'hide-sm' }
+];
+
+function sortLeads(list, k, dir) {
+  const cmp = {
+    company: (a, b) => a.company.localeCompare(b.company),
+    group: (a, b) => a.group.localeCompare(b.group),
+    stage: (a, b) => STAGES.findIndex(s => s.id === a.stage) - STAGES.findIndex(s => s.id === b.stage),
+    fit: (a, b) => a.fit - b.fit,
+    owner: (a, b) => a.owner.localeCompare(b.owner),
+    next: (a, b) => (a.nextDate || '9999') < (b.nextDate || '9999') ? -1 : (a.nextDate || '9999') > (b.nextDate || '9999') ? 1 : 0
+  }[k];
+  return list.slice().sort((a, b) => cmp(a, b) * dir || a.company.localeCompare(b.company));
+}
+
+function tableHtml(list, sortable) {
+  const head = COLS.map(c => {
+    const sorted = sortable && state.sort.k === c.k;
+    const aria = sorted ? (state.sort.dir === 1 ? 'ascending' : 'descending') : 'none';
+    return `<th class="${c.cls || ''}" aria-sort="${aria}">` + (sortable ? `<button type="button" class="th" data-sort="${c.k}">${c.t}</button>` : `<span class="th" style="display:block;padding:9px 12px;font-weight:600">${c.t}</span>`) + `</th>`;
+  }).join('');
+  return `<div class="tablewrap"><table><thead><tr>${head}</tr></thead><tbody>${list.map(rowHtml).join('')}</tbody></table></div>`;
+}
+
+function emptyHtml() {
+  return `<div class="empty"><img class="mark" src="favicon.png" alt=""><h2>No leads yet</h2>
+    <p>Add a lead by hand, or import a CSV from your research. The CSV template shows the columns that import cleanly.</p>
+    <div class="row"><button class="btn primary" type="button" data-act="new">Add your first lead</button>
+    <button class="btn" type="button" data-act="import">Import CSV</button>
+    <button class="btn" type="button" data-act="template">Download CSV template</button>
+    <button class="btn ghost" type="button" data-act="examples">Load example leads</button></div></div>`;
+}
+
+function renderView() {
+  const host = $('#view');
+  if (!state.leads.length) { host.innerHTML = emptyHtml(); return; }
+  const list = state.leads.filter(l => matches(l));
+  if (state.view === 'all') {
+    host.innerHTML = list.length ? tableHtml(sortLeads(list, state.sort.k, state.sort.dir), true) : noMatchHtml();
+  } else if (state.view === 'board') {
+    renderBoard(host, list);
+  } else {
+    renderDue(host, list);
+  }
+}
+const noMatchHtml = () => `<div class="empty"><h2>No leads match</h2><p>Try a different search or clear the filters.</p><div class="row"><button class="btn" type="button" data-act="clear">Clear filters</button></div></div>`;
+
+function renderDue(host, list) {
+  const open = list.filter(l => !isClosed(l));
+  const groups = [['overdue', 'Overdue'], ['today', 'Due today'], ['week', 'Later this week'], ['none', 'Needs a next action']];
+  let html = '';
+  groups.forEach(([k, title]) => {
+    const items = sortLeads(open.filter(l => bucket(l) === k), 'next', 1);
+    if (!items.length) return;
+    html += `<div class="grouphead ${k}"><h2>${title}</h2><span class="c">${items.length}</span></div>` + tableHtml(items, false);
+  });
+  if (!html) {
+    html = `<div class="empty"><h2>Nothing due this week</h2><p>Every open lead has a next action dated after this week. Check All leads, or move a date forward to bring something into view.</p><div class="row"><button class="btn" type="button" data-act="all">See all leads</button></div></div>`;
+  }
+  host.innerHTML = html;
+}
+
+function renderBoard(host, list) {
+  host.innerHTML = `<div class="board">` + STAGES.map(s => {
+    const items = sortLeads(list.filter(l => l.stage === s.id), 'next', 1);
+    return `<div class="col" data-stage="${s.id}"><h3><span class="pill"><i style="background:${s.color}"></i>${esc(s.label)}</span><span class="c">${items.length}</span></h3>` +
+      items.map(l => {
+        const b = bucket(l);
+        return `<div class="card" draggable="true" data-id="${esc(l.id)}"><button type="button" class="co" data-open="${esc(l.id)}">${esc(l.company || '(no name)')}</button>` +
+          (l.group ? `<div class="sub">${esc(l.group)}</div>` : '') +
+          (l.nextAction ? `<div>${esc(l.nextAction)}</div>` : '') +
+          (l.nextDate ? `<div class="sub due ${b}">${esc(fmtDue(l))}</div>` : '') + `</div>`;
+      }).join('') + `</div>`;
+  }).join('') + `</div>`;
+}
+
+/* ---------- drawer ---------- */
+function fillSelects() {
+  $('#f-stage').innerHTML = STAGES.map(s => `<option value="${s.id}">${esc(s.label)}</option>`).join('');
+  $('#f-fit').innerHTML = [1,2,3,4,5].map(n => `<option value="${n}">${n}</option>`).join('');
+  $('#dl-sources').innerHTML = CFG.sources.map(s => `<option value="${esc(s)}">`).join('');
+}
+function ownerOptions(current) {
+  const owners = [...new Set([...CFG.owners, ...state.leads.map(l => l.owner).filter(Boolean), current].filter(Boolean))];
+  $('#f-owner').innerHTML = '<option value="">Unassigned</option>' + owners.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
+}
+function who() { return (store && store.user) || 'You'; }
+
+function openDrawer(id) {
+  if (!store) { toast('Sign in first'); return; }
+  const existing = id ? state.leads.find(l => l.id === id) : null;
+  state.isNew = !existing;
+  state.editing = existing ? normalise(existing) : blankLead();
+  if (state.isNew && CFG.owners[0] && store.mode === 'demo') state.editing.owner = '';
+  const l = state.editing;
+  lastFocus = document.activeElement;
+  ownerOptions(l.owner);
+  $('#dr-title').textContent = state.isNew ? 'New lead' : (l.company || 'Edit lead');
+  $('#f-company').value = l.company; $('#f-group').value = l.group; $('#f-source').value = l.source;
+  $('#f-contact').value = l.contact; $('#f-role').value = l.role; $('#f-email').value = l.email; $('#f-website').value = l.website;
+  $('#f-stage').value = l.stage; $('#f-fit').value = String(l.fit); $('#f-owner').value = l.owner;
+  $('#f-next').value = l.nextAction; $('#f-date').value = l.nextDate; $('#f-notes').value = l.notes; $('#f-log').value = '';
+  $('#btn-delete').hidden = state.isNew;
+  const link = safeUrl(l.website);
+  renderActivity(l, link);
+  $('#scrim').hidden = false;
+  const d = $('#drawer'); d.classList.add('open'); d.setAttribute('aria-hidden', 'false');
+  setTimeout(() => $('#f-company').focus(), 30);
+}
+function renderActivity(l, link) {
+  const items = l.activity.slice().reverse();
+  $('#activity').innerHTML = (items.length ? items.map(a =>
+    `<li>${esc(a.text)}<time datetime="${esc(a.at)}">${esc(dateTimeFmt.format(new Date(a.at)))}${a.by ? ' by ' + esc(a.by) : ''}</time></li>`).join('')
+    : '<li class="muted">Nothing logged yet.</li>') +
+    (link ? `<li><a href="${esc(link)}" target="_blank" rel="noopener noreferrer">Open website</a></li>` : '');
+}
+function closeDrawer() {
+  const d = $('#drawer');
+  d.classList.remove('open'); d.setAttribute('aria-hidden', 'true');
+  $('#scrim').hidden = true; state.editing = null;
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+
+async function saveForm(e) {
+  e.preventDefault();
+  const company = $('#f-company').value.trim();
+  if (!company) { $('#f-company').focus(); toast('Add a company name first'); return; }
+  const prev = state.isNew ? null : state.editing;
+  const l = prev ? Object.assign({}, prev) : blankLead();
+  Object.assign(l, {
+    company, group: $('#f-group').value.trim(), source: $('#f-source').value.trim(),
+    contact: $('#f-contact').value.trim(), role: $('#f-role').value.trim(), email: $('#f-email').value.trim(),
+    website: $('#f-website').value.trim(), stage: $('#f-stage').value, fit: parseInt($('#f-fit').value, 10) || 3,
+    owner: $('#f-owner').value, nextAction: $('#f-next').value.trim(), nextDate: $('#f-date').value,
+    notes: $('#f-notes').value.trim()
+  });
+  const now = new Date().toISOString();
+  l.activity = (prev ? prev.activity : []).slice();
+  if (!prev) l.activity.push({ at: now, by: who(), text: 'Lead added' });
+  else if (prev.stage !== l.stage) l.activity.push({ at: now, by: who(), text: 'Moved to ' + stageOf(l.stage).label });
+  const note = $('#f-log').value.trim();
+  if (note) l.activity.push({ at: now, by: who(), text: note });
+  l.updated = now;
+  try { await store.save(l); closeDrawer(); toast('Lead saved'); }
+  catch (err) { toast('Could not save: ' + (err.message || err)); }
+}
+
+async function deleteLead() {
+  const l = state.editing;
+  if (!l || state.isNew) return;
+  if (!confirm(`Delete ${l.company || 'this lead'}? This cannot be undone.`)) return;
+  try { await store.remove(l.id); closeDrawer(); toast('Lead deleted'); }
+  catch (err) { toast('Could not delete: ' + (err.message || err)); }
+}
+
+async function changeStage(id, stageId) {
+  const l = state.leads.find(x => x.id === id);
+  if (!l || l.stage === stageId) return;
+  const n = Object.assign({}, l, { stage: stageId, updated: new Date().toISOString() });
+  n.activity = l.activity.concat({ at: n.updated, by: who(), text: 'Moved to ' + stageOf(stageId).label });
+  try { await store.save(n); } catch (err) { toast('Could not move lead: ' + (err.message || err)); }
+}
+
+/* ---------- CSV ---------- */
+function parseCSV(text) {
+  text = text.replace(/^﻿/, '');
+  const firstLine = text.split(/\r?\n/, 1)[0] || '';
+  const delim = (firstLine.split('\t').length > firstLine.split(',').length) ? '\t' : ',';
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; }
+      else f += c;
+    } else if (c === '"') q = true;
+    else if (c === delim) { row.push(f); f = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(f); f = ''; rows.push(row); row = []; }
+    else f += c;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter(r => r.some(x => String(x).trim() !== ''));
+}
+const HMAP = {
+  company: ['company', 'companyname', 'organisation', 'organization', 'account'],
+  group: ['customergroup', 'group', 'segment', 'sector', 'category', 'industry'],
+  contact: ['contactname', 'contact', 'person', 'keycontact'],
+  role: ['contactrole', 'role', 'title', 'jobtitle', 'position'],
+  email: ['email', 'emailaddress', 'contactemail'],
+  website: ['website', 'url', 'web', 'site', 'companywebsite'],
+  source: ['source', 'leadsource'],
+  fit: ['fit', 'fitscore', 'fit15', 'score'],
+  stage: ['stage', 'status'],
+  owner: ['owner'],
+  nextAction: ['nextaction'],
+  nextDate: ['nextactiondate', 'nextdate', 'due', 'duedate'],
+  notes: ['notes', 'note', 'reason', 'why', 'rationale', 'comments']
+};
+function parseDateCell(v) {
+  v = String(v || '').trim();
+  let m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (m) return `${m[1]}-${pad(+m[2])}-${pad(+m[3])}`;
+  m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);       // UK day/month/year
+  if (m) return `${m[3]}-${pad(+m[2])}-${pad(+m[1])}`;
+  return '';
+}
+function rowsToLeads(rows) {
+  const header = rows[0].map(h => String(h).toLowerCase().replace(/[^a-z0-9]/g, ''));
+  const idx = {};
+  Object.keys(HMAP).forEach(k => { const i = header.findIndex(h => HMAP[k].includes(h)); if (i >= 0) idx[k] = i; });
+  if (idx.company == null) return null;
+  const get = (r, k) => idx[k] == null ? '' : String(r[idx[k]] == null ? '' : r[idx[k]]).trim();
+  const now = new Date().toISOString();
+  return rows.slice(1).map(r => {
+    const l = blankLead();
+    l.company = get(r, 'company'); l.group = get(r, 'group'); l.contact = get(r, 'contact'); l.role = get(r, 'role');
+    l.email = get(r, 'email'); l.website = get(r, 'website'); l.source = get(r, 'source') || 'Import';
+    l.owner = get(r, 'owner'); l.nextAction = get(r, 'nextAction'); l.nextDate = parseDateCell(get(r, 'nextDate'));
+    l.notes = get(r, 'notes');
+    const fit = parseInt(get(r, 'fit'), 10); l.fit = fit >= 1 && fit <= 5 ? fit : 3;
+    const st = get(r, 'stage').toLowerCase(); const hit = STAGES.find(s => s.label.toLowerCase() === st || s.id === st);
+    l.stage = hit ? hit.id : 'identified';
+    l.activity = [{ at: now, by: who(), text: 'Imported from CSV' }];
+    return l;
+  }).filter(l => l.company);
+}
+const dupKey = l => (l.company + '|' + (l.email || l.contact)).toLowerCase().trim();
+
+async function importFile(file) {
+  if (!store) { toast('Sign in first'); return; }
+  const text = await file.text();
+  const rows = parseCSV(text);
+  if (rows.length < 2) { toast('That file has no rows to import'); return; }
+  const leads = rowsToLeads(rows);
+  if (!leads) { toast('No Company column found. Download the CSV template to see the expected columns.'); return; }
+  const have = new Set(state.leads.map(dupKey));
+  const fresh = [];
+  let skipped = 0;
+  leads.forEach(l => { const k = dupKey(l); if (have.has(k)) skipped++; else { have.add(k); fresh.push(l); } });
+  if (!fresh.length) { toast(`Nothing new to import (${skipped} already in the pipeline)`); return; }
+  try {
+    await store.saveMany(fresh);
+    toast(`Imported ${fresh.length} lead${fresh.length === 1 ? '' : 's'}` + (skipped ? `, skipped ${skipped} duplicate${skipped === 1 ? '' : 's'}` : ''));
+  } catch (err) { toast('Import failed: ' + (err.message || err)); }
+}
+
+const csvCell = v => {
+  let s = String(v == null ? '' : v);
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;               // stop spreadsheet formula injection
+  return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+};
+function download(name, text) {
+  const url = URL.createObjectURL(new Blob(['﻿' + text], { type: 'text/csv;charset=utf-8' }));
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+const CSV_HEAD = ['Company', 'Customer group', 'Contact name', 'Contact role', 'Email', 'Website', 'Source', 'Fit score', 'Stage', 'Owner', 'Next action', 'Next action date', 'Notes'];
+function exportCSV() {
+  if (!state.leads.length) { toast('No leads to export yet'); return; }
+  const lines = [CSV_HEAD.concat('Last updated').map(csvCell).join(',')];
+  sortLeads(state.leads, 'company', 1).forEach(l => lines.push([l.company, l.group, l.contact, l.role, l.email, l.website, l.source, l.fit,
+    stageOf(l.stage).label, l.owner, l.nextAction, l.nextDate, l.notes, l.updated].map(csvCell).join(',')));
+  download(`astral-bd-leads-${today()}.csv`, lines.join('\r\n'));
+}
+function downloadTemplate() {
+  const ex = ['Example Co', 'Customer group name', 'Jo Bloggs', 'Head of Quality', 'jo@example.com', 'https://example.com', 'AI research', '4', 'Identified', '', 'Send intro email', '', 'Why they might need an irradiation source'];
+  download('astral-bd-import-template.csv', CSV_HEAD.map(csvCell).join(',') + '\r\n' + ex.map(csvCell).join(','));
+}
+
+/* ---------- example data ---------- */
+async function loadExamples() {
+  if (!store) { toast('Sign in first'); return; }
+  const mk = (o) => Object.assign(blankLead(), o, { activity: [{ at: new Date().toISOString(), by: who(), text: 'Example lead' }] });
+  const owner = CFG.owners[0] || '';
+  await store.saveMany([
+    mk({ company: 'Example: sterile-products contract lab', group: 'Example group A', contact: 'A. Example', role: 'Head of Operations', source: 'Example', stage: 'contacted', fit: 4, nextAction: 'Chase reply to intro email', nextDate: addDays(-2), owner }),
+    mk({ company: 'Example: packaging manufacturer', group: 'Example group A', source: 'Example', stage: 'call', fit: 3, nextAction: 'Send requirements form', nextDate: today(), owner }),
+    mk({ company: 'Example: research institute', group: 'Example group B', source: 'Example', stage: 'identified', fit: 5 }),
+    mk({ company: 'Example: equipment supplier', group: 'Example group B', source: 'Example', stage: 'quoted', fit: 4, nextAction: 'Follow up on quote', nextDate: addDays(3), owner })
+  ]);
+  toast('Example leads added. Use More, then Remove example leads, when you are done.');
+}
+async function clearExamples() {
+  if (!store) return;
+  const ids = state.leads.filter(l => l.source === 'Example').map(l => l.id);
+  if (!ids.length) { toast('No example leads to remove'); return; }
+  await store.removeMany(ids);
+  toast(`Removed ${ids.length} example lead${ids.length === 1 ? '' : 's'}`);
+}
+
+/* ---------- wiring ---------- */
+function resetFilters() { state.stage = null; state.group = ''; state.owner = ''; state.q = ''; $('#q').value = ''; render(); }
+
+function bindUI() {
+  fillSelects();
+  $('#app-name').textContent = CFG.appName; document.title = 'Astral Systems ' + CFG.appName;
+
+  $('#beam').addEventListener('click', e => {
+    const b = e.target.closest('[data-stage]'); if (!b) return;
+    state.stage = state.stage === b.dataset.stage ? null : b.dataset.stage;
+    if (state.stage && state.view === 'board') state.view = 'all';
+    render();
+  });
+  document.querySelector('.tabs').addEventListener('click', e => {
+    const b = e.target.closest('[data-view]'); if (!b) return;
+    state.view = b.dataset.view; render();
+  });
+  $('#q').addEventListener('input', e => { state.q = e.target.value; render(); });
+  $('#flt-group').addEventListener('change', e => { state.group = e.target.value; render(); });
+  $('#flt-owner').addEventListener('change', e => { state.owner = e.target.value; render(); });
+  $('#btn-clear').addEventListener('click', resetFilters);
+
+  $('#view').addEventListener('click', e => {
+    const sortBtn = e.target.closest('[data-sort]');
+    if (sortBtn) { const k = sortBtn.dataset.sort; state.sort = { k, dir: state.sort.k === k ? -state.sort.dir : 1 }; render(); return; }
+    const act = e.target.closest('[data-act]');
+    if (act) {
+      ({ new: () => openDrawer(null), import: () => $('#file').click(), template: downloadTemplate,
+         examples: loadExamples, clear: resetFilters, all: () => { state.view = 'all'; render(); } }[act.dataset.act] || (() => {}))();
+      return;
+    }
+    const open = e.target.closest('[data-open]');
+    const tr = e.target.closest('tr[data-id]');
+    const id = open ? open.dataset.open : tr ? tr.dataset.id : null;
+    if (id) openDrawer(id);
+  });
+
+  /* drag and drop on the board */
+  const view = $('#view');
+  let dragId = null;
+  view.addEventListener('dragstart', e => { const c = e.target.closest('.card'); if (!c) return; dragId = c.dataset.id; c.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', dragId); });
+  view.addEventListener('dragend', e => { const c = e.target.closest('.card'); if (c) c.classList.remove('dragging'); view.querySelectorAll('.col.over').forEach(x => x.classList.remove('over')); });
+  view.addEventListener('dragover', e => { const col = e.target.closest('.col'); if (!col || !dragId) return; e.preventDefault(); view.querySelectorAll('.col.over').forEach(x => x.classList.remove('over')); col.classList.add('over'); });
+  view.addEventListener('drop', e => { const col = e.target.closest('.col'); if (!col || !dragId) return; e.preventDefault(); const id = dragId; dragId = null; changeStage(id, col.dataset.stage); });
+
+  $('#btn-new').addEventListener('click', () => openDrawer(null));
+  $('#btn-import').addEventListener('click', () => $('#file').click());
+  $('#file').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) importFile(f); });
+  $('#btn-export').addEventListener('click', exportCSV);
+  $('#m-import').addEventListener('click', () => { $('#more').open = false; $('#file').click(); });
+  $('#m-export').addEventListener('click', () => { $('#more').open = false; exportCSV(); });
+  $('#m-template').addEventListener('click', () => { downloadTemplate(); $('#more').open = false; });
+  $('#m-examples').addEventListener('click', () => { loadExamples(); $('#more').open = false; });
+  $('#m-clear').addEventListener('click', () => { clearExamples(); $('#more').open = false; });
+  $('#m-signout').addEventListener('click', async () => { $('#more').open = false; if (store && store.signOut) await store.signOut(); });
+  document.addEventListener('click', e => { const m = $('#more'); if (m.open && !m.contains(e.target)) m.open = false; });
+
+  $('#lead-form').addEventListener('submit', saveForm);
+  $('#dr-close').addEventListener('click', closeDrawer);
+  $('#dr-cancel').addEventListener('click', closeDrawer);
+  $('#scrim').addEventListener('click', closeDrawer);
+  $('#btn-delete').addEventListener('click', deleteLead);
+  $('#btn-done').addEventListener('click', () => {
+    const cur = $('#f-next').value.trim();
+    if (cur && !$('#f-log').value.trim()) $('#f-log').value = 'Done: ' + cur;
+    $('#f-next').value = ''; $('#f-date').value = ''; $('#f-next').focus();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#drawer').classList.contains('open')) closeDrawer(); });
+
+  /* keep Tab inside the open drawer */
+  $('#drawer').addEventListener('keydown', e => {
+    if (e.key !== 'Tab') return;
+    const f = [...$('#drawer').querySelectorAll('input,select,textarea,button,a[href]')].filter(x => !x.hidden && !x.disabled && x.offsetParent !== null);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+}
+
+function setBanner(text, warn) { const b = $('#banner'); b.textContent = text; b.hidden = !text; b.classList.toggle('warn', !!warn); }
+function onData(arr) { state.leads = arr.map(normalise); render(); }
+
+async function start() {
+  bindUI();
+  render();
+  if (!CFG.firebase) {
+    store = createLocalStore();
+    $('#mode').textContent = 'Demo mode';
+    setBanner('Demo mode: leads are saved in this browser only. Add your Firebase details in config.js to share the pipeline with the team.');
+    store.subscribe(onData);
+    return;
+  }
+  $('#mode').textContent = 'Connecting…';
+  const dlg = $('#signin');
+  $('#signin-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    $('#si-err').textContent = '';
+    try { await pending.signIn($('#si-email').value.trim(), $('#si-pass').value); }
+    catch (err) { $('#si-err').textContent = 'Could not sign in. Check the email and password, or ask for an account to be added.'; }
+  });
+  let pending = null;
+  try {
+    pending = await createFirebaseStore(CFG.firebase,
+      s => {
+        store = s;
+        $('#mode').textContent = 'Signed in as ' + s.user; $('#mode').classList.add('live');
+        $('#m-signout').hidden = false;
+        setBanner('');
+        if (dlg.open) dlg.close();
+        $('#si-pass').value = '';
+        s.subscribe(onData);
+      },
+      () => {
+        store = null; state.leads = []; render();
+        $('#mode').textContent = 'Signed out'; $('#mode').classList.remove('live');
+        $('#m-signout').hidden = true;
+        if (!dlg.open) dlg.showModal();
+      },
+      err => {
+        const denied = err && err.code === 'permission-denied';
+        setBanner(denied ? 'This account is not on the access list for the pipeline. Ask an admin to add your email to the Firestore rules, then sign in again.' : 'Could not load leads: ' + (err.message || err), true);
+      });
+  } catch (err) {
+    $('#mode').textContent = 'Offline';
+    setBanner('Could not reach Firebase. Check your connection and the config in config.js, then reload.', true);
+  }
+}
+
+start();
+})();
+</script>
+</body>
+</html>
