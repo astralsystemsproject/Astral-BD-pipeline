@@ -173,11 +173,13 @@ svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-widt
 
 /* funnel */
 .funnel{display:flex;flex-direction:column;gap:8px}
-.frow{display:grid;grid-template-columns:minmax(0,1fr) 128px;gap:14px;align-items:center}
+.frow{display:grid;grid-template-columns:minmax(0,1fr) 196px;gap:14px;align-items:center}
 .ftrack{display:flex;justify-content:center}
 .fbar{height:30px;border-radius:7px;background:var(--blue);min-width:4px;transition:width .3s ease}
 .fbar.zero{background:var(--line);width:10px!important;height:10px;border-radius:50%}
 .flab{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.flab{min-width:0}
+.flab span{overflow:hidden;text-overflow:ellipsis}
 .flab b{color:var(--ink);font-variant-numeric:tabular-nums}
 .ffoot{display:flex;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid var(--line-2);font-size:13px;color:var(--ink-2)}
 .ffoot b{color:var(--ink)}
@@ -414,6 +416,54 @@ a.clink:hover{color:var(--blue-ink)}
 .lcl .pav{width:30px;height:30px;font-size:11.5px}
 .lcl small{display:block;color:var(--ink-2);font-size:12px}
 
+/* ---------- opportunities ---------- */
+.fsec{grid-column:1/-1;font-size:13px;font-weight:700;color:var(--ink);margin:10px 0 -4px;padding-top:12px;border-top:1px solid var(--line-2)}
+.fsec:first-child{margin-top:0;padding-top:0;border-top:0}
+.hint{font-size:12px;color:var(--ink-2);font-weight:500}
+.money{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.pct{font-size:12px;color:var(--ink-2);font-weight:600;margin-left:4px}
+.idtag{font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.prio{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11.5px;font-weight:700}
+.prio.Urgent{background:var(--alert);color:#fff}
+.prio.Important,.prio.High{background:var(--alert-wash);color:var(--alert)}
+.prio.Medium{background:var(--amber-wash);color:var(--amber)}
+.prio.Low{background:var(--fill);color:var(--ink-2)}
+.stage .v{font-size:12px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.col h3 .tot{display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin-top:2px}
+.card .val{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:12.5px}
+.actrl{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.actrl select{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:0 12px}
+.actrl .grow{flex:1}
+.atable{width:100%;min-width:520px;table-layout:auto;border-collapse:separate;border-spacing:0}
+.atable th{padding:10px 14px;background:var(--card-2)}
+.atable td{padding:10px 14px;cursor:default}
+.atable tbody tr{cursor:default}
+.atable td.num,.atable th.num{text-align:right;font-variant-numeric:tabular-nums}
+.atable tfoot td{font-weight:700;border-top:1px solid var(--line);border-bottom:0;background:var(--card-2)}
+.atable .barcell{width:22%}
+.mbar{height:8px;border-radius:4px;background:var(--line-2);overflow:hidden}
+.mbar i{display:block;height:100%;border-radius:4px;background:var(--blue)}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--ink-2);margin-bottom:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px}
+.gcols{position:relative;display:flex;align-items:flex-end;gap:10px;height:220px;padding-top:18px;border-bottom:1px solid var(--line)}
+.gcols .grid{position:absolute;left:0;right:0;border-top:1px dashed var(--line);pointer-events:none}
+.gcols .grid span{position:absolute;right:0;top:-18px;font-size:11.5px;color:var(--ink-3)}
+.gcol{flex:1;display:flex;justify-content:center;align-items:flex-end;gap:2px;height:100%}
+.gcol i{display:block;width:min(18px,40%);border-radius:4px 4px 0 0;min-height:0}
+.gcol i.u{background:#A9C4FA}
+.gcol i.w{background:var(--blue)}
+:root[data-theme="dark"] .gcol i.u{background:#3E5E9C}
+.gx{display:flex;gap:10px;margin-top:8px}
+.gx span{flex:1;min-width:0;overflow:hidden;text-align:center;font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+.gcol{min-width:0}
+@media (max-width:640px){ .gcols,.gx{gap:3px} .gx span{font-size:10px} .actrl select{flex:1 1 140px} }
+.opp-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.opp-list button{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--card-2);border-radius:12px;padding:9px 12px;cursor:pointer}
+.opp-list button:hover{border-color:var(--line-strong);background:var(--hover)}
+.opp-list small{display:block;color:var(--ink-2);font-size:12px}
+.lcl .main{border-color:var(--blue)}
+
 /* ---------- polish ---------- */
 .panel,.kpi,.tile,.tablewrap,.beamcard{border-radius:18px}
 .btn{border-radius:11px}
@@ -540,7 +590,8 @@ a.clink:hover{color:var(--blue-ink)}
       </div>
       <div class="toolbar" id="toolbar" hidden>
         <div class="fsearch"><svg class="i"><use href="#i-search"/></svg><input type="search" id="q" placeholder="Search company, contact or notes" aria-label="Search leads"></div>
-        <select id="flt-group" aria-label="Customer group"></select>
+        <select id="flt-group" aria-label="Sector"></select>
+        <select id="flt-type" aria-label="Type"></select>
         <select id="flt-owner" aria-label="Owner"></select>
         <button type="button" class="btn ghost" id="btn-clear" hidden>Clear filters</button>
         <span class="count" id="count"></span>
@@ -559,20 +610,33 @@ a.clink:hover{color:var(--blue-ink)}
     </header>
     <div class="dr-body">
       <div class="fgrid">
-        <label class="span2">Company<input id="f-company" autocomplete="off"></label>
-        <label>Customer group<input id="f-group" list="dl-groups" autocomplete="off"></label>
-        <label>Source<input id="f-source" list="dl-sources" autocomplete="off"></label>
-        <label>Contact name<input id="f-contact" autocomplete="off"></label>
-        <label>Contact role<input id="f-role" autocomplete="off"></label>
-        <label>Email<input id="f-email" type="email" autocomplete="off"></label>
-        <label>Website<input id="f-website" inputmode="url" autocomplete="off"></label>
+        <div class="fsec">Opportunity</div>
+        <label class="span2">Opportunity<input id="f-opp" placeholder="e.g. Blanket materials irradiation campaign" autocomplete="off"></label>
+        <label>Opportunity ID<input id="f-oppid" placeholder="Created when you save" autocomplete="off"></label>
+        <label>Company<input id="f-company" list="dl-orgs" autocomplete="off"></label>
+        <label>Type<select id="f-type"></select></label>
+        <label>Sector<select id="f-sector"></select></label>
+        <label>Value (£)<input id="f-value" inputmode="decimal" placeholder="0" autocomplete="off"><span class="hint" id="f-weighted"></span></label>
         <label>Stage<select id="f-stage"></select></label>
+        <label>Start date<input id="f-start" type="date"></label>
+        <label>Target close date<input id="f-close" type="date"></label>
+        <label>Priority<select id="f-priority"></select></label>
         <label>Fit (1 weak, 5 strong)<select id="f-fit"></select></label>
         <label>Owner<select id="f-owner"></select></label>
-        <div></div>
+        <label>NDA<select id="f-nda"><option value="no">No</option><option value="yes">Yes</option></select></label>
+        <label>Source<input id="f-source" list="dl-sources" autocomplete="off"></label>
+        <label>Status detail<input id="f-status" list="dl-status" placeholder="e.g. Project in progress" autocomplete="off"></label>
+        <div class="fsec">Contact</div>
+        <label class="span2">Contact name<input id="f-contact" list="dl-contacts" placeholder="Start typing to pick from Contacts" autocomplete="off"><span class="hint" id="f-contact-hint"></span></label>
+        <label>Contact role<input id="f-role" autocomplete="off"></label>
+        <label>Contact email<input id="f-email" type="email" autocomplete="off"></label>
+        <label class="span2">Website<input id="f-website" inputmode="url" autocomplete="off"></label>
+        <div class="fsec">Next action</div>
         <label class="span2">Next action<input id="f-next" autocomplete="off"></label>
-        <label>Next action date<input id="f-date" type="date"></label>
-        <div class="doneWrap"><button type="button" class="btn" id="btn-done">Done, set the next one</button></div>
+        <label>Due date<input id="f-date" type="date"></label>
+        <label>Action owner<select id="f-nextowner"></select></label>
+        <div class="doneWrap span2"><button type="button" class="btn" id="btn-done">Done, set the next one</button></div>
+        <div class="fsec">Notes</div>
         <label class="span2">Notes<textarea id="f-notes" rows="4"></textarea></label>
         <label class="span2">Log a note<input id="f-log" placeholder="e.g. Call with Sam, wants a quote for 200 samples" autocomplete="off"></label>
       </div>
@@ -616,6 +680,7 @@ a.clink:hover{color:var(--blue-ink)}
         <div></div>
         <label class="span2">Notes<textarea id="c-notes" rows="6"></textarea></label>
       </div>
+      <div id="c-opps"></div>
       <h3 id="c-src-h">Source</h3>
       <p class="muted" id="c-src" style="margin:0;font-size:13px"></p>
     </div>
@@ -630,6 +695,8 @@ a.clink:hover{color:var(--blue-ink)}
 <datalist id="dl-orgs"></datalist>
 <datalist id="dl-cowners"></datalist>
 <datalist id="dl-groups"></datalist>
+<datalist id="dl-contacts"></datalist>
+<datalist id="dl-status"></datalist>
 <datalist id="dl-sources"></datalist>
 
 <dialog id="signin">
@@ -654,25 +721,77 @@ a.clink:hover{color:var(--blue-ink)}
 'use strict';
 
 /* ---------- config & constants ---------- */
+const DEFAULT_STAGES = [
+  // Harriet's MS Planner stages. "closed" marks stages outside the open pipeline.
+  { id: 'legacy',       label: 'Not yet qualified',       prob: 0,   color: '#C9D6EE' },
+  { id: 'initial',      label: 'Initial lead',            prob: 5,   color: '#9DBCF8' },
+  { id: 'requirements', label: 'Requirement capture',     prob: 25,  color: '#6E9BF0' },
+  { id: 'proposal',     label: 'Proposal in development', prob: 50,  color: '#3B7CF6' },
+  { id: 'negotiation',  label: 'Negotiation',             prob: 75,  color: '#2558C9' },
+  { id: 'won',          label: 'Won',                     prob: 100, color: '#23794A', closed: 'won' },
+  { id: 'hold',         label: 'On hold',                 prob: 0,   color: '#C08A2E', closed: 'hold' },
+  { id: 'disqualified', label: 'Disqualified',            prob: 0,   color: '#B7BFB9', closed: 'lost' },
+  { id: 'lost',         label: 'Lost',                    prob: 0,   color: '#8E9891', closed: 'lost' }
+];
+// earlier stage ids, so leads saved before the switch still land in the right column
+const STAGE_ALIASES = { identified: 'initial', contacted: 'initial', replied: 'initial', call: 'requirements', quoted: 'proposal' };
+const STATUS_HINTS = {
+  won: ['Initial project involvement', 'Project planning', 'Project in progress', 'Irradiation complete - report/certificate to send', 'Delivered - handover to Ops', 'Delivered - irradiation and report'],
+  hold: ['Project on hold', 'Waiting on customer funding'],
+  lost: ['Cancelled', 'Cancelled - missed opportunity', 'Cancelled - unfunded', 'Disqualified']
+};
 const CFG = Object.assign({
   appName: 'BD pipeline',
   owners: [],
-  sources: ['AI research', 'Conference', 'LinkedIn', 'Inbound enquiry', 'Other'],
+  sources: ['Conference', 'Website', 'UKAEA referral', 'QR code', 'Inbound enquiry', 'AI research', 'LinkedIn', 'Contacts', 'Other'],
+  types: [{ label: 'Irradiation', code: 'IRR' }, { label: 'Device sale', code: 'DEV' }, { label: 'Research/Project', code: 'RES' }, { label: 'Internal', code: 'INT' }],
+  sectors: ['Fusion', 'Nuclear', 'Electronics', 'Aerospace', 'Other'],
+  priorities: ['Urgent', 'Important', 'Medium', 'Low'],
+  idFormat: '{TYPE}-{CLIENT}-{NNN}',   // e.g. IRR-REN-001, as used on the Planner board
+  stages: null,
   firebase: null
 }, window.CRM_CONFIG || {});
 
-const STAGES = [
-  { id: 'identified',   label: 'Identified',   color: '#B9CFFA' },
-  { id: 'contacted',    label: 'Contacted',    color: '#8FB2F6' },
-  { id: 'replied',      label: 'Replied',      color: '#6E9BF0' },
-  { id: 'call',         label: 'Call booked',  color: '#4F86F4' },
-  { id: 'requirements', label: 'Requirements', color: '#3B7CF6' },
-  { id: 'quoted',       label: 'Quoted',       color: '#2558C9' },
-  { id: 'won',          label: 'Won',          color: '#23794A' },
-  { id: 'lost',         label: 'Lost',         color: '#9AA49E' }
-];
+const STAGES = (Array.isArray(CFG.stages) && CFG.stages.length ? CFG.stages : DEFAULT_STAGES).map((st, i) => ({
+  id: st.id || String(st.label).toLowerCase().replace(/[^a-z0-9]+/g, '-'), label: st.label, prob: Math.max(0, Math.min(100, +st.prob || 0)),
+  color: st.color || DEFAULT_STAGES[Math.min(i, DEFAULT_STAGES.length - 1)].color,
+  closed: st.closed || (st.id === 'won' ? 'won' : st.id === 'lost' ? 'lost' : '')
+}));
+const WON = (STAGES.find(st => st.closed === 'won') || {}).id || 'won';
+const LOST = (STAGES.find(st => st.id === 'lost') || STAGES.find(st => st.closed === 'lost') || {}).id || 'lost';
+const OPEN_STAGE_IDS = STAGES.filter(st => !st.closed).map(st => st.id);
 const stageOf = id => STAGES.find(s => s.id === id) || STAGES[0];
-const isClosed = l => l.stage === 'won' || l.stage === 'lost';
+const closedKind = l => stageOf(l.stage).closed || '';
+const isClosed = l => !!closedKind(l);
+const probOf = l => stageOf(l.stage).prob / 100;
+const weightedOf = l => (l.value || 0) * probOf(l);
+const oppTitle = l => l.opportunity || l.company || '(untitled)';
+const GBP = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 });
+const GBPc = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', notation: 'compact', maximumFractionDigits: 1 });
+const money = n => GBP.format(Math.round(n || 0));
+const moneyC = n => (Math.abs(n || 0) < 10000 ? GBP.format(Math.round(n || 0)) : GBPc.format(n));
+const parseMoney = v => { const n = parseFloat(String(v == null ? '' : v).replace(/[^\d.\-]/g, '')); return isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : 0; };
+const typeCode = t => (CFG.types.find(x => x.label === t) || {}).code || 'GEN';
+function clientCode(company) {
+  const words = String(company || '').replace(/\(.*?\)/g, ' ').split(/[^A-Za-z0-9]+/).filter(Boolean);
+  if (!words.length) return 'XXX';
+  const w = words[0];
+  if (/^[A-Z0-9]{2,5}$/.test(w)) return w;                       // already an acronym, e.g. UKAEA, CNL, KIT
+  const caps = words.filter(x => /^[A-Z]/.test(x)).map(x => x[0]).join('');
+  if (caps.length >= 3 && words.length >= 3) return caps.slice(0, 4).toUpperCase();
+  return w.slice(0, 3).toUpperCase();
+}
+const monthFmt = new Intl.DateTimeFormat('en-GB', { month: 'short', year: 'numeric' });
+function nextOppId(l, taken) {
+  const year = (l.startDate && l.startDate.slice(0, 4)) || String(new Date().getFullYear());
+  const base = CFG.idFormat.replace('{TYPE}', typeCode(l.type)).replace('{YYYY}', year).replace('{CLIENT}', clientCode(l.company));
+  if (!base.includes('{NNN}')) return base;
+  const re = new RegExp('^' + base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace('\\{NNN\\}', '(\\d+)') + '$');
+  let max = 0;
+  (taken || state.leads.map(x => x.oppId)).forEach(id => { const m = re.exec(id || ''); if (m) max = Math.max(max, +m[1]); });
+  return base.replace('{NNN}', String(max + 1).padStart(3, '0'));
+}
+
 
 /* ---------- small helpers ---------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -715,16 +834,23 @@ function safeUrl(u) {
 
 function blankLead() {
   const now = new Date().toISOString();
-  return { id: uid(), company: '', group: '', contact: '', role: '', email: '', website: '', source: '', fit: 3,
-           stage: 'identified', nextAction: '', nextDate: '', owner: '', notes: '', activity: [], created: now, updated: now };
+  return { id: uid(), opportunity: '', oppId: '', company: '', type: '', sector: '', value: 0, startDate: '', closeDate: '', nda: false, priority: '',
+           group: '', contact: '', contactId: '', role: '', email: '', website: '', source: '', fit: 3,
+           stage: STAGES[0].id, status: '', plannerId: '', nextAction: '', nextDate: '', nextOwner: '', owner: '', notes: '', activity: [], created: now, updated: now };
 }
 function normalise(raw) {
   const b = blankLead();
   const l = Object.assign(b, raw || {});
   l.fit = Math.min(5, Math.max(1, parseInt(l.fit, 10) || 3));
-  if (!STAGES.some(s => s.id === l.stage)) l.stage = 'identified';
+  if (STAGE_ALIASES[l.stage] && !STAGES.some(st => st.id === l.stage)) l.stage = STAGE_ALIASES[l.stage];
+  if (!STAGES.some(st => st.id === l.stage)) l.stage = STAGES[0].id;
   if (!Array.isArray(l.activity)) l.activity = [];
-  ['company','group','contact','role','email','website','source','nextAction','nextDate','owner','notes'].forEach(k => { l[k] = l[k] == null ? '' : String(l[k]); });
+  ['status','plannerId','opportunity','oppId','company','type','sector','priority','group','contact','contactId','role','email','website','source','nextAction','nextDate','nextOwner','owner','notes','startDate','closeDate']
+    .forEach(k => { l[k] = l[k] == null ? '' : String(l[k]); });
+  l.value = parseMoney(l.value);
+  l.nda = l.nda === true || /^(yes|y|true|1)$/i.test(String(l.nda));
+  if (!l.sector && l.group) { const hit = CFG.sectors.find(x => x.toLowerCase() === l.group.toLowerCase()); if (hit) l.sector = hit; }
+  if (l.type && !CFG.types.some(t => t.label === l.type)) { const hit = CFG.types.find(t => t.label.toLowerCase() === l.type.toLowerCase() || t.code.toLowerCase() === l.type.toLowerCase()); l.type = hit ? hit.label : l.type; }
   return l;
 }
 
@@ -812,7 +938,7 @@ async function createFirebaseStore(cfg, onSignedIn, onSignedOut, onError) {
 
 /* ---------- state ---------- */
 const VIEWS = { home: 'Home', leads: 'Leads', contacts: 'Contacts', pipeline: 'Pipeline', followups: 'Follow-ups', analytics: 'Analytics' };
-const state = { contacts: [], interest: null, cowner: '', ccheck: '', csort: { k: 'name', dir: 1 }, cediting: null, cisNew: false, leads: [], view: 'home', stage: null, group: '', owner: '', q: '', sort: { k: 'company', dir: 1 }, editing: null, isNew: false };
+const state = { type: '', ayear: '', ascope: 'open', contacts: [], interest: null, cowner: '', ccheck: '', csort: { k: 'name', dir: 1 }, cediting: null, cisNew: false, leads: [], view: 'home', stage: null, group: '', owner: '', q: '', sort: { k: 'opp', dir: 1 }, editing: null, isNew: false };
 let store = null;
 let lastFocus = null;
 const OPEN_STAGES = STAGES.filter(s => s.id !== 'won' && s.id !== 'lost');
@@ -848,10 +974,11 @@ const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 /* ---------- filtering ---------- */
 function matches(l, ignoreStage) {
   if (!ignoreStage && state.stage && l.stage !== state.stage) return false;
-  if (state.group && l.group !== state.group) return false;
-  if (state.owner && l.owner !== state.owner) return false;
+  if (state.group && l.sector !== state.group) return false;
+  if (state.type && l.type !== state.type) return false;
+  if (state.owner && l.owner !== state.owner && l.nextOwner !== state.owner) return false;
   if (state.q) {
-    const hay = [l.company, l.group, l.contact, l.role, l.email, l.nextAction, l.notes, l.owner].join(' ').toLowerCase();
+    const hay = [l.opportunity, l.oppId, l.status, l.company, l.sector, l.type, l.contact, l.role, l.email, l.nextAction, l.notes, l.owner, l.nextOwner].join(' ').toLowerCase();
     if (!state.q.toLowerCase().split(/\s+/).filter(Boolean).every(t => hay.includes(t))) return false;
   }
   return true;
@@ -867,7 +994,7 @@ function render() {
   $('#page-title').textContent = VIEWS[v];
   $('#btn-new .newlbl').textContent = v === 'contacts' ? 'New contact' : 'New lead';
   const longDate = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
-  $('#page-sub').textContent = { home: longDate, leads: 'Everyone in the pipeline', pipeline: 'Drag a card to move it to another stage',
+  $('#page-sub').textContent = { home: longDate, leads: 'Every opportunity in the pipeline', pipeline: 'Drag a card to move it to another stage',
     followups: 'Overdue, today and the rest of the week', analytics: 'How the pipeline is moving', contacts: 'People you know at each organisation' }[v];
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   renderBadges();
@@ -900,23 +1027,24 @@ function renderBadges() {
 }
 
 function renderBeam() {
-  const counts = {};
-  STAGES.forEach(st => counts[st.id] = 0);
-  state.leads.filter(l => matches(l, true)).forEach(l => { counts[l.stage]++; });
+  const counts = {}, vals = {};
+  STAGES.forEach(st => { counts[st.id] = 0; vals[st.id] = 0; });
+  state.leads.filter(l => matches(l, true)).forEach(l => { counts[l.stage]++; vals[l.stage] += l.value; });
+  $('#beam').style.gridTemplateColumns = `repeat(${STAGES.length},1fr)`;
   $('#beam').innerHTML = STAGES.map(st =>
-    `<button type="button" class="stage ${counts[st.id] ? 'has' : 'zero'}" style="--c:${st.color}" data-stage="${st.id}" aria-pressed="${state.stage === st.id}" aria-label="${esc(st.label)}: ${plural(counts[st.id], 'lead')}">` +
-    `<span class="n">${counts[st.id]}</span><span class="l">${esc(st.label)}</span><span class="dot" aria-hidden="true"></span></button>`).join('');
+    `<button type="button" class="stage ${counts[st.id] ? 'has' : 'zero'}" style="--c:${st.color}" data-stage="${st.id}" aria-pressed="${state.stage === st.id}" aria-label="${esc(st.label)}: ${plural(counts[st.id], 'lead')}, ${money(vals[st.id])}">` +
+    `<span class="n">${counts[st.id]}</span><span class="l">${esc(st.label)} <span class="pct">${st.prob}%</span></span><span class="v">${vals[st.id] ? moneyC(vals[st.id]) : '–'}</span><span class="dot" aria-hidden="true"></span></button>`).join('');
 }
 
 function renderToolbar() {
-  const groups = [...new Set(state.leads.map(l => l.group).filter(Boolean))].sort((a, b) => a.localeCompare(b));
-  if (state.group && !groups.includes(state.group)) state.group = '';
-  const owners = [...new Set([...CFG.owners, ...state.leads.map(l => l.owner).filter(Boolean)])];
+  const sectors = [...new Set(CFG.sectors.concat(state.leads.map(l => l.sector).filter(Boolean)))];
+  if (state.group && !sectors.includes(state.group)) state.group = '';
+  const owners = [...new Set([...CFG.owners, ...state.leads.map(l => l.owner).filter(Boolean), ...state.leads.map(l => l.nextOwner).filter(Boolean)])];
   if (state.owner && !owners.includes(state.owner)) state.owner = '';
-  $('#flt-group').innerHTML = '<option value="">All customer groups</option>' + groups.map(g => `<option value="${esc(g)}"${g === state.group ? ' selected' : ''}>${esc(g)}</option>`).join('');
+  $('#flt-group').innerHTML = '<option value="">All sectors</option>' + sectors.map(g => `<option value="${esc(g)}"${g === state.group ? ' selected' : ''}>${esc(g)}</option>`).join('');
+  $('#flt-type').innerHTML = '<option value="">All types</option>' + CFG.types.map(t => `<option value="${esc(t.label)}"${t.label === state.type ? ' selected' : ''}>${esc(t.label)}</option>`).join('');
   $('#flt-owner').innerHTML = '<option value="">All owners</option>' + owners.map(o => `<option value="${esc(o)}"${o === state.owner ? ' selected' : ''}>${esc(o)}</option>`).join('');
-  $('#btn-clear').hidden = !(state.stage || state.group || state.owner || state.q);
-  $('#dl-groups').innerHTML = groups.map(g => `<option value="${esc(g)}">`).join('');
+  $('#btn-clear').hidden = !(state.stage || state.group || state.type || state.owner || state.q);
   if ($('#q').value !== state.q) $('#q').value = state.q;
   if ($('#tq').value !== state.q) $('#tq').value = state.q;
 }
@@ -928,33 +1056,38 @@ const pillHtml = l => { const st = stageOf(l.stage); return `<span class="pill">
 const ownerHtml = o => o ? `<span class="owner"><i aria-hidden="true">${esc(initials(o))}</i>${esc(o)}</span>` : '<span class="muted">Unassigned</span>';
 
 const COLS = [
-  { k: 'company', t: 'Company', w: '25%' }, { k: 'group', t: 'Customer group', cls: 'hide-sm', w: '15%' }, { k: 'stage', t: 'Stage', w: '14%' },
-  { k: 'fit', t: 'Fit', cls: 'hide-sm', w: '8%' }, { k: 'next', t: 'Next action', w: '23%' }, { k: 'owner', t: 'Owner', cls: 'hide-sm', w: '15%' }
+  { k: 'opp', t: 'Opportunity', w: '27%' }, { k: 'stage', t: 'Stage', cls: 'hide-sm', w: '14%' }, { k: 'value', t: 'Value', w: '13%' },
+  { k: 'close', t: 'Close', cls: 'hide-sm', w: '9%' }, { k: 'next', t: 'Next action', w: '24%' }, { k: 'owner', t: 'Owner', cls: 'hide-sm', w: '13%' }
 ];
+const shortMonth = d => d ? monthFmt.format(parseYmd(d)) : '';
 
 function rowHtml(l) {
   const b = bucket(l);
+  const sub = [l.company !== oppTitle(l) ? l.company : '', l.sector, l.type].filter(Boolean).join(' · ');
   return `<tr data-id="${esc(l.id)}">` +
-    `<td><button type="button" class="co" data-open="${esc(l.id)}">${esc(l.company || '(no name)')}</button>` +
-      (l.contact ? `<div class="sub">${esc(l.contact)}${l.role ? ', ' + esc(l.role) : ''}</div>` : '') + `</td>` +
-    `<td class="hide-sm">${esc(l.group)}</td>` +
-    `<td>${pillHtml(l)}</td>` +
-    `<td class="hide-sm">${fitHtml(l.fit)}</td>` +
+    `<td><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
+      (sub ? `<div class="sub">${esc(sub)}</div>` : '') +
+      `<div>${l.oppId ? `<span class="idtag">${esc(l.oppId)}</span> ` : ''}${l.priority ? `<span class="prio ${esc(l.priority)}">${esc(l.priority)}</span>` : ''}</div></td>` +
+    `<td class="hide-sm">${pillHtml(l)}<div class="sub">${l.status ? esc(l.status) : stageOf(l.stage).prob + '% probability'}</div></td>` +
+    `<td>${l.value ? `<span class="money">${money(l.value)}</span><div class="sub">${money(weightedOf(l))} weighted</div>` : '<span class="muted">Not set</span>'}</td>` +
+    `<td class="hide-sm">${l.closeDate ? esc(shortMonth(l.closeDate)) : '<span class="muted">–</span>'}</td>` +
     `<td>${l.nextAction ? esc(l.nextAction) : '<span class="muted">Not set</span>'}` +
-      (l.nextDate ? `<div class="due ${b}">${esc(fmtDue(l))}</div>` : '') + `</td>` +
+      (l.nextDate || l.nextOwner ? `<div class="due ${b}">${esc([fmtDue(l), l.nextOwner].filter(Boolean).join(' · '))}</div>` : '') + `</td>` +
     `<td class="hide-sm">${ownerHtml(l.owner)}</td></tr>`;
 }
 
 function sortLeads(list, k, dir) {
   const cmp = {
+    opp: (a, b) => oppTitle(a).localeCompare(oppTitle(b)),
     company: (a, b) => a.company.localeCompare(b.company),
-    group: (a, b) => a.group.localeCompare(b.group),
-    stage: (a, b) => STAGES.findIndex(s => s.id === a.stage) - STAGES.findIndex(s => s.id === b.stage),
+    stage: (a, b) => STAGES.findIndex(x => x.id === a.stage) - STAGES.findIndex(x => x.id === b.stage),
+    value: (a, b) => a.value - b.value,
+    close: (a, b) => (a.closeDate || '9999').localeCompare(b.closeDate || '9999'),
     fit: (a, b) => a.fit - b.fit,
     owner: (a, b) => a.owner.localeCompare(b.owner),
-    next: (a, b) => (a.nextDate || '9999') < (b.nextDate || '9999') ? -1 : (a.nextDate || '9999') > (b.nextDate || '9999') ? 1 : 0
-  }[k];
-  return list.slice().sort((a, b) => cmp(a, b) * dir || a.company.localeCompare(b.company));
+    next: (a, b) => (a.nextDate || '9999').localeCompare(b.nextDate || '9999')
+  }[k] || ((a, b) => 0);
+  return list.slice().sort((a, b) => cmp(a, b) * dir || oppTitle(a).localeCompare(oppTitle(b)));
 }
 
 function tableHtml(list, sortable) {
@@ -983,9 +1116,7 @@ function renderHome(host) {
   const open = L.filter(l => !isClosed(l));
   const by = k => open.filter(l => bucket(l) === k).length;
   const over = by('overdue'), dueToday = by('today'), dueWeek = over + dueToday + by('week');
-  const won = L.filter(l => l.stage === 'won').length, lost = L.filter(l => l.stage === 'lost').length;
-  const ws = weekStart().getTime();
-  const addedWeek = L.filter(l => new Date(l.created).getTime() >= ws).length;
+  const pv = open.reduce((n, l) => n + l.value, 0), wv = open.reduce((n, l) => n + weightedOf(l), 0);
   const name = store && store.user ? personName(store.user) : '';
   const summary = !L.length ? 'Your pipeline is empty. Add a lead or import your research to get started.'
     : over ? `You have <b>${plural(over, 'overdue follow-up')}</b> and ${dueWeek - over} more due this week.`
@@ -1004,53 +1135,61 @@ function renderHome(host) {
     </svg>
   </section>
   <div class="kpis">
-    <button class="kpi" type="button" data-go="leads"><div class="row"><span class="lbl">Open leads</span><span class="ic">${icon('target')}</span></div><div class="num">${open.length}</div><div class="sub">${addedWeek ? `+${addedWeek} added this week` : 'None added this week'}</div></button>
+    <button class="kpi" type="button" data-go="analytics"><div class="row"><span class="lbl">Pipeline value</span><span class="ic">${icon('target')}</span></div><div class="num">${moneyC(pv)}</div><div class="sub">${plural(open.length, 'open lead')}</div></button>
+    <button class="kpi k-won" type="button" data-go="analytics"><div class="row"><span class="lbl">Weighted value</span><span class="ic">${icon('trophy')}</span></div><div class="num">${moneyC(wv)}</div><div class="sub">${pv ? Math.round(wv / pv * 100) + '% of pipeline value' : 'Add values to see this'}</div></button>
     <button class="kpi k-due" type="button" data-go="followups"><div class="row"><span class="lbl">Due this week</span><span class="ic">${icon('clock')}</span></div><div class="num">${dueWeek}</div><div class="sub">${dueToday ? `${dueToday} due today` : 'Nothing due today'}</div></button>
     <button class="kpi k-over${over ? ' hot' : ''}" type="button" data-go="followups"><div class="row"><span class="lbl">Overdue</span><span class="ic">${icon('alert')}</span></div><div class="num">${over}</div><div class="sub">${over ? 'Needs attention' : 'All clear'}</div></button>
-    <button class="kpi k-won" type="button" data-go="leads" data-stage-go="won"><div class="row"><span class="lbl">Won</span><span class="ic">${icon('trophy')}</span></div><div class="num">${won}</div><div class="sub">${won + lost ? `Win rate ${Math.round(won / (won + lost) * 100)}%` : 'No closed leads yet'}</div></button>
   </div>`;
 
   if (!L.length) { host.innerHTML = html + emptyHtml(); return; }
 
-  // follow-ups list
-  const fu = open.slice().sort((a, b) => (a.nextDate || '9999').localeCompare(b.nextDate || '9999') || a.company.localeCompare(b.company)).slice(0, 7);
+  const fu = open.slice().sort((a, b) => (a.nextDate || '9999').localeCompare(b.nextDate || '9999') || oppTitle(a).localeCompare(oppTitle(b))).slice(0, 7);
   const fuRows = fu.map(l => { const b = bucket(l); return `<tr data-id="${esc(l.id)}">
-      <td><button type="button" class="co" data-open="${esc(l.id)}">${esc(l.company)}</button>${l.group ? `<div class="sub">${esc(l.group)}</div>` : ''}<div class="sub only-sm">${l.nextAction ? esc(l.nextAction) : 'Set a next action'}</div></td>
-      <td class="hide-sm">${l.nextAction ? esc(l.nextAction) : '<span class="muted">Set a next action</span>'}</td>
+      <td><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button><div class="sub">${esc(l.company !== oppTitle(l) ? l.company : (l.sector || ''))}</div><div class="sub only-sm">${l.nextAction ? esc(l.nextAction) : 'Set a next action'}</div></td>
+      <td class="hide-sm">${l.nextAction ? esc(l.nextAction) : '<span class="muted">Set a next action</span>'}${l.nextOwner ? `<div class="sub">${esc(l.nextOwner)}</div>` : ''}</td>
       <td>${l.nextDate ? `<span class="chip ${b}">${esc(fmtDue(l))}</span>` : '<span class="chip none">No date</span>'}</td>
-      <td class="hide-sm">${pillHtml(l)}</td></tr>`; }).join('');
-  const fuTable = fu.length ? `<div class="tablewrap"><table style="min-width:0"><colgroup><col style="width:31%"><col style="width:29%" class="hide-sm"><col style="width:19%"><col style="width:21%" class="hide-sm"></colgroup>
-      <thead><tr><th><span class="th">Lead</span></th><th class="hide-sm"><span class="th">Next action</span></th><th><span class="th">Due</span></th><th class="hide-sm"><span class="th">Stage</span></th></tr></thead><tbody>${fuRows}</tbody></table></div>`
+      <td class="hide-sm">${l.value ? `<span class="money">${moneyC(l.value)}</span>` : '<span class="muted">–</span>'}</td></tr>`; }).join('');
+  const fuTable = fu.length ? `<div class="tablewrap"><table style="min-width:0"><colgroup><col style="width:33%"><col style="width:31%" class="hide-sm"><col style="width:19%"><col style="width:17%" class="hide-sm"></colgroup>
+      <thead><tr><th><span class="th">Lead</span></th><th class="hide-sm"><span class="th">Next action</span></th><th><span class="th">Due</span></th><th class="hide-sm"><span class="th">Value</span></th></tr></thead><tbody>${fuRows}</tbody></table></div>`
     : `<div class="pempty">No open leads. Everything is closed.</div>`;
 
-  // funnel
-  const counts = OPEN_STAGES.map(s => ({ s, n: open.filter(l => l.stage === s.id).length }));
-  const max = Math.max(1, ...counts.map(c => c.n));
-  const funnel = `<div class="funnel">` + counts.map(({ s, n }) =>
-    `<div class="frow" data-tip="${esc(s.label)}: ${plural(n, 'lead')}" tabindex="0">
-      <div class="ftrack"><div class="fbar${n ? '' : ' zero'}" style="width:${n ? Math.max(6, n / max * 100) : 2}%"></div></div>
-      <div class="flab"><span>${esc(s.label)}</span><b>${n}</b></div></div>`).join('') + `</div>
-    <div class="ffoot"><span>Won <b>${won}</b></span><span>Lost <b>${lost}</b></span><span>Open <b>${open.length}</b></span></div>`;
+  const openStages = STAGES.filter(st => !st.closed);
+  const rowsF = openStages.map(st => { const ls = open.filter(l => l.stage === st.id); return { st, n: ls.length, v: ls.reduce((a, l) => a + l.value, 0) }; });
+  const useValue = rowsF.some(r => r.v > 0);
+  const max = Math.max(1, ...rowsF.map(r => useValue ? r.v : r.n));
+  const funnel = `<div class="funnel">` + rowsF.map(({ st, n, v }) => { const m = useValue ? v : n;
+    return `<div class="frow" data-tip="${esc(st.label)} (${st.prob}%): ${plural(n, 'lead')}, ${money(v)}" tabindex="0">
+      <div class="ftrack"><div class="fbar${m ? '' : ' zero'}" style="width:${m ? Math.max(6, m / max * 100) : 2}%"></div></div>
+      <div class="flab"><span>${esc(st.label)}</span><b>${useValue ? moneyC(v) : n}</b></div></div>`; }).join('') + `</div>
+    <div class="ffoot"><span>Open <b>${open.length}</b></span><span>Value <b>${moneyC(pv)}</b></span><span>Weighted <b>${moneyC(wv)}</b></span></div>`;
 
-  // recent activity
   const acts = [];
   L.forEach(l => (l.activity || []).forEach(a => acts.push({ l, a })));
   acts.sort((x, y) => String(y.a.at).localeCompare(String(x.a.at)));
   const feed = acts.slice(0, 7).map(({ l, a }) => `<li><span class="av" aria-hidden="true">${esc(initials(a.by))}</span>
-      <div class="txt">${esc(a.text)}<div><button type="button" class="co" data-open="${esc(l.id)}">${esc(l.company)}</button></div><div class="meta">${esc(personName(a.by) || 'Someone')} · <time datetime="${esc(a.at)}">${esc(rel(a.at))}</time></div></div></li>`).join('');
+      <div class="txt">${esc(a.text)}<div><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button></div><div class="meta">${esc(personName(a.by) || 'Someone')} · <time datetime="${esc(a.at)}">${esc(rel(a.at))}</time></div></div></li>`).join('');
 
-  // groups
-  const groupRows = topCounts(L.map(l => l.group || 'No group'), 6);
+  const sectorRows = CFG.sectors.concat('Not set').map(sc => { const ls = open.filter(l => (l.sector || 'Not set') === sc); return { label: sc, value: ls.reduce((a, l) => a + l.value, 0), n: ls.length }; }).filter(r => r.n);
 
   html += `<div class="grid2">
     <section class="panel"><div class="ph"><h2>My follow-ups</h2><a href="#followups">View all</a></div><div class="pb flush">${fuTable}</div></section>
-    <section class="panel"><div class="ph"><h2>Pipeline by stage</h2><span class="note">Open leads</span></div><div class="pb">${funnel}</div></section>
+    <section class="panel"><div class="ph"><h2>Pipeline by stage</h2><span class="note">${useValue ? 'Open value' : 'Open leads'}</span></div><div class="pb">${funnel}</div></section>
   </div>
   <div class="grid2 even">
     <section class="panel"><div class="ph"><h2>Recent activity</h2></div>${feed ? `<ul class="feed">${feed}</ul>` : '<div class="pempty">No activity yet.</div>'}</section>
-    <section class="panel"><div class="ph"><h2>Leads by customer group</h2><span class="note">All leads</span></div><div class="pb">${barsHtml(groupRows)}</div></section>
+    <section class="panel"><div class="ph"><h2>Open value by sector</h2><a href="#analytics">Analytics</a></div><div class="pb">${moneyBarsHtml(sectorRows)}</div></section>
   </div>`;
   host.innerHTML = html;
+}
+
+function moneyBarsHtml(rows) {
+  if (!rows.length) return '<div class="pempty">No data yet.</div>';
+  const max = Math.max(1, ...rows.map(r => r.value));
+  return `<div class="bars">` + rows.map(r =>
+    `<div class="brow" style="grid-template-columns:minmax(80px,130px) minmax(0,1fr) 64px" data-tip="${esc(r.label)}: ${plural(r.n, 'lead')}, ${money(r.value)}" tabindex="0">
+      <span class="bl"><span>${esc(r.label)}</span></span>
+      <div class="track"><div class="fill" style="width:${r.value ? r.value / max * 100 : 0}%"></div></div>
+      <span class="bv">${moneyC(r.value)}</span></div>`).join('') + `</div>`;
 }
 
 function topCounts(values, n) {
@@ -1074,53 +1213,121 @@ function barsHtml(rows) {
 }
 
 /* ---------- analytics ---------- */
+function aggregate(list, keyFn, keys) {
+  const m = new Map((keys || []).map(k => [k, { key: k, n: 0, v: 0, w: 0 }]));
+  list.forEach(l => { const k = keyFn(l); if (!m.has(k)) m.set(k, { key: k, n: 0, v: 0, w: 0 }); const r = m.get(k); r.n++; r.v += l.value; r.w += weightedOf(l); });
+  return [...m.values()];
+}
+function aTable(rows, labelHead, opts = {}) {
+  const tot = rows.reduce((a, r) => ({ n: a.n + r.n, v: a.v + r.v, w: a.w + r.w }), { n: 0, v: 0, w: 0 });
+  const maxW = Math.max(1, ...rows.map(r => r.v));
+  return `<div class="tablewrap" style="border:0;box-shadow:none;border-radius:0 0 16px 16px"><table class="atable"><thead><tr><th>${labelHead}</th>${opts.prob ? '<th class="num">Probability</th>' : ''}<th class="num">Leads</th><th class="num">Value</th><th class="num">Weighted</th><th class="barcell hide-sm"><span class="sr">Share of value</span></th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td>${opts.dot ? `<span class="pill" style="background:none;padding:0"><i style="background:${r.color}"></i>${esc(r.label)}</span>` : esc(r.label)}</td>${opts.prob ? `<td class="num">${r.prob}%</td>` : ''}<td class="num">${r.n}</td><td class="num">${money(r.v)}</td><td class="num">${money(r.w)}</td>
+      <td class="barcell hide-sm"><div class="mbar" data-tip="${esc(r.label)}: ${money(r.v)} value, ${money(r.w)} weighted"><i style="width:${r.v / maxW * 100}%"></i></div></td></tr>`).join('') +
+    `</tbody><tfoot><tr><td>Total</td>${opts.prob ? '<td></td>' : ''}<td class="num">${tot.n}</td><td class="num">${money(tot.v)}</td><td class="num">${money(tot.w)}</td><td class="hide-sm"></td></tr></tfoot></table></div>`;
+}
+function analyticsData() {
+  const L = state.leads;
+  const scoped = L.filter(l => state.ascope === 'all' ? true : state.ascope === 'won' ? (!isClosed(l) || closedKind(l) === 'won') : !isClosed(l));
+  const inYear = l => !state.ayear || (state.ayear === 'none' ? !l.closeDate : (l.closeDate || '').startsWith(state.ayear));
+  const F = scoped.filter(inYear);
+  const visibleStages = STAGES.filter(st => state.ascope === 'all' || !st.closed || (state.ascope === 'won' && st.closed === 'won'));
+  const byStage = aggregate(F, l => l.stage, visibleStages.map(st => st.id)).map(r => { const st = stageOf(r.key); return Object.assign(r, { label: st.label, prob: st.prob, color: st.color }); });
+  const bySector = aggregate(F, l => l.sector || 'Not set', CFG.sectors).filter(r => r.n || CFG.sectors.includes(r.key)).map(r => Object.assign(r, { label: r.key }));
+  const byType = aggregate(F, l => l.type || 'Not set', CFG.types.map(t => t.label)).map(r => Object.assign(r, { label: r.key }));
+  // months
+  let months = [];
+  const dated = F.filter(l => l.closeDate);
+  if (state.ayear && state.ayear !== 'none') months = Array.from({ length: 12 }, (_, i) => `${state.ayear}-${pad(i + 1)}`);
+  else if (dated.length) {
+    const ks = dated.map(l => l.closeDate.slice(0, 7)).sort();
+    let [y, m] = ks[0].split('-').map(Number); const [y2, m2] = ks[ks.length - 1].split('-').map(Number);
+    while ((y < y2 || (y === y2 && m <= m2)) && months.length < 36) { months.push(`${y}-${pad(m)}`); m++; if (m > 12) { m = 1; y++; } }
+  }
+  const byMonth = aggregate(dated, l => l.closeDate.slice(0, 7), months).filter(r => months.includes(r.key)).sort((a, b) => a.key.localeCompare(b.key))
+    .map(r => Object.assign(r, { label: monthFmt.format(new Date(+r.key.slice(0, 4), +r.key.slice(5) - 1, 1)) }));
+  const undated = F.filter(l => !l.closeDate);
+  const yearL = L.filter(inYear);
+  const sales = yearL.filter(l => l.type !== 'Internal');
+  const won = sales.filter(l => closedKind(l) === 'won').length, lost = sales.filter(l => closedKind(l) === 'lost').length;
+  return { F, byStage, bySector, byType, byMonth, undated, won, lost };
+}
 function renderAnalytics(host) {
   const L = state.leads;
   if (!L.length && !state.contacts.length) { host.innerHTML = emptyHtml(); return; }
-  const open = L.filter(l => !isClosed(l));
-  const won = L.filter(l => l.stage === 'won').length, lost = L.filter(l => l.stage === 'lost').length;
-  const avgFit = open.length ? (open.reduce((s, l) => s + l.fit, 0) / open.length).toFixed(1) : '–';
-  const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
-  const newMonth = L.filter(l => new Date(l.created) >= monthStart).length;
+  const years = [...new Set(L.map(l => (l.closeDate || '').slice(0, 4)).filter(Boolean))].sort();
+  if (state.ayear && state.ayear !== 'none' && !years.includes(state.ayear)) state.ayear = '';
+  const D = analyticsData();
+  const pv = D.F.reduce((a, l) => a + l.value, 0), wv = D.F.reduce((a, l) => a + weightedOf(l), 0);
+  const scopeLabel = { open: 'Open pipeline', won: 'Open and won', all: 'All, including on hold and lost' }[state.ascope];
+  const yearLabel = !state.ayear ? 'all years' : state.ayear === 'none' ? 'no close date' : state.ayear;
 
-  // new leads per week, last 12 weeks
+  // grouped month chart
+  const mmax = Math.max(1, ...D.byMonth.map(r => r.v));
+  const step = mmax > 1e6 ? 250000 : mmax > 200000 ? 50000 : mmax > 50000 ? 10000 : 5000;
+  const nice = Math.ceil(mmax / step) * step;
+  const monthChart = D.byMonth.length ? `<div class="legend"><span><i style="background:#A9C4FA"></i>Value</span><span><i style="background:var(--blue)"></i>Weighted value</span></div>
+    <div class="gcols" role="img" aria-label="Pipeline value and weighted value by target close month">
+      <div class="grid" style="top:18px"><span>${moneyC(nice)}</span></div>
+      ${D.byMonth.map(r => `<div class="gcol" data-tip="${esc(r.label)}: ${plural(r.n, 'lead')}, ${money(r.v)} value, ${money(r.w)} weighted" tabindex="0">
+        <i class="u" style="height:${r.v / nice * 100}%"></i><i class="w" style="height:${r.w / nice * 100}%"></i></div>`).join('')}
+    </div>
+    <div class="gx" aria-hidden="true">${D.byMonth.map((r, i) => `<span>${D.byMonth.length <= 12 || i % 2 === 0 ? esc(r.label.replace(/ \d{4}$/, m => D.byMonth.length > 12 || !state.ayear ? ' ' + m.trim().slice(2) : '')) : ''}</span>`).join('')}</div>`
+    : '<div class="pempty">No target close dates in this view yet. Add them to leads to see the monthly pipeline.</div>';
+  const monthRows = D.byMonth.filter(r => r.n).concat(D.undated.length ? [{ label: 'No close date', n: D.undated.length, v: D.undated.reduce((a, l) => a + l.value, 0), w: D.undated.reduce((a, l) => a + weightedOf(l), 0) }] : []);
+
+  // counts-based panels kept from before
   const weeks = [];
-  for (let i = 11; i >= 0; i--) {
-    const s = weekStart(-i), e = weekStart(-i + 1);
-    weeks.push({ s, n: L.filter(l => { const t = new Date(l.created); return t >= s && t < e; }).length });
-  }
+  for (let i = 11; i >= 0; i--) { const s0 = weekStart(-i), e0 = weekStart(-i + 1); weeks.push({ s: s0, n: L.filter(l => { const t = new Date(l.created); return t >= s0 && t < e0; }).length }); }
   const wmax = Math.max(1, ...weeks.map(w => w.n));
-  const nice = Math.max(1, Math.ceil(wmax / (wmax > 10 ? 5 : 1)) * (wmax > 10 ? 5 : 1));
+  const wnice = Math.max(1, Math.ceil(wmax / (wmax > 10 ? 5 : 1)) * (wmax > 10 ? 5 : 1));
   const shortDate = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' });
   const weekly = `<div class="cols" role="img" aria-label="New leads per week for the last 12 weeks">
-      <div class="grid" style="top:18px"><span>${nice}</span></div>
+      <div class="grid" style="top:18px"><span>${wnice}</span></div>
       ${weeks.map((w, i) => `<div class="ccol" data-tip="Week of ${esc(shortDate.format(w.s))}: ${plural(w.n, 'new lead')}" tabindex="0">
-        ${i === weeks.length - 1 || w.n === wmax && w.n ? `<span class="cval">${w.n}</span>` : ''}
-        <div class="cbar${w.n ? '' : ' zero'}" style="height:${w.n ? Math.max(2, w.n / nice * 100) : 1}%"></div></div>`).join('')}
+        ${i === weeks.length - 1 || (w.n === wmax && w.n) ? `<span class="cval">${w.n}</span>` : ''}
+        <div class="cbar${w.n ? '' : ' zero'}" style="height:${w.n ? Math.max(2, w.n / wnice * 100) : 1}%"></div></div>`).join('')}
     </div>
-    <div class="cx" aria-hidden="true">${weeks.map((w, i) => `<span>${i % 2 === 1 ? esc(shortDate.format(w.s)) : ''}</span>`).join('')}</div>
-    <table class="sr"><caption>New leads per week</caption><tr><th>Week starting</th><th>New leads</th></tr>${weeks.map(w => `<tr><td>${esc(shortDate.format(w.s))}</td><td>${w.n}</td></tr>`).join('')}</table>`;
+    <div class="cx" aria-hidden="true">${weeks.map((w, i) => `<span>${i % 2 === 1 ? esc(shortDate.format(w.s)) : ''}</span>`).join('')}</div>`;
 
-  const stageRows = STAGES.map(s => ({ label: s.label, value: L.filter(l => l.stage === s.id).length, dot: s.color }));
-  const sourceRows = topCounts(L.map(l => l.source || 'Not set'), 6);
-  const groupRows = topCounts(L.map(l => l.group || 'No group'), 6);
-  const ownerRows = topCounts(open.map(l => l.owner || 'Unassigned'), 6);
-
-  host.innerHTML = `<div class="tiles">
-      <div class="tile"><div class="lbl">Total leads</div><div class="num">${L.length}</div><div class="sub">${newMonth} new this month</div></div>
-      <div class="tile"><div class="lbl">Open leads</div><div class="num">${open.length}</div><div class="sub">${plural(won + lost, 'closed lead')}</div></div>
-      <div class="tile"><div class="lbl">Win rate</div><div class="num">${won + lost ? Math.round(won / (won + lost) * 100) + '%' : '–'}</div><div class="sub">${won} won, ${lost} lost</div></div>
-      <div class="tile"><div class="lbl">Average fit (open)</div><div class="num">${avgFit}</div><div class="sub">Out of 5</div></div>
+  host.innerHTML = `<div class="actrl">
+      <select data-actl="year" aria-label="Year (target close)"><option value="">All years</option>${years.map(y => `<option value="${y}"${y === state.ayear ? ' selected' : ''}>${y}</option>`).join('')}<option value="none"${state.ayear === 'none' ? ' selected' : ''}>No close date</option></select>
+      <select data-actl="scope" aria-label="Which leads"><option value="open"${state.ascope === 'open' ? ' selected' : ''}>Open pipeline</option><option value="won"${state.ascope === 'won' ? ' selected' : ''}>Open and won</option><option value="all"${state.ascope === 'all' ? ' selected' : ''}>All, including on hold and lost</option></select>
+      <span class="grow"></span>
+      <button type="button" class="btn" data-actl="export">${icon('export')}Export tables</button>
+    </div>
+    <div class="tiles">
+      <div class="tile"><div class="lbl">Leads</div><div class="num">${D.F.length}</div><div class="sub">${esc(scopeLabel)}, ${esc(yearLabel)}</div></div>
+      <div class="tile"><div class="lbl">Pipeline value</div><div class="num">${moneyC(pv)}</div><div class="sub">Unweighted</div></div>
+      <div class="tile"><div class="lbl">Weighted value</div><div class="num">${moneyC(wv)}</div><div class="sub">${pv ? Math.round(wv / pv * 100) + '% of value' : 'By stage probability'}</div></div>
+      <div class="tile"><div class="lbl">Win rate</div><div class="num">${D.won + D.lost ? Math.round(D.won / (D.won + D.lost) * 100) + '%' : '–'}</div><div class="sub">${D.won} won, ${D.lost} lost (excl. internal)</div></div>
     </div>
     <div class="grid2 even">
-      <section class="panel span2"><div class="ph"><h2>New leads per week</h2><span class="note">Last 12 weeks</span></div><div class="pb">${weekly}</div></section>
-      <section class="panel"><div class="ph"><h2>Leads by stage</h2><span class="note">All leads</span></div><div class="pb">${barsHtml(stageRows)}</div></section>
-      <section class="panel"><div class="ph"><h2>Leads by source</h2><span class="note">All leads</span></div><div class="pb">${barsHtml(sourceRows)}</div></section>
-      <section class="panel"><div class="ph"><h2>Leads by customer group</h2><span class="note">All leads</span></div><div class="pb">${barsHtml(groupRows)}</div></section>
-      <section class="panel"><div class="ph"><h2>Open leads by owner</h2><span class="note">Open leads</span></div><div class="pb">${barsHtml(ownerRows)}</div></section>
+      <section class="panel span2"><div class="ph"><h2>Pipeline by stage</h2><span class="note">${esc(scopeLabel)}, ${esc(yearLabel)}</span></div><div class="pb flush">${aTable(D.byStage, 'Stage', { prob: true, dot: true })}</div></section>
+      <section class="panel span2"><div class="ph"><h2>Pipeline by month</h2><span class="note">By target close date</span></div><div class="pb">${monthChart}</div>${monthRows.length ? `<div class="pb flush">${aTable(monthRows, 'Month')}</div>` : ''}</section>
+      <section class="panel"><div class="ph"><h2>Pipeline by sector</h2></div><div class="pb flush">${aTable(D.bySector, 'Sector')}</div></section>
+      <section class="panel"><div class="ph"><h2>Pipeline by type</h2></div><div class="pb flush">${aTable(D.byType, 'Type')}</div></section>
+      <section class="panel span2"><div class="ph"><h2>New leads per week</h2><span class="note">Last 12 weeks, all leads</span></div><div class="pb">${weekly}</div></section>
       ${state.contacts.length ? `<section class="panel"><div class="ph"><h2>Contacts by interest</h2><span class="note">${plural(state.contacts.length, 'contact')}</span></div><div class="pb">${barsHtml(INTERESTS.map(i => ({ label: i, value: state.contacts.filter(c => c.interests.includes(i)).length })).concat({ label: 'Not set', value: state.contacts.filter(c => !c.interests.length).length }))}</div></section>
       <section class="panel"><div class="ph"><h2>Contacts by owner</h2><span class="note">All contacts</span></div><div class="pb">${barsHtml(topCounts(state.contacts.map(c => c.owner || 'Unassigned'), 7))}</div></section>` : ''}
     </div>`;
+}
+function exportAnalytics() {
+  const D = analyticsData();
+  const lines = [];
+  const add = (title, rows, prob) => {
+    lines.push(csvCell(title));
+    lines.push([title.split(' by ')[1] || 'Group'].concat(prob ? ['Probability'] : [], ['Leads', 'Value (£)', 'Weighted value (£)']).map(csvCell).join(','));
+    rows.forEach(r => lines.push([r.label].concat(prob ? [r.prob + '%'] : [], [r.n, Math.round(r.v), Math.round(r.w)]).map(csvCell).join(',')));
+    lines.push('');
+  };
+  const scope = { open: 'Open pipeline', won: 'Open and won', all: 'All including lost' }[state.ascope];
+  lines.push(csvCell(`Astral BD pipeline analytics, ${scope}, ${!state.ayear ? 'all years' : state.ayear === 'none' ? 'no close date' : state.ayear}, exported ${today()}`), '');
+  add('Pipeline by stage', D.byStage, true);
+  add('Pipeline by month', D.byMonth.filter(r => r.n));
+  add('Pipeline by sector', D.bySector);
+  add('Pipeline by type', D.byType);
+  download(`astral-bd-analytics-${today()}.csv`, lines.join('\r\n'));
 }
 
 /* ---------- follow-ups and board ---------- */
@@ -1137,52 +1344,89 @@ function renderDue(host, list) {
 }
 
 function renderBoard(host, list) {
-  host.innerHTML = `<div class="board">` + STAGES.map(s => {
-    const items = sortLeads(list.filter(l => l.stage === s.id), 'next', 1);
-    return `<div class="col" data-stage="${s.id}"><div class="colbar" style="--c:${s.color}"></div><h3><span class="pill"><i style="background:${s.color}"></i>${esc(s.label)}</span><span class="c">${items.length}</span></h3>` +
+  host.innerHTML = `<div class="board">` + STAGES.map(st => {
+    const items = sortLeads(list.filter(l => l.stage === st.id), 'next', 1);
+    const v = items.reduce((a, l) => a + l.value, 0);
+    return `<div class="col" data-stage="${st.id}"><div class="colbar" style="--c:${st.color}"></div><h3><span><span class="pill"><i style="background:${st.color}"></i>${esc(st.label)} <span class="pct">${st.prob}%</span></span><span class="tot">${v ? `${moneyC(v)} · ${moneyC(v * st.prob / 100)} weighted` : 'No value yet'}</span></span><span class="c">${items.length}</span></h3>` +
       items.map(l => {
         const b = bucket(l);
-        return `<div class="card" draggable="true" data-id="${esc(l.id)}"><button type="button" class="co" data-open="${esc(l.id)}">${esc(l.company || '(no name)')}</button>` +
-          (l.group ? `<div class="sub">${esc(l.group)}</div>` : '') +
+        return `<div class="card" draggable="true" data-id="${esc(l.id)}"><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
+          `<div class="sub">${esc([l.company !== oppTitle(l) ? l.company : '', l.sector].filter(Boolean).join(' · '))}</div>` +
           (l.nextAction ? `<div style="margin-top:6px">${esc(l.nextAction)}</div>` : '') +
-          `<div class="meta">${l.nextDate ? `<span class="chip ${b}">${esc(fmtDue(l))}</span>` : '<span></span>'}${fitHtml(l.fit)}</div></div>`;
+          `<div class="val"><span class="money">${l.value ? moneyC(l.value) : ''}</span><span class="sub">${l.closeDate ? 'Close ' + esc(shortMonth(l.closeDate)) : ''}</span></div>` +
+          `<div class="meta">${l.nextDate ? `<span class="chip ${b}">${esc(fmtDue(l))}</span>` : '<span></span>'}${l.priority ? `<span class="prio ${esc(l.priority)}">${esc(l.priority)}</span>` : fitHtml(l.fit)}</div></div>`;
       }).join('') + `</div>`;
   }).join('') + `</div>`;
 }
 
 /* ---------- drawer ---------- */
 function fillSelects() {
-  $('#f-stage').innerHTML = STAGES.map(s => `<option value="${s.id}">${esc(s.label)}</option>`).join('');
+  $('#f-stage').innerHTML = STAGES.map(st => `<option value="${st.id}">${esc(st.label)} (${st.prob}%)</option>`).join('');
   $('#f-fit').innerHTML = [1,2,3,4,5].map(n => `<option value="${n}">${n}</option>`).join('');
-  $('#dl-sources').innerHTML = CFG.sources.map(s => `<option value="${esc(s)}">`).join('');
+  $('#f-type').innerHTML = '<option value="">Choose a type</option>' + CFG.types.map(t => `<option value="${esc(t.label)}">${esc(t.label)}</option>`).join('');
+  $('#f-sector').innerHTML = '<option value="">Choose a sector</option>' + CFG.sectors.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join('');
+  $('#f-priority').innerHTML = '<option value="">Not set</option>' + CFG.priorities.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join('');
+  $('#dl-sources').innerHTML = CFG.sources.map(x => `<option value="${esc(x)}">`).join('');
 }
-function ownerOptions(current) {
-  const owners = [...new Set([...CFG.owners, ...state.leads.map(l => l.owner).filter(Boolean), current].filter(Boolean))];
-  $('#f-owner').innerHTML = '<option value="">Unassigned</option>' + owners.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
+function ownerOptions(current, nextCurrent) {
+  const owners = [...new Set([...CFG.owners, ...state.leads.map(l => l.owner).filter(Boolean), ...state.leads.map(l => l.nextOwner).filter(Boolean), current, nextCurrent].filter(Boolean))];
+  const opts = owners.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
+  $('#f-owner').innerHTML = '<option value="">Unassigned</option>' + opts;
+  $('#f-nextowner').innerHTML = '<option value="">Same as owner</option>' + opts;
 }
 function who() { return (store && store.user) || 'You'; }
+const contactLabel = c => `${cName(c) || 'Organisation contact'}${c.company ? ' (' + c.company + ')' : ''}`;
+function updateWeightedHint() {
+  const v = parseMoney($('#f-value').value), st = stageOf($('#f-stage').value);
+  $('#f-weighted').textContent = v ? `Weighted: ${money(v * st.prob / 100)} at ${st.prob}%` : `Stage probability ${st.prob}%`;
+}
+function syncContactHint() {
+  const c = state.contacts.find(x => x.id === state.editing.contactId);
+  $('#f-contact-hint').textContent = c ? 'Linked to ' + contactLabel(c) + ' in Contacts' : (state.contacts.length ? 'Not linked to a contact yet' : '');
+}
 
 function openDrawer(id) {
   if (!store) { toast('Sign in first'); return; }
   const existing = id ? state.leads.find(l => l.id === id) : null;
   state.isNew = !existing;
   state.editing = existing ? normalise(existing) : blankLead();
-  if (state.isNew && CFG.owners[0] && store.mode === 'demo') state.editing.owner = '';
   const l = state.editing;
   lastFocus = document.activeElement;
-  ownerOptions(l.owner);
-  $('#dr-title').textContent = state.isNew ? 'New lead' : (l.company || 'Edit lead');
-  $('#f-company').value = l.company; $('#f-group').value = l.group; $('#f-source').value = l.source;
+  ownerOptions(l.owner, l.nextOwner);
+  $('#dr-title').textContent = state.isNew ? 'New lead' : oppTitle(l);
+  $('#f-opp').value = l.opportunity; $('#f-oppid').value = l.oppId; $('#f-company').value = l.company;
+  $('#f-type').value = l.type; $('#f-sector').value = l.sector; $('#f-value').value = l.value ? String(l.value) : '';
+  $('#f-stage').value = l.stage; $('#f-start').value = l.startDate; $('#f-close').value = l.closeDate;
+  $('#f-priority').value = l.priority; $('#f-fit').value = String(l.fit); $('#f-owner').value = l.owner; $('#f-nda').value = l.nda ? 'yes' : 'no';
+  $('#f-source').value = l.source; $('#f-status').value = l.status;
+  $('#dl-status').innerHTML = [...new Set(Object.values(STATUS_HINTS).flat().concat(state.leads.map(x => x.status).filter(Boolean)))].map(x => `<option value="${esc(x)}">`).join('');
   $('#f-contact').value = l.contact; $('#f-role').value = l.role; $('#f-email').value = l.email; $('#f-website').value = l.website;
-  $('#f-stage').value = l.stage; $('#f-fit').value = String(l.fit); $('#f-owner').value = l.owner;
-  $('#f-next').value = l.nextAction; $('#f-date').value = l.nextDate; $('#f-notes').value = l.notes; $('#f-log').value = '';
+  $('#f-next').value = l.nextAction; $('#f-date').value = l.nextDate; $('#f-nextowner').value = l.nextOwner;
+  $('#f-notes').value = l.notes; $('#f-log').value = '';
+  $('#dl-contacts').innerHTML = state.contacts.filter(c => cName(c)).map(c => `<option value="${esc(contactLabel(c))}">`).join('');
+  $('#dl-orgs').innerHTML = [...new Set(state.contacts.map(x => x.company).concat(state.leads.map(x => x.company)).filter(Boolean))].sort().map(o => `<option value="${esc(o)}">`).join('');
   $('#btn-delete').hidden = state.isNew;
-  const link = safeUrl(l.website);
-  renderActivity(l, link);
+  updateWeightedHint(); syncContactHint();
+  renderActivity(l, safeUrl(l.website));
   renderLeadContacts(l);
   $('#scrim').hidden = false;
   const d = $('#drawer'); d.classList.add('open'); d.setAttribute('aria-hidden', 'false');
-  setTimeout(() => $('#f-company').focus(), 30);
+  setTimeout(() => { if (!d.contains(document.activeElement)) $('#f-opp').focus(); }, 30);
+}
+function pickContactFromInput() {
+  const v = $('#f-contact').value.trim();
+  const c = state.contacts.find(x => contactLabel(x) === v);
+  if (c) {
+    state.editing.contactId = c.id;
+    $('#f-contact').value = cName(c);
+    if (!$('#f-role').value) $('#f-role').value = c.role;
+    if (!$('#f-email').value) $('#f-email').value = c.email;
+    if (!$('#f-company').value) $('#f-company').value = c.company;
+  } else {
+    const linked = state.contacts.find(x => x.id === state.editing.contactId);
+    if (linked && cName(linked) !== v) state.editing.contactId = '';
+  }
+  syncContactHint();
 }
 function renderActivity(l, link) {
   const items = l.activity.slice().reverse();
@@ -1195,30 +1439,36 @@ function closeDrawer() {
   const d = $('#drawer');
   d.classList.remove('open'); d.setAttribute('aria-hidden', 'true');
   $('#scrim').hidden = true; state.editing = null;
-  if (lastFocus && lastFocus.focus) lastFocus.focus();
+  if (lastFocus && lastFocus.focus && document.contains(lastFocus)) lastFocus.focus();
 }
 
 async function saveForm(e) {
   e.preventDefault();
-  const company = $('#f-company').value.trim();
-  if (!company) { $('#f-company').focus(); toast('Add a company name first'); return; }
+  const company = $('#f-company').value.trim(), opportunity = $('#f-opp').value.trim();
+  if (!company && !opportunity) { $('#f-opp').focus(); toast('Add an opportunity or a company name first'); return; }
   const prev = state.isNew ? null : state.editing;
-  const l = prev ? Object.assign({}, prev) : blankLead();
+  const l = Object.assign({}, state.editing);
   Object.assign(l, {
-    company, group: $('#f-group').value.trim(), source: $('#f-source').value.trim(),
-    contact: $('#f-contact').value.trim(), role: $('#f-role').value.trim(), email: $('#f-email').value.trim(),
+    opportunity, oppId: $('#f-oppid').value.trim(), company: company || opportunity,
+    type: $('#f-type').value, sector: $('#f-sector').value, value: parseMoney($('#f-value').value),
+    startDate: $('#f-start').value, closeDate: $('#f-close').value, priority: $('#f-priority').value, nda: $('#f-nda').value === 'yes',
+    source: $('#f-source').value.trim(), status: $('#f-status').value.trim(), contact: $('#f-contact').value.trim(), role: $('#f-role').value.trim(), email: $('#f-email').value.trim(),
     website: $('#f-website').value.trim(), stage: $('#f-stage').value, fit: parseInt($('#f-fit').value, 10) || 3,
-    owner: $('#f-owner').value, nextAction: $('#f-next').value.trim(), nextDate: $('#f-date').value,
+    owner: $('#f-owner').value, nextAction: $('#f-next').value.trim(), nextDate: $('#f-date').value, nextOwner: $('#f-nextowner').value,
     notes: $('#f-notes').value.trim()
   });
+  if (!l.oppId) l.oppId = nextOppId(l, state.leads.filter(x => x.id !== l.id).map(x => x.oppId));
   const now = new Date().toISOString();
   l.activity = (prev ? prev.activity : []).slice();
   if (!prev) l.activity.push({ at: now, by: who(), text: 'Lead added' });
-  else if (prev.stage !== l.stage) l.activity.push({ at: now, by: who(), text: 'Moved to ' + stageOf(l.stage).label });
+  else {
+    if (prev.stage !== l.stage) l.activity.push({ at: now, by: who(), text: 'Moved to ' + stageOf(l.stage).label });
+    if (prev.value !== l.value) l.activity.push({ at: now, by: who(), text: `Value changed to ${money(l.value)}` });
+  }
   const note = $('#f-log').value.trim();
   if (note) l.activity.push({ at: now, by: who(), text: note });
   l.updated = now;
-  try { await store.save(l); closeDrawer(); toast('Lead saved'); }
+  try { await store.save(l); closeDrawer(); toast(`Lead saved (${l.oppId})`); }
   catch (err) { toast('Could not save: ' + (err.message || err)); }
 }
 
@@ -1258,18 +1508,30 @@ function parseCSV(text) {
   return rows.filter(r => r.some(x => String(x).trim() !== ''));
 }
 const HMAP = {
-  company: ['company', 'companyname', 'organisation', 'organization', 'account'],
-  group: ['customergroup', 'group', 'segment', 'sector', 'category', 'industry'],
+  opportunity: ['opportunity', 'opportunityname', 'opportunitytitle', 'deal', 'dealname'],
+  oppId: ['opportunityid', 'oppid', 'opportunityref', 'reference', 'ref'],
+  company: ['company', 'companyname', 'organisation', 'organization', 'account', 'customer'],
+  type: ['type', 'opportunitytype'],
+  sector: ['sector', 'industry'],
+  value: ['value', 'value£', 'valuegbp', 'amount', 'dealvalue', 'valueunweighted'],
+  startDate: ['startdate', 'start'],
+  closeDate: ['targetclosedate', 'closedate', 'expectedclosedate', 'close', 'targetclose'],
+  priority: ['priority'],
+  nda: ['nda', 'ndasigned', 'ndayesno'],
+  group: ['customergroup', 'group', 'segment', 'category'],
   contact: ['contactname', 'contact', 'person', 'keycontact'],
   role: ['contactrole', 'role', 'title', 'jobtitle', 'position'],
   email: ['email', 'emailaddress', 'contactemail'],
   website: ['website', 'url', 'web', 'site', 'companywebsite'],
   source: ['source', 'leadsource'],
   fit: ['fit', 'fitscore', 'fit15', 'score'],
-  stage: ['stage', 'status'],
+  stage: ['stage', 'pipelinestage', 'bucket'],
   owner: ['owner'],
   nextAction: ['nextaction'],
   nextDate: ['nextactiondate', 'nextdate', 'due', 'duedate'],
+  nextOwner: ['nextactionowner', 'actionowner'],
+  status: ['statusdetail', 'status detail', 'bucketdetail'],
+  plannerId: ['plannertask', 'plannertasknumber', 'plannerid'],
   notes: ['notes', 'note', 'reason', 'why', 'rationale', 'comments']
 };
 function parseDateCell(v) {
@@ -1284,23 +1546,35 @@ function rowsToLeads(rows) {
   const header = rows[0].map(h => String(h).toLowerCase().replace(/[^a-z0-9]/g, ''));
   const idx = {};
   Object.keys(HMAP).forEach(k => { const i = header.findIndex(h => HMAP[k].includes(h)); if (i >= 0) idx[k] = i; });
-  if (idx.company == null) return null;
+  if (idx.company == null && idx.opportunity == null) return null;
   const get = (r, k) => idx[k] == null ? '' : String(r[idx[k]] == null ? '' : r[idx[k]]).trim();
   const now = new Date().toISOString();
   return rows.slice(1).map(r => {
     const l = blankLead();
-    l.company = get(r, 'company'); l.group = get(r, 'group'); l.contact = get(r, 'contact'); l.role = get(r, 'role');
+    l.opportunity = get(r, 'opportunity'); l.oppId = get(r, 'oppId'); l.value = parseMoney(get(r, 'value'));
+    l.startDate = parseDateCell(get(r, 'startDate')); l.closeDate = parseDateCell(get(r, 'closeDate'));
+    l.nda = /^(yes|y|true|1)$/i.test(get(r, 'nda')); l.nextOwner = get(r, 'nextOwner'); l.status = get(r, 'status'); l.plannerId = get(r, 'plannerId');
+    const ty = get(r, 'type').toLowerCase(); const th = CFG.types.find(t => t.label.toLowerCase() === ty || t.code.toLowerCase() === ty); l.type = th ? th.label : '';
+    const se = get(r, 'sector').toLowerCase(); l.sector = CFG.sectors.find(x => x.toLowerCase() === se) || (se ? 'Other' : '');
+    const pr = get(r, 'priority').toLowerCase(); l.priority = CFG.priorities.find(x => x.toLowerCase() === pr) || '';
+    l.company = get(r, 'company') || l.opportunity; l.group = get(r, 'group'); l.contact = get(r, 'contact'); l.role = get(r, 'role');
     l.email = get(r, 'email'); l.website = get(r, 'website'); l.source = get(r, 'source') || 'Import';
     l.owner = get(r, 'owner'); l.nextAction = get(r, 'nextAction'); l.nextDate = parseDateCell(get(r, 'nextDate'));
     l.notes = get(r, 'notes');
     const fit = parseInt(get(r, 'fit'), 10); l.fit = fit >= 1 && fit <= 5 ? fit : 3;
-    const st = get(r, 'stage').toLowerCase(); const hit = STAGES.find(s => s.label.toLowerCase() === st || s.id === st);
-    l.stage = hit ? hit.id : 'identified';
+    const st = get(r, 'stage').toLowerCase(); const hit = STAGES.find(s => s.label.toLowerCase() === st || s.id === st) || STAGES.find(s => s.id === STAGE_ALIASES[st]);
+    l.stage = hit ? hit.id : STAGES[0].id;
     l.activity = [{ at: now, by: who(), text: 'Imported from CSV' }];
     return l;
   }).filter(l => l.company);
 }
-const dupKey = l => (l.company + '|' + (l.email || l.contact)).toLowerCase().trim();
+function assignMissingIds(list) {
+  const taken = state.leads.map(x => x.oppId);
+  list.forEach(l => { if (!l.oppId) { l.oppId = nextOppId(l, taken); } taken.push(l.oppId); });
+  return list;
+}
+// Planner rows are matched on their task number only (the same company can have several cards); other rows on company + opportunity + contact.
+const dupKeys = l => (l.plannerId ? ['p:' + l.plannerId] : [(l.company + '|' + l.opportunity + '|' + (l.email || l.contact)).toLowerCase().trim()]).concat(l.oppId ? ['id:' + l.oppId.toLowerCase()] : []);
 
 async function importFile(file) {
   if (!store) { toast('Sign in first'); return; }
@@ -1308,11 +1582,11 @@ async function importFile(file) {
   const rows = parseCSV(text);
   if (rows.length < 2) { toast('That file has no rows to import'); return; }
   const leads = rowsToLeads(rows);
-  if (!leads) { toast('No Company column found. Download the CSV template to see the expected columns.'); return; }
-  const have = new Set(state.leads.map(dupKey));
+  if (!leads) { toast('No Company or Opportunity column found. Download the CSV template to see the expected columns.'); return; }
+  const have = new Set(state.leads.flatMap(dupKeys));
   const fresh = [];
   let skipped = 0;
-  leads.forEach(l => { const k = dupKey(l); if (have.has(k)) skipped++; else { have.add(k); fresh.push(l); } });
+  leads.forEach(l => { const ks = dupKeys(l); if (ks.some(k => have.has(k))) skipped++; else { ks.forEach(k => have.add(k)); fresh.push(l); } });
   if (!fresh.length) { toast(`Nothing new to import (${skipped} already in the pipeline)`); return; }
   try {
     await store.saveMany(fresh);
@@ -1330,20 +1604,21 @@ function download(name, text) {
   const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-const CSV_HEAD = ['Company', 'Customer group', 'Contact name', 'Contact role', 'Email', 'Website', 'Source', 'Fit score', 'Stage', 'Owner', 'Next action', 'Next action date', 'Notes'];
+const CSV_HEAD = ['Opportunity', 'Opportunity ID', 'Company', 'Type', 'Sector', 'Value (£)', 'Start date', 'Target close date', 'Stage', 'Status detail', 'Probability', 'Weighted value (£)',
+  'Priority', 'Fit', 'NDA', 'Source', 'Owner', 'Contact name', 'Contact role', 'Email', 'Website', 'Next action', 'Next action date', 'Next action owner', 'Notes'];
 function exportCSV() {
   if (!state.leads.length) { toast('No leads to export yet'); return; }
   const lines = [CSV_HEAD.concat('Last updated').map(csvCell).join(',')];
-  sortLeads(state.leads, 'company', 1).forEach(l => lines.push([l.company, l.group, l.contact, l.role, l.email, l.website, l.source, l.fit,
-    stageOf(l.stage).label, l.owner, l.nextAction, l.nextDate, l.notes, l.updated].map(csvCell).join(',')));
+  sortLeads(state.leads, 'opp', 1).forEach(l => lines.push([oppTitle(l), l.oppId, l.company, l.type, l.sector, l.value || '', l.startDate, l.closeDate,
+    stageOf(l.stage).label, l.status, stageOf(l.stage).prob + '%', l.value ? Math.round(weightedOf(l)) : '', l.priority, l.fit, l.nda ? 'Yes' : 'No', l.source, l.owner,
+    l.contact, l.role, l.email, l.website, l.nextAction, l.nextDate, l.nextOwner, l.notes, l.updated].map(csvCell).join(',')));
   download(`astral-bd-leads-${today()}.csv`, lines.join('\r\n'));
 }
 function downloadTemplate() {
-  const ex = ['Example Co', 'Customer group name', 'Jo Bloggs', 'Head of Quality', 'jo@example.com', 'https://example.com', 'AI research', '4', 'Identified', '', 'Send intro email', '', 'Why they might need an irradiation source'];
+  const ex = ['Blanket materials irradiation campaign', '', 'Example Co', 'Irradiation', 'Fusion', '120000', '2026-11-01', '2027-03-31', STAGES[1].label, '', '', '',
+    'Important', '4', 'No', 'AI research', '', 'Jo Bloggs', 'Head of Materials', 'jo@example.com', 'https://example.com', 'Send intro email', '', '', 'Why they might need an irradiation source'];
   download('astral-bd-import-template.csv', CSV_HEAD.map(csvCell).join(',') + '\r\n' + ex.map(csvCell).join(','));
 }
-
-
 
 /* ---------- contacts ---------- */
 const INTERESTS = ['Irradiation services', 'Reactor sales', 'Research', 'Facility partnership', 'Investment'];
@@ -1430,9 +1705,16 @@ function renderContacts(host) {
 
 function renderLeadContacts(l) {
   const key = orgKey(l.company);
-  const people = key ? state.contacts.filter(c => orgKey(c.company) === key) : [];
-  $('#lead-contacts').innerHTML = people.length ? `<h3>People at ${esc(l.company)}</h3><ul class="lcl">${people.map(c =>
-    `<li><button type="button" data-lc="${esc(c.id)}"><span class="pav" aria-hidden="true">${esc(initials(cName(c) || c.company))}</span><span><b>${esc(cName(c) || 'Organisation contact')}</b><small>${esc([c.role, c.email].filter(Boolean).join(' · ') || 'No details')}</small></span></button></li>`).join('')}</ul>` : '';
+  const people = state.contacts.filter(c => c.id === l.contactId || (key && orgKey(c.company) === key))
+    .sort((a, b) => (b.id === l.contactId) - (a.id === l.contactId));
+  $('#lead-contacts').innerHTML = people.length ? `<h3>People at ${esc(l.company || 'this company')}</h3><ul class="lcl">${people.map(c =>
+    `<li><button type="button" data-lc="${esc(c.id)}"${c.id === l.contactId ? ' class="main"' : ''}><span class="pav" aria-hidden="true">${esc(initials(cName(c) || c.company))}</span><span><b>${esc(cName(c) || 'Organisation contact')}${c.id === l.contactId ? ' · main contact' : ''}</b><small>${esc([c.role, c.email].filter(Boolean).join(' · ') || 'No details')}</small></span></button></li>`).join('')}</ul>` : '';
+}
+function renderContactOpps(c) {
+  const key = orgKey(c.company);
+  const opps = state.leads.filter(l => l.contactId === c.id || (key && orgKey(l.company) === key));
+  $('#c-opps').innerHTML = !state.cisNew && opps.length ? `<h3>Opportunities</h3><ul class="opp-list">${opps.map(l =>
+    `<li><button type="button" data-copp="${esc(l.id)}"><span><b>${esc(oppTitle(l))}</b><small>${esc([l.oppId, stageOf(l.stage).label].filter(Boolean).join(' · '))}${l.contactId === c.id ? ' · main contact' : ''}</small></span><span class="money">${l.value ? moneyC(l.value) : ''}</span></button></li>`).join('')}</ul>` : '';
 }
 
 /* contact panel */
@@ -1462,15 +1744,16 @@ function openContact(id) {
   fillInterestBoxes(c.interests);
   $('#c-warn').hidden = !c.check; $('#c-warn-t').textContent = c.check;
   renderContactLinks(c);
+  renderContactOpps(c);
   $('#c-src').textContent = c.source || 'Added in the CRM'; $('#c-src-h').hidden = $('#c-src').hidden = state.cisNew;
   $('#c-delete').hidden = state.cisNew;
   const lead = state.leads.find(l => orgKey(l.company) && orgKey(l.company) === orgKey(c.company));
-  $('#c-lead').textContent = lead ? 'Open lead' : 'Create lead';
+  $('#c-lead').textContent = (state.leads.find(l => l.contactId === c.id) || lead) ? 'Open lead' : 'Create lead';
   $('#dl-orgs').innerHTML = [...new Set(state.contacts.map(x => x.company).concat(state.leads.map(x => x.company)).filter(Boolean))].sort().map(o => `<option value="${esc(o)}">`).join('');
   $('#dl-cowners').innerHTML = [...new Set(CFG.owners.concat(state.contacts.map(x => x.owner)).filter(Boolean))].map(o => `<option value="${esc(o)}">`).join('');
   $('#scrim').hidden = false;
   const d = $('#cdrawer'); d.classList.add('open'); d.setAttribute('aria-hidden', 'false');
-  setTimeout(() => $('#c-first').focus(), 30);
+  setTimeout(() => { if (!d.contains(document.activeElement)) $('#c-first').focus(); }, 30);
 }
 function closeContact() {
   const d = $('#cdrawer');
@@ -1507,16 +1790,19 @@ async function deleteContact() {
 async function leadFromContact() {
   const c = readContactForm();
   if (!c.company && !cName(c)) { toast('Add an organisation first'); return; }
-  const existing = state.leads.find(l => orgKey(l.company) && orgKey(l.company) === orgKey(c.company));
+  const existing = state.leads.find(l => l.contactId === c.id) || state.leads.find(l => orgKey(l.company) && orgKey(l.company) === orgKey(c.company));
   if (!state.cisNew) { try { c.updated = new Date().toISOString(); await store.contacts.save(c); } catch {} }
   closeContact();
   if (existing) { openDrawer(existing.id); return; }
+  const typeFor = { 'Irradiation services': 'Irradiation', 'Reactor sales': 'Device sale', 'Research': 'Research/Project' };
   const now = new Date().toISOString();
   const l = Object.assign(blankLead(), {
-    company: c.company || cName(c), group: c.interests[0] || '', contact: cName(c), role: c.role, email: c.email, source: 'Contacts',
+    company: c.company || cName(c), contactId: c.id, type: (CFG.types.find(t => t.label === typeFor[c.interests.find(i => typeFor[i])]) || {}).label || '',
+    contact: cName(c), role: c.role, email: c.email, source: 'Contacts',
     owner: CFG.owners.includes(c.owner) ? c.owner : '', notes: c.metVia ? 'Met via ' + c.metVia : '',
     activity: [{ at: now, by: who(), text: 'Lead created from contact ' + (cName(c) || c.company) }]
   });
+  l.oppId = nextOppId(l, state.leads.map(x => x.oppId));
   try { await store.save(l); toast('Lead created'); openDrawer(l.id); }
   catch (err) { toast('Could not create lead: ' + (err.message || err)); }
 }
@@ -1620,32 +1906,38 @@ async function loadExamples() {
   if (!store) { toast('Sign in first'); return; }
   const back = d => { const x = new Date(); x.setDate(x.getDate() - d); return x.toISOString(); };
   const mk = (o, ago) => Object.assign(blankLead(), o, { created: back(ago), updated: back(Math.max(0, ago - 2)),
-    activity: [{ at: back(ago), by: who(), text: 'Example lead added' }].concat(o.stage !== 'identified' ? [{ at: back(Math.max(0, ago - 2)), by: who(), text: 'Moved to ' + stageOf(o.stage).label }] : []) });
+    activity: [{ at: back(ago), by: who(), text: 'Example lead added' }].concat(o.stage !== STAGES[0].id ? [{ at: back(Math.max(0, ago - 2)), by: who(), text: 'Moved to ' + stageOf(o.stage).label }] : []) });
   const owner = CFG.owners[0] || '';
   const owner2 = CFG.owners[1] || owner;
   const demo = 'Demo example only, not a real opportunity. ';
-  await store.saveMany([
-    mk({ company: 'UKAEA (Culham Campus)', group: 'Research & national labs', role: 'Materials testing lead (target role)', source: 'Example', stage: 'call', fit: 5,
-         nextAction: 'Prepare call agenda: neutron testing for blanket materials', nextDate: today(), owner, notes: demo + 'UK national fusion lab. Large materials and component testing need.' }, 18),
-    mk({ company: 'Tokamak Energy', group: 'Fusion developers', role: 'Head of materials (target role)', source: 'Example', stage: 'contacted', fit: 5,
-         nextAction: 'Chase reply to intro email', nextDate: addDays(-2), owner, notes: demo + 'UK spherical tokamak developer. Components and magnets need radiation testing.' }, 26),
-    mk({ company: 'Oxford Sigma', group: 'Fusion materials & components', role: 'CTO (target role)', source: 'Example', stage: 'requirements', fit: 5,
-         nextAction: 'Send requirements form', nextDate: addDays(2), owner: owner2, notes: demo + 'Fusion materials and engineering company in Oxford.' }, 31),
-    mk({ company: 'Kyoto Fusioneering UK', group: 'Fusion materials & components', role: 'Blanket programme lead (target role)', source: 'Example', stage: 'quoted', fit: 4,
-         nextAction: 'Follow up on irradiation quote', nextDate: addDays(5), owner: owner2, notes: demo + 'Breeding blanket and fusion plant technology supplier.' }, 44),
-    mk({ company: 'First Light Fusion', group: 'Fusion developers', role: 'Head of engineering (target role)', source: 'Example', stage: 'replied', fit: 4,
-         nextAction: 'Book intro call', nextDate: addDays(1), owner, notes: demo + 'Oxford-based inertial fusion company.' }, 9),
-    mk({ company: 'Proxima Fusion', group: 'Fusion developers', role: 'Materials engineer (target role)', source: 'Example', stage: 'identified', fit: 3,
-         notes: demo + 'German stellarator developer. Check appetite for UK testing.' }, 4),
-    mk({ company: 'Commonwealth Fusion Systems', group: 'Fusion developers', role: 'Radiation effects lead (target role)', source: 'Example', stage: 'identified', fit: 3,
-         notes: demo + 'US tokamak developer. Longer shot, but a large testing programme.' }, 2),
-    mk({ company: 'Frazer-Nash Consultancy', group: 'Fusion supply chain', role: 'Fusion business lead (target role)', source: 'Example', stage: 'contacted', fit: 3,
-         nextAction: 'Send overview deck', nextDate: addDays(3), owner: owner2, notes: demo + 'UK engineering consultancy working on fusion programmes. Possible channel partner.' }, 12),
-    mk({ company: 'University of Birmingham', group: 'Research & national labs', role: 'Nuclear materials research group (target)', source: 'Example', stage: 'won', fit: 4,
-         owner, notes: demo + 'University nuclear materials research. Shown as won for the demo.' }, 60),
-    mk({ company: 'Gauss Fusion', group: 'Fusion developers', role: 'Procurement (target role)', source: 'Example', stage: 'lost', fit: 2,
-         owner: owner2, notes: demo + 'European industrial fusion consortium. Shown as lost for the demo.' }, 50)
-  ]);
+  const D = n => addDays(n);
+  const list = [
+    mk({ opportunity: 'Blanket materials irradiation campaign', company: 'UKAEA (Culham Campus)', type: 'Irradiation', sector: 'Fusion', value: 180000, startDate: D(-18), closeDate: D(120), priority: 'Important', nda: true,
+         role: 'Materials testing lead (target role)', source: 'Example', stage: 'requirements', fit: 5, nextAction: 'Prepare call agenda: neutron testing for blanket materials', nextDate: today(), owner, notes: demo + 'UK national fusion lab. Large materials and component testing need.' }, 18),
+    mk({ opportunity: 'Magnet component radiation testing', company: 'Tokamak Energy', type: 'Irradiation', sector: 'Fusion', value: 250000, startDate: D(-26), closeDate: D(150), priority: 'Important',
+         role: 'Head of materials (target role)', source: 'Example', stage: 'initial', fit: 5, nextAction: 'Chase reply to intro email', nextDate: D(-2), nextOwner: owner2, owner, notes: demo + 'UK spherical tokamak developer. Components and magnets need radiation testing.' }, 26),
+    mk({ opportunity: 'Tungsten armour neutron exposure', company: 'Oxford Sigma', type: 'Irradiation', sector: 'Fusion', value: 95000, startDate: D(-31), closeDate: D(60), priority: 'Medium', nda: true,
+         role: 'CTO (target role)', source: 'Example', stage: 'proposal', fit: 5, nextAction: 'Send proposal draft', nextDate: D(2), owner: owner2, notes: demo + 'Fusion materials and engineering company in Oxford.' }, 31),
+    mk({ opportunity: 'Breeder blanket tritium study', company: 'Kyoto Fusioneering UK', type: 'Research/Project', sector: 'Fusion', value: 320000, startDate: D(-44), closeDate: D(40), priority: 'Important', nda: true,
+         role: 'Blanket programme lead (target role)', source: 'Example', stage: 'negotiation', fit: 4, nextAction: 'Follow up on proposal', nextDate: D(5), owner: owner2, notes: demo + 'Breeding blanket and fusion plant technology supplier.' }, 44),
+    mk({ opportunity: 'Diagnostics neutron calibration', company: 'First Light Fusion', type: 'Research/Project', sector: 'Fusion', value: 60000, startDate: D(-9), closeDate: D(200), priority: 'Medium',
+         role: 'Head of engineering (target role)', source: 'Example', stage: 'initial', fit: 4, nextAction: 'Book intro call', nextDate: D(1), owner, notes: demo + 'Oxford-based inertial fusion company.' }, 9),
+    mk({ opportunity: 'Stellarator materials screening', company: 'Proxima Fusion', type: 'Irradiation', sector: 'Fusion', value: 150000, closeDate: D(300), priority: 'Low',
+         role: 'Materials engineer (target role)', source: 'Example', stage: 'legacy', fit: 3, notes: demo + 'German stellarator developer. Check appetite for UK testing.' }, 4),
+    mk({ opportunity: 'Neutron source evaluation', company: 'Commonwealth Fusion Systems', type: 'Device sale', sector: 'Fusion', value: 1200000, closeDate: D(420), priority: 'Medium',
+         role: 'Radiation effects lead (target role)', source: 'Example', stage: 'initial', fit: 3, notes: demo + 'US tokamak developer. Longer shot, but a large testing programme.' }, 2),
+    mk({ opportunity: 'Supply chain partnership', company: 'Frazer-Nash Consultancy', type: 'Research/Project', sector: 'Nuclear', value: 40000, startDate: D(-12), closeDate: D(90), priority: 'Low',
+         role: 'Fusion business lead (target role)', source: 'Example', stage: 'requirements', fit: 3, nextAction: 'Send overview deck', nextDate: D(3), owner: owner2, notes: demo + 'UK engineering consultancy. Possible channel partner.' }, 12),
+    mk({ opportunity: 'Electronics radiation hardness tests', company: 'University of Birmingham', type: 'Irradiation', sector: 'Electronics', value: 35000, startDate: D(-60), closeDate: D(-10), nda: true,
+         role: 'Nuclear materials research group (target)', source: 'Example', stage: 'won', fit: 4, owner, notes: demo + 'Shown as won for the demo.' }, 60),
+    mk({ opportunity: 'Satellite component screening', company: 'Example aerospace supplier', type: 'Irradiation', sector: 'Aerospace', value: 70000, startDate: D(-7), closeDate: D(75), priority: 'Medium',
+         role: 'Head of reliability (target role)', source: 'Example', stage: 'initial', fit: 3, nextAction: 'Share data sheet', nextDate: D(6), owner, notes: demo + 'Fictional aerospace example.' }, 7),
+    mk({ opportunity: 'Component qualification programme', company: 'Gauss Fusion', type: 'Irradiation', sector: 'Fusion', value: 210000, startDate: D(-50), closeDate: D(-20),
+         role: 'Procurement (target role)', source: 'Example', stage: 'lost', fit: 2, owner: owner2, notes: demo + 'Shown as lost for the demo.' }, 50)
+  ];
+  const taken = state.leads.map(x => x.oppId);
+  list.forEach(l => { l.oppId = nextOppId(l, taken); taken.push(l.oppId); });
+  await store.saveMany(list);
   toast('Example leads added. Remove them from your account menu when you are done.');
 }
 async function clearExamples() {
@@ -1657,7 +1949,7 @@ async function clearExamples() {
 }
 
 /* ---------- wiring ---------- */
-function resetFilters() { state.stage = null; state.group = ''; state.owner = ''; state.q = ''; $('#q').value = ''; $('#tq').value = ''; render(); }
+function resetFilters() { state.stage = null; state.group = ''; state.type = ''; state.owner = ''; state.q = ''; $('#q').value = ''; $('#tq').value = ''; render(); }
 function closeUserMenu() { $('#user').open = false; }
 function setNav(open) { $('#app').classList.toggle('navopen', open); }
 
@@ -1704,6 +1996,18 @@ function bindUI() {
   bindContacts();
   $('#flt-group').addEventListener('change', e => { state.group = e.target.value; render(); });
   $('#flt-owner').addEventListener('change', e => { state.owner = e.target.value; render(); });
+  $('#flt-type').addEventListener('change', e => { state.type = e.target.value; render(); });
+  $('#f-value').addEventListener('input', updateWeightedHint);
+  $('#f-stage').addEventListener('change', updateWeightedHint);
+  $('#f-contact').addEventListener('change', pickContactFromInput);
+  $('#f-contact').addEventListener('input', () => { if (state.contacts.some(x => contactLabel(x) === $('#f-contact').value)) pickContactFromInput(); });
+  $('#view').addEventListener('change', e => {
+    const c = e.target.closest('[data-actl]'); if (!c) return;
+    if (c.dataset.actl === 'year') state.ayear = c.value; else if (c.dataset.actl === 'scope') state.ascope = c.value;
+    render();
+  });
+  $('#view').addEventListener('click', e => { if (e.target.closest('[data-actl="export"]')) exportAnalytics(); });
+  $('#c-opps').addEventListener('click', e => { const b = e.target.closest('[data-copp]'); if (!b) return; closeContact(); openDrawer(b.dataset.copp); });
   $('#btn-clear').addEventListener('click', resetFilters);
 
   $('#view').addEventListener('click', e => {
