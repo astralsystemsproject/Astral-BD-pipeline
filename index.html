@@ -497,6 +497,53 @@ a.clink:hover{color:var(--blue-ink)}
 :root[data-theme="dark"] .fbar.zero{background:var(--line-strong)}
 @media (max-width:900px){ .hero-art{display:none} }
 @media (max-width:640px){ #page-sub{display:none} .hero{min-height:0;padding:24px 20px} }
+
+/* ---------- news brief ---------- */
+.neps{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:thin}
+.nep{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;font:600 12.5px inherit;cursor:pointer;font-family:inherit}
+.nep:hover{background:var(--hover)}
+.nep[aria-current="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.nep.wk{border-style:dashed}
+.nplayer{padding:20px;display:flex;flex-direction:column;gap:12px}
+.nmeta{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+.nmeta .k{color:var(--blue-ink)}
+.nplayer h2{font-size:clamp(18px,2.4vw,22px);line-height:1.25;text-wrap:balance;margin:0}
+.nctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.nctl label{font-size:12.5px;color:var(--ink-2)}
+.nprog{height:4px;background:var(--fill);border-radius:4px;overflow:hidden}
+.nprog i{display:block;height:100%;width:0;background:var(--blue);transition:width .3s}
+.nnote{font-size:12.5px;color:var(--ink-2)}
+.ntabs{display:flex;gap:2px;border-bottom:1px solid var(--line-2);padding:0 20px}
+.ntab{background:none;border:0;border-bottom:2px solid transparent;padding:10px 12px;font:600 13.5px inherit;font-family:inherit;color:var(--ink-2);cursor:pointer}
+.ntab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--blue)}
+.nbody{padding:18px 20px}
+.nscript{max-width:68ch;font-size:15px;line-height:1.7}
+.nscript h3{font-size:14.5px;margin:18px 0 6px;display:flex;gap:10px;align-items:baseline}
+.nscript h3:first-child{margin-top:0}
+.nscript h3 .num{font-size:12px;color:var(--blue-ink);font-variant-numeric:tabular-nums}
+.nscript p{margin:0 0 .8em;border-radius:6px;transition:background .2s}
+.nscript p.speaking{background:var(--wash)}
+.nstories{display:flex;flex-direction:column;gap:10px}
+.nstory{border:1px solid var(--line);background:var(--card-2);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.nstory h3{font-size:14.5px;margin:0;line-height:1.35;text-wrap:balance}
+.nrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.nchip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--fill);color:var(--ink-2);border:1px solid transparent;white-space:nowrap}
+.nchip.in{background:var(--ok-wash);color:var(--ok)}
+.nchip.new{background:var(--wash);color:var(--blue-ink)}
+.nchip.check,.nchip.competitor{background:var(--amber-wash);color:var(--amber)}
+button.nchip{cursor:pointer;font-family:inherit}
+button.nchip:hover{border-color:currentColor}
+.nsig{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.nsig.high{color:var(--ok)} .nsig.medium{color:var(--amber)} .nsig.low{color:var(--ink-3)}
+.nstory ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px;font-size:13px}
+.nstory a,.nnews a{color:var(--blue-ink);overflow-wrap:anywhere}
+.nradar{display:grid;grid-template-columns:auto 1fr;gap:12px 14px}
+.nradar .n{font-weight:700;color:var(--amber);font-variant-numeric:tabular-nums}
+.nradar b{display:block}
+.nnoise{font-size:13px;color:var(--ink-2);margin:12px 0 0}
+.nnews{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.nnews li{border:1px solid var(--line);background:var(--card-2);border-radius:12px;padding:9px 12px;font-size:13px}
+.nnews small{display:block;color:var(--ink-2);font-size:12px}
 </style>
 </head>
 <body>
@@ -526,6 +573,7 @@ a.clink:hover{color:var(--blue-ink)}
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10" r="2.3"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></symbol>
+  <symbol id="i-radio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M8.2 8.2a5.4 5.4 0 0 0 0 7.6M15.8 15.8a5.4 5.4 0 0 0 0-7.6M5.3 5.3a9.5 9.5 0 0 0 0 13.4M18.7 18.7a9.5 9.5 0 0 0 0-13.4"/></symbol>
   <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8M10 17h4"/></symbol>
 </svg>
 
@@ -545,6 +593,7 @@ a.clink:hover{color:var(--blue-ink)}
       <a href="#pipeline" data-nav="pipeline" title="Pipeline"><svg class="i"><use href="#i-pipe"/></svg><span class="t">Pipeline</span></a>
       <a href="#followups" data-nav="followups" title="Follow-ups"><svg class="i"><use href="#i-cal"/></svg><span class="t">Follow-ups</span><span class="nbadge" id="nb-over" hidden></span></a>
       <a href="#analytics" data-nav="analytics" title="Analytics"><svg class="i"><use href="#i-chart"/></svg><span class="t">Analytics</span></a>
+      <a href="#news" data-nav="news" title="News brief"><svg class="i"><use href="#i-radio"/></svg><span class="t">News brief</span><span class="nbadge soft" id="nb-news" hidden>New</span></a>
     </nav>
 
     <div class="sect">Data</div>
@@ -648,6 +697,7 @@ a.clink:hover{color:var(--blue-ink)}
         <label class="span2">Log a note<input id="f-log" placeholder="e.g. Call with Sam, wants a quote for 200 samples" autocomplete="off"></label>
       </div>
       <div id="lead-contacts"></div>
+      <div id="lead-news"></div>
       <h3>Activity</h3>
       <ol id="activity" class="activity"></ol>
     </div>
@@ -688,6 +738,7 @@ a.clink:hover{color:var(--blue-ink)}
         <label class="span2">Notes<textarea id="c-notes" rows="6"></textarea></label>
       </div>
       <div id="c-opps"></div>
+      <div id="c-news"></div>
       <h3 id="c-src-h">Source</h3>
       <p class="muted" id="c-src" style="margin:0;font-size:13px"></p>
     </div>
@@ -932,8 +983,9 @@ async function createFirebaseStore(cfg, onSignedIn, onSignedOut, onError) {
   const store = Object.assign(makeColl('leads'), {
     mode: 'sync', user: '',
     contacts: makeColl('contacts'),
+    briefings: makeColl('briefings'),
     async signIn(email, pass) { await authM.signInWithEmailAndPassword(auth, email, pass); },
-    async signOut() { store.unsubscribe(); store.contacts.unsubscribe(); await authM.signOut(auth); }
+    async signOut() { store.unsubscribe(); store.contacts.unsubscribe(); store.briefings.unsubscribe(); await authM.signOut(auth); }
   });
   authM.onAuthStateChanged(auth, user => {
     if (user) { store.user = user.email || 'You'; onSignedIn(store); }
@@ -944,8 +996,8 @@ async function createFirebaseStore(cfg, onSignedIn, onSignedOut, onError) {
 
 
 /* ---------- state ---------- */
-const VIEWS = { home: 'Home', leads: 'Leads', contacts: 'Contacts', pipeline: 'Pipeline', followups: 'Follow-ups', analytics: 'Analytics' };
-const state = { type: '', ayear: '', ascope: 'open', contacts: [], interest: null, cowner: '', ccheck: '', csort: { k: 'name', dir: 1 }, cediting: null, cisNew: false, leads: [], view: 'home', stage: null, group: '', owner: '', q: '', sort: { k: 'opp', dir: 1 }, editing: null, isNew: false };
+const VIEWS = { home: 'Home', leads: 'Leads', contacts: 'Contacts', pipeline: 'Pipeline', followups: 'Follow-ups', analytics: 'Analytics', news: 'News brief' };
+const state = { briefings: [], nsel: null, ntab: 'script', type: '', ayear: '', ascope: 'open', contacts: [], interest: null, cowner: '', ccheck: '', csort: { k: 'name', dir: 1 }, cediting: null, cisNew: false, leads: [], view: 'home', stage: null, group: '', owner: '', q: '', sort: { k: 'opp', dir: 1 }, editing: null, isNew: false };
 let store = null;
 let lastFocus = null;
 const OPEN_STAGES = STAGES.filter(s => s.id !== 'won' && s.id !== 'lost');
@@ -995,15 +1047,154 @@ function matches(l, ignoreStage) {
 function routeFromHash() { const h = location.hash.replace('#', ''); return VIEWS[h] ? h : 'home'; }
 function go(view) { if (location.hash !== '#' + view) location.hash = view; else { state.view = view; render(); } }
 
+
+/* ---------- news brief ---------- */
+const NEWS_CRM = { in: 'In CRM', new: 'New', check: 'Check CRM', research: 'Research list', competitor: 'Competitor', mixed: 'Mixed' };
+const NUMW = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+function newsKey(o) { return orgKey(String(o || '').toLowerCase().replace(/\b(one|two|three|four|five|six|seven|eight|nine|ten)\b/g, w => NUMW[w]).replace(/\b(the|ltd|limited|inc|plc|gmbh|llc|co)\b\.?/g, '')); }
+function newsHit(a, b) { const x = newsKey(a), y = newsKey(b); return !!x && !!y && (x === y || (Math.min(x.length, y.length) >= 5 && (x.includes(y) || y.includes(x)))); }
+function orgMatch(name) {
+  const k = newsKey(name); if (k.length < 3) return null;
+  const hit = x => newsHit(x, name);
+  const lead = state.leads.find(l => hit(l.company));
+  if (lead) return { kind: 'lead', id: lead.id };
+  const c = state.contacts.find(x => hit(x.company));
+  return c ? { kind: 'contact', id: c.id } : null;
+}
+function newsFmt(d) { try { return new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }).format(parseYmd(d)); } catch { return d; } }
+function newsWords(b) { return (b.sections || []).reduce((n, s) => n + (s.paras || []).join(' ').split(/\s+/).length, 0); }
+function orgChip(o, si) {
+  if (o.crm === 'competitor') return `<span class="nchip competitor">${esc(o.name)} · Competitor</span>`;
+  const m = orgMatch(o.name);
+  if (m && m.kind === 'lead') return `<button type="button" class="nchip in" data-nlead="${esc(m.id)}" title="Open the lead">${esc(o.name)} · In CRM</button>`;
+  if (m) return `<button type="button" class="nchip in" data-ncontact="${esc(m.id)}" title="Open the contact">${esc(o.name)} · Contact</button>`;
+  return `<button type="button" class="nchip new" data-ncreate="${esc(o.name)}" data-nstory="${si}" title="Create a lead for this organisation">${icon('plus', 'i')}${esc(o.name)} · Create lead</button>`;
+}
+function renderNews(host) {
+  const B = state.briefings;
+  if (state.newsBlocked) { host.innerHTML = `<div class="empty"><h2>News brief is blocked</h2><p>The Firestore rules don't include briefings yet. Paste the updated rules into Firestore, Rules, then click Publish.</p></div>`; return; }
+  if (!B.length) { host.innerHTML = `<div class="empty"><img class="mark" src="${$('.logo-mark').getAttribute('src')}" alt=""><h2>No briefings yet</h2><p>The research agent adds a briefing here every weekday morning, with a weekly wrap-up on Fridays.</p></div>`; return; }
+  let b = B.find(x => x.date + x.kind === state.nsel) || B[0];
+  state.nsel = b.date + b.kind;
+  const mins = Math.max(1, Math.round(newsWords(b) / 150));
+  const tabs = [['script', 'Script'], ['notes', 'Show notes'], ['radar', 'BD radar']];
+  host.innerHTML = `<nav class="neps" aria-label="Episodes">${B.map(x => `<button type="button" class="nep${x.kind === 'weekly' ? ' wk' : ''}" data-nep="${esc(x.date + x.kind)}" aria-current="${x === b}">${x.kind === 'weekly' ? 'Week · ' : ''}${esc(newsFmt(x.date))}</button>`).join('')}</nav>
+  <section class="panel">
+    <div class="nplayer">
+      <div class="nmeta"><span class="k">${b.kind === 'weekly' ? 'Weekly wrap' : 'Daily brief'}</span><span>${esc(newsFmt(b.date))}</span><span>About ${mins} min</span>${b.window ? `<span>${esc(b.window)}</span>` : ''}</div>
+      <h2>${esc(b.title)}</h2>
+      <div class="nctl"><button type="button" class="btn primary" id="n-play">${icon('radio')}<span>Listen</span></button><button type="button" class="btn" id="n-stop">Stop</button>
+        <label for="n-rate">Speed</label><select id="n-rate"><option value="0.9">0.9×</option><option value="1">1×</option><option value="1.15">1.15×</option><option value="1.3">1.3×</option></select></div>
+      <div class="nprog"><i id="n-bar"></i></div><div class="nnote" id="n-note" hidden></div>
+    </div>
+    <div class="ntabs" role="tablist">${tabs.map(([k, t]) => `<button type="button" class="ntab" role="tab" data-ntab="${k}" aria-selected="${state.ntab === k}">${t}</button>`).join('')}</div>
+    <div class="nbody" id="n-body"></div>
+  </section>`;
+  $('#n-rate').value = String(newsSpeech.rate);
+  renderNewsBody(b);
+}
+function renderNewsBody(b) {
+  const host = $('#n-body'); if (!host) return;
+  if (state.ntab === 'script') {
+    let i = 0;
+    host.innerHTML = `<div class="nscript">${(b.sections || []).map(s => `<h3>${s.n ? `<span class="num">${String(s.n).padStart(2, '0')}</span>` : ''}${esc(s.heading)}</h3>${(s.paras || []).map(t => `<p data-np="${i++}">${esc(t)}</p>`).join('')}`).join('')}</div>`;
+  } else if (state.ntab === 'notes') {
+    host.innerHTML = `<div class="nstories">${(b.stories || []).map((s, si) => `<article class="nstory">
+      <div class="nrow"><span class="nsig ${esc(s.signal)}">${esc(s.signal)} signal</span><span class="nchip">${esc(s.date)}</span>${(s.tags || []).map(t => `<span class="nchip">${esc(t)}</span>`).join('')}</div>
+      <h3>${esc(s.headline)}</h3>
+      <div class="nrow">${(s.orgs || []).map(o => orgChip(o, si)).join('')}</div>
+      <ul>${(s.sources || []).map(x => safeUrl(x.url) ? `<li><a href="${esc(safeUrl(x.url))}" target="_blank" rel="noopener noreferrer">${esc(x.title || x.url)}</a></li>` : '').join('')}</ul></article>`).join('')}</div>
+      ${(b.noise || []).length ? `<p class="nnoise"><b>Filtered out as noise:</b> ${b.noise.map(esc).join(' · ')}</p>` : ''}`;
+  } else {
+    host.innerHTML = (b.radar || []).length ? `<div class="nradar">${b.radar.map((r, i) => `<span class="n">${i + 1}</span><div><b>${esc(r.org)}</b>${esc(r.action)} <span class="nchip ${esc(r.crm)}">${esc(NEWS_CRM[r.crm] || r.crm || '')}</span></div>`).join('')}</div>` : '<p class="nnote">No BD actions in this episode.</p>';
+  }
+}
+function currentBrief() { return state.briefings.find(x => x.date + x.kind === state.nsel) || state.briefings[0]; }
+function orgNewsHtml(company) {
+  if (newsKey(company).length < 3) return '';
+  const hit = n => newsHit(n, company);
+  const items = [];
+  state.briefings.filter(b => b.kind !== 'weekly').forEach(b => (b.stories || []).forEach(s => { if ((s.orgs || []).some(o => hit(o.name))) items.push({ b, s }); }));
+  if (!items.length) return '';
+  return `<h3>In the news</h3><ul class="nnews">${items.slice(0, 5).map(({ b, s }) => {
+    const src = (s.sources || []).find(x => safeUrl(x.url));
+    return `<li>${src ? `<a href="${esc(safeUrl(src.url))}" target="_blank" rel="noopener noreferrer">${esc(s.headline)}</a>` : esc(s.headline)}<small>News brief, ${esc(newsFmt(b.date))}</small></li>`;
+  }).join('')}</ul>`;
+}
+async function leadFromNews(name, si) {
+  if (!store) { toast('Sign in first'); return; }
+  const b = currentBrief(); const s = (b && b.stories || [])[si] || {};
+  const now = new Date().toISOString();
+  const urls = (s.sources || []).map(x => x.url).filter(Boolean);
+  const l = Object.assign(blankLead(), {
+    company: name, source: 'News brief',
+    notes: `From the news brief, ${b ? b.date : ''}: ${s.headline || ''}` + (urls.length ? '\nSources: ' + urls.join(' ') : ''),
+    activity: [{ at: now, by: who(), text: 'Lead created from the news brief' }]
+  });
+  l.oppId = nextOppId(l, state.leads.map(x => x.oppId));
+  try { await store.save(l); toast('Lead created'); openDrawer(l.id); }
+  catch (err) { toast('Could not create lead: ' + (err.message || err)); }
+}
+const newsSpeech = { rate: 1, queue: [], qi: 0, playing: false, paused: false };
+function newsVoice() {
+  const v = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+  return v.find(x => /en-GB/i.test(x.lang) && /natural|online|neural/i.test(x.name)) || v.find(x => /en-GB/i.test(x.lang)) || v.find(x => /^en/i.test(x.lang)) || null;
+}
+function newsBtn() { const b = $('#n-play span'); if (b) b.textContent = newsSpeech.playing && !newsSpeech.paused ? 'Pause' : newsSpeech.paused ? 'Resume' : 'Listen'; }
+function newsSpeakNext() {
+  const S = newsSpeech;
+  document.querySelectorAll('.nscript p.speaking').forEach(e => e.classList.remove('speaking'));
+  if (S.qi >= S.queue.length) { S.playing = false; newsBtn(); const bar = $('#n-bar'); if (bar) bar.style.width = '100%'; return; }
+  const item = S.queue[S.qi];
+  const u = new SpeechSynthesisUtterance(item.text);
+  const v = newsVoice(); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'en-GB';
+  u.rate = S.rate;
+  const el = item.i != null && document.querySelector(`.nscript p[data-np="${item.i}"]`);
+  if (el) { el.classList.add('speaking'); el.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
+  u.onend = () => { if (!S.playing) return; S.qi++; const bar = $('#n-bar'); if (bar) bar.style.width = (100 * S.qi / S.queue.length) + '%'; newsSpeakNext(); };
+  u.onerror = () => { S.playing = false; newsBtn(); };
+  speechSynthesis.speak(u);
+}
+function newsPlay() {
+  const S = newsSpeech;
+  if (!window.speechSynthesis) { const n = $('#n-note'); n.hidden = false; n.textContent = "Read-aloud isn't available in this browser. Try Chrome, Edge or Safari."; return; }
+  if (S.playing && !S.paused) { speechSynthesis.pause(); S.paused = true; newsBtn(); return; }
+  if (S.paused) { speechSynthesis.resume(); S.paused = false; newsBtn(); return; }
+  if (state.ntab !== 'script') { state.ntab = 'script'; document.querySelectorAll('.ntab').forEach(x => x.setAttribute('aria-selected', x.dataset.ntab === 'script')); renderNewsBody(currentBrief()); }
+  const b = currentBrief(); S.queue = []; let i = 0;
+  (b.sections || []).forEach(s => { S.queue.push({ text: (s.n ? `Story ${s.n}. ` : '') + s.heading + '.', i: null }); (s.paras || []).forEach(t => S.queue.push({ text: t, i: i++ })); });
+  S.qi = 0; S.playing = true; S.paused = false; speechSynthesis.cancel(); newsBtn(); newsSpeakNext();
+}
+function newsStop() {
+  const S = newsSpeech; if (!S.playing && !S.paused) return;
+  S.playing = false; S.paused = false; S.qi = 0; if (window.speechSynthesis) speechSynthesis.cancel();
+  const bar = $('#n-bar'); if (bar) bar.style.width = '0';
+  document.querySelectorAll('.nscript p.speaking').forEach(e => e.classList.remove('speaking')); newsBtn();
+}
+function bindNews() {
+  $('#view').addEventListener('click', e => {
+    if (state.view !== 'news') return;
+    const ep = e.target.closest('[data-nep]'); if (ep) { newsStop(); state.nsel = ep.dataset.nep; render(); return; }
+    const t = e.target.closest('[data-ntab]'); if (t) { state.ntab = t.dataset.ntab; document.querySelectorAll('.ntab').forEach(x => x.setAttribute('aria-selected', x === t)); renderNewsBody(currentBrief()); return; }
+    if (e.target.closest('#n-play')) { newsPlay(); return; }
+    if (e.target.closest('#n-stop')) { newsStop(); return; }
+    const nl = e.target.closest('[data-nlead]'); if (nl) { openDrawer(nl.dataset.nlead); return; }
+    const nc = e.target.closest('[data-ncontact]'); if (nc) { openContact(nc.dataset.ncontact); return; }
+    const cr = e.target.closest('[data-ncreate]'); if (cr) { leadFromNews(cr.dataset.ncreate, +cr.dataset.nstory); return; }
+  });
+  $('#view').addEventListener('change', e => { if (e.target.id === 'n-rate') { newsSpeech.rate = +e.target.value; if (newsSpeech.playing) { newsStop(); newsPlay(); } } });
+}
+
 /* ---------- rendering ---------- */
 function render() {
   const v = state.view;
+  if (v !== 'news') newsStop();
   $('#page-title').textContent = VIEWS[v];
   $('#app').classList.toggle('board-view', v === 'pipeline');
   $('#btn-new .newlbl').textContent = v === 'contacts' ? 'New contact' : 'New lead';
   const longDate = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
   $('#page-sub').textContent = { home: longDate, leads: 'Every opportunity in the pipeline', pipeline: 'Drag a card to move it to another stage',
-    followups: 'Overdue, today and the rest of the week', analytics: 'How the pipeline is moving', contacts: 'People you know at each organisation' }[v];
+    followups: 'Overdue, today and the rest of the week', analytics: 'How the pipeline is moving', contacts: 'People you know at each organisation', news: 'Daily industry briefing from the research agent' }[v];
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   renderBadges();
   const listView = v === 'leads' || v === 'pipeline' || v === 'followups';
@@ -1015,6 +1206,7 @@ function render() {
   const host = $('#view');
   if (v === 'home') renderHome(host);
   else if (v === 'analytics') renderAnalytics(host);
+  else if (v === 'news') renderNews(host);
   else if (v === 'contacts') renderContacts(host);
   else if (!state.leads.length) host.innerHTML = emptyHtml();
   else {
@@ -1031,6 +1223,7 @@ function renderBadges() {
   const over = open.filter(l => bucket(l) === 'overdue').length;
   const nb = $('#nb-over'); nb.hidden = !over; nb.textContent = over;
   const nl = $('#nb-leads'); nl.hidden = !open.length; nl.textContent = open.length;
+  const nn = $('#nb-news'); const todayYmd = new Date().toLocaleDateString('en-CA'); nn.hidden = !state.briefings.some(b => b.date === todayYmd);
   const nc = $('#nb-contacts'); nc.hidden = !state.contacts.length; nc.textContent = state.contacts.length;
 }
 
@@ -1427,6 +1620,7 @@ function openDrawer(id) {
   updateWeightedHint(); syncContactHint();
   renderActivity(l, safeUrl(l.website));
   renderLeadContacts(l);
+  $('#lead-news').innerHTML = orgNewsHtml(l.company);
   $('#scrim').hidden = false;
   const d = $('#drawer'); d.classList.add('open'); d.setAttribute('aria-hidden', 'false');
   setTimeout(() => { if (!d.contains(document.activeElement)) $('#f-opp').focus(); }, 30);
@@ -1763,6 +1957,7 @@ function openContact(id) {
   $('#c-warn').hidden = !c.check; $('#c-warn-t').textContent = c.check;
   renderContactLinks(c);
   renderContactOpps(c);
+  $('#c-news').innerHTML = state.cisNew ? '' : orgNewsHtml(c.company);
   $('#c-src').textContent = c.source || 'Added in the CRM'; $('#c-src-h').hidden = $('#c-src').hidden = state.cisNew;
   $('#c-delete').hidden = state.cisNew;
   const lead = state.leads.find(l => orgKey(l.company) && orgKey(l.company) === orgKey(c.company));
@@ -2121,21 +2316,25 @@ function setUser(email) {
   $('#u-mail').textContent = email || 'Demo mode, saved in this browser';
   $('#m-signout').hidden = !email; $('#m-sep').hidden = !email;
 }
+function onBriefings(arr) { state.newsBlocked = false; state.briefings = arr.filter(b => b && b.date).sort((a, b) => (b.date + (b.kind === 'weekly' ? 'b' : 'a')).localeCompare(a.date + (a.kind === 'weekly' ? 'b' : 'a'))); render(); }
 function onData(arr) { state.leads = arr.map(normalise); render(); }
 function onContacts(arr) { state.contacts = arr.map(normaliseContact); render(); if (state.cediting && $('#cdrawer').classList.contains('open')) {} }
 
 async function start() {
   state.view = routeFromHash();
   bindUI();
+  bindNews();
   render();
   if (!CFG.firebase) {
     store = createLocalStore();
     store.contacts = createLocalStore('astral-bd-contacts-v1');
+    store.briefings = createLocalStore('astral-bd-briefings-v1');
     setStatus(false, 'Demo mode', 'Saved in this browser');
     setUser('');
     setBanner('Demo mode: leads are saved in this browser only. Add your Firebase details in config.js to share the pipeline with the team.');
     store.subscribe(onData);
     store.contacts.subscribe(onContacts);
+    store.briefings.subscribe(onBriefings);
     return;
   }
   setStatus(false, 'Connecting', 'Firebase');
@@ -2160,15 +2359,17 @@ async function start() {
         $('#si-pass').value = '';
         s.subscribe(onData);
         s.contacts.subscribe(onContacts);
+        s.briefings.subscribe(onBriefings);
       },
       () => {
-        store = null; state.leads = []; state.contacts = []; render();
+        store = null; state.leads = []; state.contacts = []; state.briefings = []; render();
         setStatus(false, 'Signed out', 'Sign in to see leads');
         setUser('');
         if (!dlg.open) dlg.showModal();
       },
       (err, coll) => {
         const denied = err && err.code === 'permission-denied';
+        if (denied && coll === 'briefings') { state.newsBlocked = true; if (state.view === 'news') render(); return; }
         if (denied && coll === 'contacts') { setBanner('Contacts are blocked by the Firestore rules. Paste the updated rules (with the contacts section) into Firestore, Rules, then click Publish.', true); return; }
         setBanner(denied ? 'This account is not on the access list for the pipeline. Ask an admin to add your email to the Firestore rules, then sign in again.' : 'Could not load leads: ' + (err.message || err), true);
       });
