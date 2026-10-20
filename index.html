@@ -1084,13 +1084,15 @@ function renderNews(host) {
       <div class="nmeta"><span class="k">${b.kind === 'weekly' ? 'Weekly wrap' : 'Daily brief'}</span><span>${esc(newsFmt(b.date))}</span><span>About ${mins} min</span>${b.window ? `<span>${esc(b.window)}</span>` : ''}</div>
       <h2>${esc(b.title)}</h2>
       <div class="nctl"><button type="button" class="btn primary" id="n-play">${icon('radio')}<span>Listen</span></button><button type="button" class="btn" id="n-stop">Stop</button>
-        <label for="n-rate">Speed</label><select id="n-rate"><option value="0.9">0.9×</option><option value="1">1×</option><option value="1.15">1.15×</option><option value="1.3">1.3×</option></select></div>
+        <label for="n-rate">Speed</label><select id="n-rate"><option value="0.9">0.9×</option><option value="1">1×</option><option value="1.15">1.15×</option><option value="1.3">1.3×</option></select>
+        <label for="n-voice">Voice</label><select id="n-voice" style="max-width:220px"></select></div>
       <div class="nprog"><i id="n-bar"></i></div><div class="nnote" id="n-note" hidden></div>
     </div>
     <div class="ntabs" role="tablist">${tabs.map(([k, t]) => `<button type="button" class="ntab" role="tab" data-ntab="${k}" aria-selected="${state.ntab === k}">${t}</button>`).join('')}</div>
     <div class="nbody" id="n-body"></div>
   </section>`;
   $('#n-rate').value = String(newsSpeech.rate);
+  fillVoices();
   renderNewsBody(b);
 }
 function renderNewsBody(b) {
@@ -1136,9 +1138,46 @@ async function leadFromNews(name, si) {
   catch (err) { toast('Could not create lead: ' + (err.message || err)); }
 }
 const newsSpeech = { rate: 1, queue: [], qi: 0, playing: false, paused: false };
-function newsVoice() {
+/* British voices, most natural first: Edge's neural voices, then Apple's premium/enhanced, then Google's */
+function voiceScore(x) {
+  const n = x.name, gb = /en[-_]GB/i.test(x.lang);
+  let s = gb ? 100 : /^en/i.test(x.lang) ? 10 : 0;
+  if (/natural|neural|online/i.test(n)) s += 60;
+  if (/premium/i.test(n)) s += 50;
+  if (/enhanced/i.test(n)) s += 40;
+  if (/Sonia|Ryan|Libby|Maisie|Thomas|Abbi|Bella|Elliot|Ethan|Hollie|Noah|Oliver|Olivia/i.test(n)) s += 8;
+  if (/Google UK English/i.test(n)) s += 25;
+  if (/Serena|Daniel|Kate|Arthur|Martha/i.test(n)) s += 15;
+  if (/compact|novelty|eloquence/i.test(n)) s -= 40;
+  return s;
+}
+function britishVoices() {
   const v = window.speechSynthesis ? speechSynthesis.getVoices() : [];
-  return v.find(x => /en-GB/i.test(x.lang) && /natural|online|neural/i.test(x.name)) || v.find(x => /en-GB/i.test(x.lang)) || v.find(x => /^en/i.test(x.lang)) || null;
+  const gb = v.filter(x => /en[-_]GB/i.test(x.lang));
+  return (gb.length ? gb : v.filter(x => /^en/i.test(x.lang))).slice().sort((a, b) => voiceScore(b) - voiceScore(a));
+}
+function voiceLabel(x) { return x.name.replace(/^Microsoft\s+/i, '').replace(/\s*-\s*English \(United Kingdom\)/i, '').replace(/\s*\(United Kingdom\)/i, ''); }
+function newsVoice() {
+  const list = britishVoices(); if (!list.length) return null;
+  let pick = ''; try { pick = localStorage.getItem('astral-bd-voice') || ''; } catch {}
+  return list.find(x => x.name === pick) || list[0];
+}
+function fillVoices() {
+  const sel = $('#n-voice'); if (!sel) return;
+  const list = britishVoices();
+  if (!list.length) { sel.innerHTML = '<option>Default</option>'; sel.disabled = true; return; }
+  const cur = newsVoice();
+  sel.disabled = false;
+  sel.innerHTML = list.map(x => `<option value="${esc(x.name)}"${cur && x.name === cur.name ? ' selected' : ''}>${esc(voiceLabel(x))}</option>`).join('');
+}
+if (window.speechSynthesis) speechSynthesis.addEventListener ? speechSynthesis.addEventListener('voiceschanged', fillVoices) : (speechSynthesis.onvoiceschanged = fillVoices);
+/* speak sentence by sentence so long paragraphs don't cut out, with short pauses like a presenter */
+function speechChunks(text) {
+  const t = String(text).replace(/£\s?([\d.,]+)\s?(m|bn|k)\b/gi, (m, n, u) => `${n} ${{ m: 'million', bn: 'billion', k: 'thousand' }[u.toLowerCase()]} pounds`)
+    .replace(/€\s?([\d.,]+)\s?(m|bn)\b/gi, (m, n, u) => `${n} ${u.toLowerCase() === 'm' ? 'million' : 'billion'} euros`)
+    .replace(/\$\s?([\d.,]+)\s?(m|bn)\b/gi, (m, n, u) => `${n} ${u.toLowerCase() === 'm' ? 'million' : 'billion'} dollars`);
+  const parts = t.split(/(?<=[.!?]["')\]]?)\s+(?=["'(]?[A-Z0-9])/).map(x => x.trim()).filter(Boolean);
+  return parts.length ? parts : [t];
 }
 function newsBtn() { const b = $('#n-play span'); if (b) b.textContent = newsSpeech.playing && !newsSpeech.paused ? 'Pause' : newsSpeech.paused ? 'Resume' : 'Listen'; }
 function newsSpeakNext() {
@@ -1146,12 +1185,20 @@ function newsSpeakNext() {
   document.querySelectorAll('.nscript p.speaking').forEach(e => e.classList.remove('speaking'));
   if (S.qi >= S.queue.length) { S.playing = false; newsBtn(); const bar = $('#n-bar'); if (bar) bar.style.width = '100%'; return; }
   const item = S.queue[S.qi];
-  const u = new SpeechSynthesisUtterance(item.text);
+  if (!item.parts) { item.parts = speechChunks(item.text); item.pi = 0; }
+  const u = new SpeechSynthesisUtterance(item.parts[item.pi]);
   const v = newsVoice(); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'en-GB';
-  u.rate = S.rate;
+  u.rate = S.rate * 0.97; u.pitch = 1;
   const el = item.i != null && document.querySelector(`.nscript p[data-np="${item.i}"]`);
-  if (el) { el.classList.add('speaking'); el.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
-  u.onend = () => { if (!S.playing) return; S.qi++; const bar = $('#n-bar'); if (bar) bar.style.width = (100 * S.qi / S.queue.length) + '%'; newsSpeakNext(); };
+  if (el && item.pi === 0) { el.classList.add('speaking'); el.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
+  else if (el) el.classList.add('speaking');
+  u.onend = () => {
+    if (!S.playing) return;
+    item.pi++;
+    let pause = 120;
+    if (item.pi >= item.parts.length) { item.parts = null; S.qi++; pause = item.i == null ? 450 : 320; const bar = $('#n-bar'); if (bar) bar.style.width = (100 * S.qi / S.queue.length) + '%'; }
+    clearTimeout(S.timer); S.timer = setTimeout(() => { if (S.playing && !S.paused) newsSpeakNext(); }, pause);
+  };
   u.onerror = () => { S.playing = false; newsBtn(); };
   speechSynthesis.speak(u);
 }
@@ -1167,7 +1214,7 @@ function newsPlay() {
 }
 function newsStop() {
   const S = newsSpeech; if (!S.playing && !S.paused) return;
-  S.playing = false; S.paused = false; S.qi = 0; if (window.speechSynthesis) speechSynthesis.cancel();
+  S.playing = false; S.paused = false; S.qi = 0; clearTimeout(S.timer); S.queue.forEach(q => { q.parts = null; }); if (window.speechSynthesis) speechSynthesis.cancel();
   const bar = $('#n-bar'); if (bar) bar.style.width = '0';
   document.querySelectorAll('.nscript p.speaking').forEach(e => e.classList.remove('speaking')); newsBtn();
 }
@@ -1182,7 +1229,7 @@ function bindNews() {
     const nc = e.target.closest('[data-ncontact]'); if (nc) { openContact(nc.dataset.ncontact); return; }
     const cr = e.target.closest('[data-ncreate]'); if (cr) { leadFromNews(cr.dataset.ncreate, +cr.dataset.nstory); return; }
   });
-  $('#view').addEventListener('change', e => { if (e.target.id === 'n-rate') { newsSpeech.rate = +e.target.value; if (newsSpeech.playing) { newsStop(); newsPlay(); } } });
+  $('#view').addEventListener('change', e => { if (e.target.id === 'n-voice') { try { localStorage.setItem('astral-bd-voice', e.target.value); } catch {} if (newsSpeech.playing) { newsStop(); newsPlay(); } return; } if (e.target.id === 'n-rate') { newsSpeech.rate = +e.target.value; if (newsSpeech.playing) { newsStop(); newsPlay(); } } });
 }
 
 /* ---------- rendering ---------- */
