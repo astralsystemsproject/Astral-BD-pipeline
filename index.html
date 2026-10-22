@@ -558,6 +558,46 @@ button.nchip:hover{border-color:currentColor}
 :root[data-theme="dark"] .ltag.c6{--lt-bg:rgba(80,200,130,.18);--lt-ink:#93DDB0} :root[data-theme="dark"] .ltag.c7{--lt-bg:rgba(240,200,80,.16);--lt-ink:#F0D27E}
 .card .team{font-size:11.5px;color:var(--ink-3);margin-top:4px}
 .dropmark{height:3px;border-radius:3px;background:var(--blue);margin:6px 2px 0;box-shadow:0 0 0 3px var(--wash)}
+
+/* ---------- sales process: requirements, feasibility, quote ---------- */
+.drawer.wide{width:min(760px,100vw)}
+.dtabs{display:flex;gap:2px;padding:0 20px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.dtab{background:none;border:0;border-bottom:2px solid transparent;padding:11px 12px 9px;font:600 13.5px inherit;font-family:inherit;color:var(--ink-2);cursor:pointer;white-space:nowrap;display:inline-flex;gap:6px;align-items:center}
+.dtab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--blue)}
+.dtab:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.dcount{font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--fill);color:var(--ink-2)}
+.dcount.ok{background:var(--ok-wash);color:var(--ok)} .dcount.bad{background:var(--alert-wash);color:var(--alert)} .dcount:empty{display:none}
+.sp-intro{font-size:13px;color:var(--ink-2);margin:0 0 14px;line-height:1.5}
+.sp-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 16px}
+.sp-prog{flex:1 1 160px;height:6px;background:var(--fill);border-radius:6px;overflow:hidden;min-width:120px}
+.sp-prog i{display:block;height:100%;background:var(--blue);border-radius:6px}
+.sp-nudge{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 12px;border-radius:12px;background:var(--wash);border:1px solid var(--wash-line);color:var(--blue-ink);font-size:13px;margin:0 0 14px}
+.sp-nudge.ok{background:var(--ok-wash);border-color:transparent;color:var(--ok)} .sp-nudge.bad{background:var(--alert-wash);border-color:var(--alert-line);color:var(--alert)}
+.sp-nudge .grow{min-width:8px}
+.yn{display:flex;gap:6px;flex-wrap:wrap}
+.areas{display:flex;flex-direction:column;gap:12px}
+.area{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--card-2);display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+.area h4{grid-column:1/-1;margin:0;font-size:14px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.area .span2{grid-column:1/-1}
+.stat{font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--fill);color:var(--ink-2)}
+.stat.approved{background:var(--ok-wash);color:var(--ok)} .stat.conditions{background:var(--amber-wash);color:var(--amber)} .stat.rejected{background:var(--alert-wash);color:var(--alert)}
+.qtable{width:100%;border-collapse:collapse;font-size:13px}
+.qtable th{text-align:left;font-size:11.5px;color:var(--ink-2);font-weight:700;padding:6px 6px;border-bottom:1px solid var(--line)}
+.qtable td{padding:5px 6px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+.qtable td.code{color:var(--ink-3);font-variant-numeric:tabular-nums;width:34px}
+.qtable td:nth-child(2){min-width:230px}
+.qtable input.num{min-width:64px}
+.qtable input{border:1px solid var(--line);border-radius:8px;background:var(--input);padding:6px 8px;color:var(--ink);font:inherit;width:100%}
+.qtable .num{text-align:right;font-variant-numeric:tabular-nums}
+.qtable tfoot td{font-weight:700;border-bottom:0;padding-top:10px}
+.qwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;padding:4px 8px;margin:6px 0 12px}
+.sp-docs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:6px}
+.sp-doc{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--card-2)}
+.sp-doc b{font-size:13.5px} .sp-doc small{color:var(--ink-2);font-size:12px;line-height:1.4}
+.sp-doc .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.btn.sm{padding:6px 10px;font-size:12.5px}
+.cardsp{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+@media (max-width:600px){.area,.sp-docs{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -678,7 +718,14 @@ button.nchip:hover{border-color:currentColor}
       <h2 id="dr-title">New lead</h2>
       <button type="button" class="btn ghost" id="dr-close">Close</button>
     </header>
+    <nav class="dtabs" role="tablist" aria-label="Lead sections">
+      <button type="button" role="tab" class="dtab" data-dtab="details" aria-selected="true">Details</button>
+      <button type="button" role="tab" class="dtab" data-dtab="req" aria-selected="false">Requirements <span class="dcount" id="dt-req"></span></button>
+      <button type="button" role="tab" class="dtab" data-dtab="feas" aria-selected="false">Feasibility <span class="dcount" id="dt-feas"></span></button>
+      <button type="button" role="tab" class="dtab" data-dtab="quote" aria-selected="false">Quote &amp; SOW</button>
+    </nav>
     <div class="dr-body">
+      <div data-dpanel="details">
       <div class="fgrid">
         <div class="fsec">Opportunity</div>
         <label class="span2">Opportunity<input id="f-opp" placeholder="e.g. Blanket materials irradiation campaign" autocomplete="off"></label>
@@ -731,6 +778,10 @@ button.nchip:hover{border-color:currentColor}
       <div id="lead-news"></div>
       <h3>Activity</h3>
       <ol id="activity" class="activity"></ol>
+      </div>
+      <div data-dpanel="req" hidden></div>
+      <div data-dpanel="feas" hidden></div>
+      <div data-dpanel="quote" hidden></div>
     </div>
     <footer class="dr-foot">
       <button type="button" class="btn danger" id="btn-delete">Delete</button>
@@ -946,6 +997,7 @@ function normalise(raw) {
   l.targetFlux = l.targetFlux == null ? '' : String(l.targetFlux);
   l.tags = Array.isArray(l.tags) ? l.tags.map(String).filter(Boolean) : splitTags(l.tags);
   l.rank = +l.rank || 0;
+  normaliseSales(l);
   ['team', 'goal', 'checklist', 'checkDone', 'duration', 'effort', 'effortDone', 'effortLeft', 'pct', 'sprint', 'milestone'].forEach(k => { l[k] = l[k] == null ? '' : String(l[k]); });
   l.irrHours = parseHours(l.irrHours);
   l.nda = l.nda === true || /^(yes|y|true|1)$/i.test(String(l.nda));
@@ -1272,6 +1324,255 @@ function bindNews() {
     const cr = e.target.closest('[data-ncreate]'); if (cr) { leadFromNews(cr.dataset.ncreate, +cr.dataset.nstory); return; }
   });
   $('#view').addEventListener('change', e => { if (e.target.id === 'n-voice') { try { localStorage.setItem('astral-bd-voice', e.target.value); } catch {} if (newsSpeech.playing) { newsStop(); newsPlay(); } return; } if (e.target.id === 'n-rate') { newsSpeech.rate = +e.target.value; if (newsSpeech.playing) { newsStop(); newsPlay(); } } });
+}
+
+
+/* ---------- sales process: requirement capture, feasibility, quote & SOW ---------- */
+const YN = ['', 'Yes', 'No', 'Not sure'];
+const REQ = [
+  { sec: 'Sample information', fields: [
+    ['sampleDesc', 'Description of sample', 'area'], ['material', 'Material composition', 'area'],
+    ['sampleDims', 'Dimensions / volume of irradiated sample'], ['assemblyDims', 'Dimensions / volume of whole assembly']] },
+  { sec: 'Irradiation requirements', fields: [
+    ['irrDate', 'Target date for irradiation', 'date'], ['fluence', 'Total fluence required'],
+    ['campaign', 'One campaign or a series of blocks?', ['', 'One campaign', 'Series of blocks', 'Not sure']],
+    ['minFlux', 'Minimum flux needed for the experiment / activation'], ['energy', 'Energy targeted'],
+    ['foils', 'Are the standard 3 activation foils adequate? (2 can be placed where the client chooses)', YN]] },
+  { sec: 'Other support', fields: [
+    ['power', 'Power, gas or cooling needed in the vault?', YN], ['mount', 'Mount needed for the sample?', YN],
+    ['cabling', 'Power / comms cabling run outside the vault?', YN], ['shielding', 'Any systems to be shielded?', YN],
+    ['moderation', 'Moderation to be provided?', YN], ['activation', 'Activation study needed? (client provides activation data)', YN],
+    ['storage', 'Storage of equipment or samples after irradiation?', YN], ['waste', 'Waste disposal after irradiation?', YN],
+    ['analysis', 'Post-irradiation analysis of samples?', YN], ['supportNotes', 'Details for any "Yes" above', 'area', true]] },
+  { sec: 'Set up and removal', fields: [
+    ['setupTime', 'Time needed to set up the sample in the vault'], ['removalTime', 'Time needed to remove the sample (excluding cool-down)']] },
+  { sec: 'Safety and compliance', fields: [
+    ['activityLevels', 'Anticipated activity levels and elements generated (can be confirmed later)', 'area'],
+    ['exportCtrl', 'Do any samples fall under export control regulations?', YN], ['exportNotes', 'Export control details', 'text', true]] },
+  { sec: 'Captured', fields: [['capturedBy', 'Captured by', 'text', true], ['capturedOn', 'Date captured', 'date', true], ['capturedVia', 'How it was captured', ['', 'Customer call', 'Customer filled in the form', 'Email', 'Meeting'], true]] }
+];
+const REQ_FIELDS = REQ.flatMap(s => s.fields);
+const REQ_COUNTED = REQ_FIELDS.filter(f => !f[3]);
+const FEAS = [['science', 'Science'], ['engineering', 'Engineering'], ['hp', 'Health Physics / RPS'], ['ops', 'Operations & Projects']];
+const FEAS_STATUS = [['', 'Not reviewed'], ['approved', 'Approved'], ['conditions', 'Approved with conditions'], ['rejected', 'Rejected']];
+const QLINES = [
+  ['1.1', 'Irradiation time (vault with sources), per hour', 'hrs'], ['1.2', 'Standard resource costs during irradiation, per hour', 'hrs'],
+  ['2.1', 'Non-irradiation time in vault (no sources), per hour', 'hrs'], ['2.2', 'Standard resource costs, non-irradiation, per hour', 'hrs']];
+function blankQuote() { return { kind: 'Indicative', vault: '', sources: '', validUntil: '', lines: QLINES.map(([code]) => ({ code, qty: '', rate: '' })), other: [], notes: '' }; }
+function normaliseSales(l) {
+  l.req = l.req && typeof l.req === 'object' ? Object.assign({}, l.req) : {};
+  REQ_FIELDS.forEach(([k]) => { l.req[k] = l.req[k] == null ? '' : String(l.req[k]); });
+  l.feas = l.feas && typeof l.feas === 'object' ? JSON.parse(JSON.stringify(l.feas)) : {};
+  FEAS.forEach(([k]) => { const a = l.feas[k] || {}; l.feas[k] = { status: a.status || '', by: a.by || '', date: a.date || '', comment: a.comment || '' }; });
+  l.feas.notes = typeof l.feas.notes === 'string' ? l.feas.notes : '';
+  const q = l.quote && typeof l.quote === 'object' ? l.quote : {};
+  const b = blankQuote();
+  l.quote = Object.assign(b, q, {
+    lines: QLINES.map(([code]) => Object.assign({ code, qty: '', rate: '' }, (Array.isArray(q.lines) ? q.lines : []).find(x => x && x.code === code) || {})),
+    other: Array.isArray(q.other) ? q.other.map(x => ({ desc: x.desc || '', qty: x.qty == null ? '' : String(x.qty), unit: x.unit || '', rate: x.rate == null ? '' : String(x.rate) })) : []
+  });
+  return l;
+}
+const reqAnswered = l => REQ_COUNTED.filter(([k]) => String(l.req[k] || '').trim()).length;
+function feasSummary(l) {
+  const st = FEAS.map(([k]) => l.feas[k].status);
+  const done = st.filter(Boolean).length, rejected = st.includes('rejected'), all = done === FEAS.length;
+  return { done, rejected, approved: all && !rejected, conditions: st.includes('conditions'), label: rejected ? 'Rejected' : all ? (st.includes('conditions') ? 'Go, with conditions' : 'Go') : done ? `${done} of ${FEAS.length} reviewed` : 'Not started' };
+}
+const numv = v => { const n = parseFloat(String(v == null ? '' : v).replace(/[£,\s]/g, '')); return isFinite(n) ? n : 0; };
+function quoteTotals(q) {
+  const rows = q.lines.map(x => numv(x.qty) * numv(x.rate)).concat(q.other.map(x => numv(x.qty) * numv(x.rate)));
+  return { total: rows.reduce((a, b) => a + b, 0), priced: rows.some(Boolean) };
+}
+function salesChips(l) {
+  if (!l.req) normaliseSales(l);
+  const n = reqAnswered(l), f = feasSummary(l), out = [];
+  if (n) out.push(`<span class="dcount${n === REQ_COUNTED.length ? ' ok' : ''}" title="Requirements captured">Req ${n}/${REQ_COUNTED.length}</span>`);
+  if (f.done) out.push(`<span class="dcount${f.rejected ? ' bad' : f.approved ? ' ok' : ''}" title="Feasibility">${f.rejected ? 'Feasibility: no' : f.approved ? 'Feasibility: go' : 'Feasibility ' + f.done + '/4'}</span>`);
+  return out.length ? `<div class="cardsp">${out.join('')}</div>` : '';
+}
+
+/* render the three panels for the lead being edited */
+function renderSalesPanels(l) {
+  const optHtml = (opts, v) => opts.map(o => `<option value="${esc(o)}"${o === v ? ' selected' : ''}>${esc(o || 'Choose')}</option>`).join('');
+  const field = ([k, label, kind]) => {
+    const v = l.req[k] || '', id = 'rq-' + k;
+    if (Array.isArray(kind)) return `<label${label.length > 46 ? ' class="span2"' : ''}>${esc(label)}<select id="${id}" data-req="${k}">${optHtml(kind, v)}</select></label>`;
+    if (kind === 'area') return `<label class="span2">${esc(label)}<textarea id="${id}" data-req="${k}" rows="2">${esc(v)}</textarea></label>`;
+    return `<label${label.length > 46 ? ' class="span2"' : ''}>${esc(label)}<input id="${id}" data-req="${k}"${kind === 'date' ? ' type="date"' : ''} value="${esc(v)}" autocomplete="off"></label>`;
+  };
+  $('[data-dpanel="req"]').innerHTML = `<p class="sp-intro">Everything we need to quote, plan and run the irradiation. Fill it in on the call, or send the questions to the customer. This feeds the feasibility check and the quote.</p>
+    <div class="sp-bar"><div class="sp-prog" aria-hidden="true"><i id="rq-bar"></i></div><span class="nnote" id="rq-count"></span>
+      <button type="button" class="btn sm" data-sp="copyq">Copy questions for the customer</button></div>
+    <div id="rq-nudge"></div>
+    <div class="fgrid">${REQ.map(sec => `<div class="fsec">${esc(sec.sec)}</div>` + sec.fields.map(field).join('')).join('')}</div>`;
+
+  $('[data-dpanel="feas"]').innerHTML = `<p class="sp-intro">Can we deliver this technically, operationally, safely and compliantly? Each area reviews the requirements and accepts or rejects. All four must approve before a proposal goes out.</p>
+    <div id="fe-nudge"></div>
+    <div class="sp-bar"><button type="button" class="btn sm" data-sp="copyreview">Copy review request</button><span class="nnote">Paste into an email or Teams message to the reviewers</span></div>
+    <div class="areas">${FEAS.map(([k, name]) => { const a = l.feas[k]; return `<div class="area" data-area="${k}">
+      <h4>${esc(name)}<span class="stat ${esc(a.status)}" id="fe-st-${k}">${esc((FEAS_STATUS.find(x => x[0] === a.status) || FEAS_STATUS[0])[1])}</span></h4>
+      <label>Decision<select id="fe-${k}-status">${FEAS_STATUS.map(([v, t]) => `<option value="${v}"${v === a.status ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
+      <label>Reviewed by<input id="fe-${k}-by" value="${esc(a.by)}" autocomplete="off"></label>
+      <label>Date<input id="fe-${k}-date" type="date" value="${esc(a.date)}"></label>
+      <label class="span2">Comments or conditions<textarea id="fe-${k}-comment" rows="2">${esc(a.comment)}</textarea></label></div>`; }).join('')}</div>
+    <div class="fgrid" style="margin-top:14px"><label class="span2">Overall notes / go-no-go meeting<textarea id="fe-notes" rows="2">${esc(l.feas.notes)}</textarea></label></div>`;
+
+  const q = l.quote;
+  const qrow = (x, i, def) => `<tr><td class="code">${esc(x.code)}</td><td>${esc(def[1])}</td><td style="width:84px"><input class="num" id="qt-q-${i}" inputmode="decimal" value="${esc(x.qty)}" placeholder="0" aria-label="${esc(def[1])} quantity"></td><td style="width:40px" class="nnote">${esc(def[2])}</td><td style="width:96px"><input class="num" id="qt-r-${i}" inputmode="decimal" value="${esc(x.rate)}" placeholder="£/hr" aria-label="${esc(def[1])} rate"></td><td class="num" id="qt-t-${i}" style="width:96px"></td></tr>`;
+  const orow = (x, i) => `<tr data-orow="${i}"><td class="code">3.${i + 1}</td><td><input id="qo-d-${i}" value="${esc(x.desc)}" placeholder="e.g. Activation study, waste disposal" aria-label="Other cost description"></td><td><input class="num" id="qo-q-${i}" inputmode="decimal" value="${esc(x.qty)}" aria-label="Quantity"></td><td><input id="qo-u-${i}" value="${esc(x.unit)}" placeholder="unit" aria-label="Unit"></td><td><input class="num" id="qo-r-${i}" inputmode="decimal" value="${esc(x.rate)}" placeholder="£" aria-label="Rate"></td><td class="num" id="qo-t-${i}"></td></tr>`;
+  $('[data-dpanel="quote"]').innerHTML = `<p class="sp-intro">Builds the quote request for SAP (Sales Quotation onwards) and a draft statement of work. Rates are optional: leave them blank and Finance prices it in SAP.</p>
+    <div id="qt-nudge"></div>
+    <div class="fgrid">
+      <label>Quote type<select id="qt-kind">${['Indicative', 'Firm'].map(o => `<option${o === q.kind ? ' selected' : ''}>${o}</option>`).join('')}</select></label>
+      <label>Valid until<input id="qt-valid" type="date" value="${esc(q.validUntil)}"></label>
+      <label>Vault / facility<input id="qt-vault" value="${esc(q.vault)}" placeholder="e.g. Vault 1" autocomplete="off"></label>
+      <label>Sources<input id="qt-sources" value="${esc(q.sources)}" placeholder="e.g. Sources 1, 2 and 3" autocomplete="off"></label>
+    </div>
+    <h3>Line items</h3>
+    <div class="qwrap"><table class="qtable"><thead><tr><th></th><th>Item</th><th class="num">Qty</th><th></th><th class="num">Rate (£)</th><th class="num">Total</th></tr></thead>
+      <tbody>${q.lines.map((x, i) => qrow(x, i, QLINES[i])).join('')}
+      <tr><td class="code">3</td><td colspan="5"><b>Other costs</b> <span class="nnote">time and materials for supporting services</span></td></tr>
+      ${q.other.map(orow).join('')}</tbody>
+      <tfoot><tr><td></td><td><button type="button" class="btn sm" data-sp="addother">+ Add other cost</button></td><td colspan="3" class="num">Total</td><td class="num" id="qt-total"></td></tr></tfoot></table></div>
+    <div class="sp-bar"><button type="button" class="btn sm" data-sp="usevalue">Use total as lead value</button><button type="button" class="btn sm" data-sp="hrsfill">Fill 1.1 and 1.2 from Est. irradiation hours</button></div>
+    <div class="fgrid"><label class="span2">Quote notes / assumptions<textarea id="qt-notes" rows="2">${esc(q.notes)}</textarea></label></div>
+    <h3>Documents</h3>
+    <div class="sp-docs">${[['req', 'Requirements summary', 'Everything captured, to share with the customer or the team'],
+      ['feas', 'Feasibility record', 'The four sign-offs with comments and the go / no-go'],
+      ['quote', 'Quote request for SAP', 'Line items and hours, ready to key into the SAP Sales Quotation'],
+      ['sow', 'Statement of work (draft)', 'Scope, deliverables, customer responsibilities and assumptions']].map(([k, t, d]) =>
+      `<div class="sp-doc"><b>${t}</b><small>${d}</small><div class="row"><button type="button" class="btn sm" data-doc="${k}" data-how="print">Open to print / PDF</button><button type="button" class="btn sm" data-doc="${k}" data-how="word">Word</button></div></div>`).join('')}</div>
+    <p class="nnote" style="margin-top:10px">Documents use what's on screen now, including unsaved changes.</p>`;
+  syncSales();
+}
+function readSales(base) {
+  const l = normaliseSales(JSON.parse(JSON.stringify(base)));
+  REQ_FIELDS.forEach(([k]) => { const el = $('#rq-' + k); if (el) l.req[k] = el.value.trim(); });
+  FEAS.forEach(([k]) => { const g = f => ($('#fe-' + k + '-' + f) || {}).value || ''; l.feas[k] = { status: g('status'), by: g('by').trim(), date: g('date'), comment: g('comment').trim() }; });
+  l.feas.notes = ($('#fe-notes') || {}).value || '';
+  const q = l.quote;
+  q.kind = $('#qt-kind').value; q.validUntil = $('#qt-valid').value; q.vault = $('#qt-vault').value.trim(); q.sources = $('#qt-sources').value.trim(); q.notes = $('#qt-notes').value.trim();
+  q.lines = QLINES.map(([code], i) => ({ code, qty: $('#qt-q-' + i).value.trim(), rate: $('#qt-r-' + i).value.trim() }));
+  q.other = [...document.querySelectorAll('[data-orow]')].map(tr => { const i = tr.dataset.orow; return { desc: $('#qo-d-' + i).value.trim(), qty: $('#qo-q-' + i).value.trim(), unit: $('#qo-u-' + i).value.trim(), rate: $('#qo-r-' + i).value.trim() }; }).filter(x => x.desc || x.qty || x.rate);
+  return l;
+}
+function currentDraft() {
+  const l = readSales(state.editing);
+  Object.assign(l, { opportunity: $('#f-opp').value.trim(), company: $('#f-company').value.trim(), oppId: $('#f-oppid').value.trim(), contact: $('#f-contact').value.trim(),
+    role: $('#f-role').value.trim(), email: $('#f-email').value.trim(), stage: $('#f-stage').value, value: parseMoney($('#f-value').value), targetFlux: $('#f-flux').value.trim(),
+    irrHours: parseHours($('#f-hours').value), nda: $('#f-nda').value === 'yes', owner: $('#f-owner').value, type: $('#f-type').value });
+  return l;
+}
+const STAGE_ORDER = id => STAGES.findIndex(s => s.id === id);
+function syncSales() {
+  if (!state.editing || !$('#rq-count')) return;
+  const l = currentDraft();
+  const n = reqAnswered(l), N = REQ_COUNTED.length;
+  $('#rq-bar').style.width = (n / N * 100) + '%'; $('#rq-count').textContent = `${n} of ${N} answered`;
+  const dr = $('#dt-req'); dr.textContent = n ? `${n}/${N}` : ''; dr.className = 'dcount' + (n === N ? ' ok' : '');
+  const f = feasSummary(l), df = $('#dt-feas');
+  df.textContent = f.done ? (f.rejected ? 'No' : f.approved ? 'Go' : `${f.done}/4`) : ''; df.className = 'dcount' + (f.rejected ? ' bad' : f.approved ? ' ok' : '');
+  FEAS.forEach(([k]) => { const st = l.feas[k].status, el = $('#fe-st-' + k); el.className = 'stat ' + st; el.textContent = (FEAS_STATUS.find(x => x[0] === st) || FEAS_STATUS[0])[1]; });
+  const so = STAGE_ORDER(l.stage), at = id => so >= 0 && so < STAGE_ORDER(id) && !isClosed(l);
+  $('#rq-nudge').innerHTML = n && at('requirements') ? `<div class="sp-nudge"><span>Requirements are being captured but the lead is still at ${esc(stageOf(l.stage).label)}.</span><span class="grow"></span><button type="button" class="btn sm" data-stageto="requirements">Move to Requirement capture</button></div>` : '';
+  $('#fe-nudge').innerHTML = f.rejected ? `<div class="sp-nudge bad"><b>No-go.</b> At least one area has rejected this. Follow up with the client on the issues raised.</div>`
+    : f.approved ? `<div class="sp-nudge ok"><b>${esc(f.label)}.</b> All four areas have approved.${at('proposal') ? '<span class="grow"></span><button type="button" class="btn sm" data-stageto="proposal">Move to Proposal in development</button>' : ''}</div>`
+    : `<div class="sp-nudge"><b>${esc(f.label)}.</b>${n < N ? ` Requirements ${n} of ${N} answered.` : ''}</div>`;
+  const q = l.quote; let total = 0;
+  q.lines.forEach((x, i) => { const t = numv(x.qty) * numv(x.rate); total += t; $('#qt-t-' + i).textContent = t ? money(t) : '–'; });
+  q.other.forEach((x, i) => { const el = $('#qo-t-' + i); const t = numv(x.qty) * numv(x.rate); total += t; if (el) el.textContent = t ? money(t) : '–'; });
+  $('#qt-total').textContent = total ? money(total) : '–';
+  $('#qt-nudge').innerHTML = !f.approved && q.kind === 'Firm' ? `<div class="sp-nudge bad">A firm quote normally waits for all four feasibility approvals (${esc(f.label.toLowerCase())}).</div>` : '';
+}
+function setDrawerTab(t) {
+  document.querySelectorAll('.dtab').forEach(b => b.setAttribute('aria-selected', b.dataset.dtab === t));
+  document.querySelectorAll('[data-dpanel]').forEach(p => { p.hidden = p.dataset.dpanel !== t; });
+  $('#drawer').classList.toggle('wide', t !== 'details');
+  $('#drawer .dr-body').scrollTop = 0;
+}
+
+/* documents */
+function docShell(title, l, body) {
+  const logo = ($('.logo-mark') || {}).src || '';
+  const d = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${esc(title)} – ${esc(l.company || '')}</title><style>
+    body{font-family:Arial,Helvetica,sans-serif;color:#1A2B1F;font-size:11pt;line-height:1.45;max-width:780px;margin:28px auto;padding:0 24px}
+    header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #3B7CF6;padding-bottom:10px;margin-bottom:18px}
+    header img{height:44px} h1{font-size:18pt;margin:0 0 4px} h2{font-size:12.5pt;margin:20px 0 6px;color:#2558C9}
+    table{width:100%;border-collapse:collapse;margin:6px 0 10px} th,td{border:1px solid #CBD3DC;padding:6px 8px;text-align:left;vertical-align:top;font-size:10pt}
+    th{background:#EEF2F7;width:38%} .num{text-align:right} .muted{color:#56645B} .draft{color:#C4321F;font-weight:700;letter-spacing:.08em}
+    @media print{body{margin:0}}
+  </style></head><body><header>${logo ? `<img src="${logo}" alt="Astral Systems">` : '<b>Astral Systems</b>'}<div class="muted" style="text-align:right">${esc(d)}<br>${esc(l.oppId || '')}</div></header>
+  <h1>${esc(title)}</h1><div class="muted">${esc(l.company)}${l.opportunity && l.opportunity !== l.company ? ' · ' + esc(l.opportunity) : ''}</div>${body}</body></html>`;
+}
+const dv = v => v ? esc(v).replace(/\n/g, '<br>') : '<span class="muted">Not provided</span>';
+function buildDoc(kind, l) {
+  const kv = rows => `<table>${rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${dv(v)}</td></tr>`).join('')}</table>`;
+  const reqHtml = REQ.map(sec => `<h2>${esc(sec.sec)}</h2>` + kv(sec.fields.map(([k, label]) => [label, l.req[k]]))).join('');
+  const f = feasSummary(l);
+  const feasHtml = `<p><b>Outcome:</b> ${esc(f.label)}</p><table><tr><th style="width:24%">Area</th><th style="width:18%">Decision</th><th style="width:20%">Reviewed by</th><th>Comments / conditions</th></tr>` +
+    FEAS.map(([k, n]) => { const a = l.feas[k]; return `<tr><td>${esc(n)}</td><td>${esc((FEAS_STATUS.find(x => x[0] === a.status) || FEAS_STATUS[0])[1])}</td><td>${dv(a.by)}${a.date ? '<br><span class="muted">' + esc(a.date) + '</span>' : ''}</td><td>${dv(a.comment)}</td></tr>`; }).join('') + `</table>` + (l.feas.notes ? `<p><b>Notes:</b> ${dv(l.feas.notes)}</p>` : '');
+  const q = l.quote, tot = quoteTotals(q);
+  const lineRows = q.lines.map((x, i) => [x.code, QLINES[i][1], x.qty, QLINES[i][2], x.rate]).concat(q.other.map((x, i) => ['3.' + (i + 1), x.desc, x.qty, x.unit, x.rate]));
+  const quoteHtml = `<table><tr><th style="width:8%">Ref</th><th style="width:46%">Item</th><th class="num" style="width:10%">Qty</th><th style="width:8%">Unit</th><th class="num" style="width:13%">Rate</th><th class="num">Total</th></tr>` +
+    lineRows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td class="num">${esc(r[2] || '')}</td><td>${esc(r[3] || '')}</td><td class="num">${r[4] ? money(numv(r[4])) : ''}</td><td class="num">${numv(r[2]) * numv(r[4]) ? money(numv(r[2]) * numv(r[4])) : ''}</td></tr>`).join('') +
+    `<tr><td colspan="5" class="num"><b>Total</b></td><td class="num"><b>${tot.priced ? money(tot.total) : 'To be priced in SAP'}</b></td></tr></table>`;
+  const support = REQ.find(s => s.sec === 'Other support').fields.filter(([k, , kind]) => Array.isArray(kind) && l.req[k] === 'Yes').map(([, label]) => label.replace(/\?.*$/, '').replace(/ needed| to be provided/i, ''));
+  if (kind === 'req') return docShell('Irradiation requirements', l, kv([['Customer', l.company], ['Contact', [l.contact, l.role, l.email].filter(Boolean).join(', ')], ['Target flux', l.targetFlux], ['Estimated irradiation hours', l.irrHours ? String(l.irrHours) : '']]) + reqHtml);
+  if (kind === 'feas') return docShell('Feasibility record', l, feasHtml + '<h2>Requirements reviewed</h2>' + reqHtml);
+  if (kind === 'quote') return docShell(`Quote request for SAP (${q.kind.toLowerCase()})`, l, kv([['Customer', l.company], ['Contact', [l.contact, l.email].filter(Boolean).join(', ')], ['Opportunity ID', l.oppId], ['Quote type', q.kind], ['Valid until', q.validUntil], ['Vault / facility', q.vault], ['Sources', q.sources], ['Target flux', l.targetFlux], ['Feasibility', f.label]]) + '<h2>Line items</h2>' + quoteHtml + (q.notes ? `<h2>Notes and assumptions</h2><p>${dv(q.notes)}</p>` : ''));
+  // statement of work
+  return docShell('Statement of work', l, `<p class="draft">DRAFT – FOR REVIEW</p>` +
+    `<h2>1. Parties</h2>` + kv([['Supplier', 'Astral Systems Ltd'], ['Client', l.company], ['Client contact', [l.contact, l.role, l.email].filter(Boolean).join(', ')], ['Reference', l.oppId]]) +
+    `<h2>2. Purpose and scope</h2><p>Astral Systems will provide neutron irradiation of the client's samples as described below${q.vault ? `, using ${esc(q.vault)}${q.sources ? ' with ' + esc(q.sources) : ''}` : ''}.</p>` +
+    kv([['Samples', l.req.sampleDesc], ['Material composition', l.req.material], ['Sample dimensions / volume', l.req.sampleDims], ['Assembly dimensions / volume', l.req.assemblyDims], ['Total fluence', l.req.fluence], ['Minimum flux', l.req.minFlux || l.targetFlux], ['Energy', l.req.energy], ['Campaign', l.req.campaign], ['Estimated irradiation time', l.irrHours ? l.irrHours + ' hours' : q.lines[0].qty ? q.lines[0].qty + ' hours' : '']]) +
+    `<h2>3. Deliverables</h2><ul><li>Irradiation of the samples to the agreed fluence${l.req.campaign === 'Series of blocks' ? ', delivered in a series of blocks' : ''}.</li><li>Dosimetry using ${l.req.foils === 'No' ? 'activation foils agreed with the client' : 'the standard 3 activation foils (2 placed at the client\'s discretion)'}.</li><li>An irradiation report / certificate.</li>${support.map(x => `<li>${esc(x)}.</li>`).join('')}</ul>` +
+    `<h2>4. Schedule</h2>` + kv([['Target irradiation date', l.req.irrDate], ['Set-up time in vault', l.req.setupTime], ['Removal time (excluding cool-down)', l.req.removalTime]]) +
+    `<h2>5. Client responsibilities</h2><ul><li>Provide samples as described, with activation data to support cool-down scheduling and safety assessment.</li><li>Confirm anticipated activity levels and elements generated${l.req.activityLevels ? ` (currently: ${esc(l.req.activityLevels)})` : ''}.</li><li>Declare any export-controlled items${l.req.exportCtrl ? ` (stated: ${esc(l.req.exportCtrl)}${l.req.exportNotes ? ' – ' + esc(l.req.exportNotes) : ''})` : ''}.</li>${l.nda ? '' : '<li>Sign a non-disclosure agreement if required.</li>'}</ul>` +
+    `<h2>6. Commercial</h2>` + quoteHtml + (q.notes ? `<p>${dv(q.notes)}</p>` : '') +
+    `<h2>7. Feasibility</h2><p>${esc(f.label)} (Science, Engineering, Health Physics / RPS, Operations &amp; Projects).</p>` +
+    `<h2>8. Acceptance</h2><table><tr><th>For Astral Systems</th><td>Name, signature, date</td></tr><tr><th>For ${esc(l.company || 'the client')}</th><td>Name, signature, date</td></tr></table>`);
+}
+function outputDoc(kind, how) {
+  const l = currentDraft();
+  const html = buildDoc(kind, l);
+  const name = `${(l.oppId || l.company || 'lead').replace(/[^\w-]+/g, '-')}-${{ req: 'requirements', feas: 'feasibility', quote: 'quote-request', sow: 'statement-of-work' }[kind]}`;
+  if (how === 'word') {
+    const url = URL.createObjectURL(new Blob(['﻿' + html], { type: 'application/msword' }));
+    const a = document.createElement('a'); a.href = url; a.download = name + '.doc'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500); toast('Word document downloaded'); return;
+  }
+  const w = window.open('', '_blank');
+  if (!w) { toast('Allow pop-ups for this site to open the document'); return; }
+  w.document.open(); w.document.write(html.replace('</body>', '<script>setTimeout(function(){window.print()},400)<\/script></body>')); w.document.close();
+}
+async function copyText(text, done) {
+  try { await navigator.clipboard.writeText(text); toast(done); }
+  catch { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); toast(done); } catch { toast('Could not copy'); } t.remove(); }
+}
+function salesClick(e) {
+  const tab = e.target.closest('[data-dtab]'); if (tab) { setDrawerTab(tab.dataset.dtab); return; }
+  const doc = e.target.closest('[data-doc]'); if (doc) { outputDoc(doc.dataset.doc, doc.dataset.how); return; }
+  const st = e.target.closest('[data-stageto]'); if (st) { $('#f-stage').value = st.dataset.stageto; updateWeightedHint(); syncSales(); toast('Stage changed. Save the lead to keep it.'); return; }
+  const b = e.target.closest('[data-sp]'); if (!b) return;
+  const l = currentDraft();
+  if (b.dataset.sp === 'copyq') {
+    const missing = REQ.filter(s => s.sec !== 'Captured').map(s => { const qs = s.fields.filter(([k, , , extra]) => !extra && !String(l.req[k] || '').trim()); return qs.length ? `${s.sec}\n` + qs.map(([, label]) => `- ${label}`).join('\n') : ''; }).filter(Boolean);
+    copyText(`To help us plan and quote your irradiation${l.opportunity ? ' (' + l.opportunity + ')' : ''}, could you answer the questions below?\n\n${missing.join('\n\n') || 'All questions are already answered.'}\n`, 'Questions copied. Paste them into an email');
+  } else if (b.dataset.sp === 'copyreview') {
+    copyText(`Feasibility review needed: ${l.company}${l.opportunity && l.opportunity !== l.company ? ' – ' + l.opportunity : ''} (${l.oppId || 'new lead'})\n\nPlease review the requirements and record your decision (Approved / Approved with conditions / Rejected) on the Feasibility tab of this lead in the BD CRM: ${location.origin + location.pathname}\n\nAreas: Science, Engineering, Health Physics / RPS, Operations & Projects.\nKey points: ${[l.req.sampleDesc, l.req.fluence && 'fluence ' + l.req.fluence, l.targetFlux && 'flux ' + l.targetFlux, l.irrHours && l.irrHours + ' hrs', l.req.irrDate && 'target ' + l.req.irrDate].filter(Boolean).join('; ') || 'see the Requirements tab'}\n`, 'Review request copied');
+  } else if (b.dataset.sp === 'addother') {
+    const tb = $('[data-dpanel="quote"] tbody'); const i = document.querySelectorAll('[data-orow]').length;
+    tb.insertAdjacentHTML('beforeend', `<tr data-orow="${i}"><td class="code">3.${i + 1}</td><td><input id="qo-d-${i}" placeholder="e.g. Activation study, waste disposal" aria-label="Other cost description"></td><td><input class="num" id="qo-q-${i}" inputmode="decimal" aria-label="Quantity"></td><td><input id="qo-u-${i}" placeholder="unit" aria-label="Unit"></td><td><input class="num" id="qo-r-${i}" inputmode="decimal" placeholder="£" aria-label="Rate"></td><td class="num" id="qo-t-${i}"></td></tr>`);
+    $('#qo-d-' + i).focus();
+  } else if (b.dataset.sp === 'usevalue') {
+    const t = quoteTotals(l.quote).total; if (!t) { toast('Add quantities and rates first'); return; }
+    $('#f-value').value = String(Math.round(t)); updateWeightedHint(); toast(`Lead value set to ${money(t)}. Save to keep it.`);
+  } else if (b.dataset.sp === 'hrsfill') {
+    const h = parseHours($('#f-hours').value); if (!h) { toast('Add Est. irradiation hours on the Details tab first'); return; }
+    $('#qt-q-0').value = String(h); $('#qt-q-1').value = String(h); syncSales();
+  }
 }
 
 /* ---------- rendering ---------- */
@@ -1647,7 +1948,7 @@ function renderBoard(host, list) {
         return `<div class="card" draggable="true" data-id="${esc(l.id)}">${tagsHtml(l.tags)}<button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
           `<div class="sub">${esc([l.company !== oppTitle(l) ? l.company : '', l.sector].filter(Boolean).join(' · '))}</div>` +
           (l.nextAction ? `<div style="margin-top:6px">${esc(l.nextAction)}</div>` : '') +
-          (l.team ? `<div class="team">${esc(l.team)}</div>` : '') +
+          (l.team ? `<div class="team">${esc(l.team)}</div>` : '') + salesChips(l) +
           `<div class="val"><span class="money">${l.value ? moneyC(l.value) : ''}</span><span class="sub">${l.closeDate ? 'Close ' + esc(shortMonth(l.closeDate)) : ''}</span></div>` +
           `<div class="meta">${l.nextDate ? `<span class="chip ${b}">${esc(fmtDue(l))}</span>` : '<span></span>'}${l.priority ? `<span class="prio ${esc(l.priority)}">${esc(l.priority)}</span>` : fitHtml(l.fit)}</div></div>`;
       }).join('') + `</div></div>`;
@@ -1718,6 +2019,7 @@ function openDrawer(id) {
   updateWeightedHint(); syncContactHint();
   renderActivity(l, safeUrl(l.website));
   renderLeadContacts(l);
+  renderSalesPanels(l); setDrawerTab('details');
   $('#lead-news').innerHTML = orgNewsHtml(l.company);
   $('#scrim').hidden = false;
   const d = $('#drawer'); d.classList.add('open'); d.setAttribute('aria-hidden', 'false');
@@ -1747,7 +2049,7 @@ function renderActivity(l, link) {
 }
 function closeDrawer() {
   const d = $('#drawer');
-  d.classList.remove('open'); d.setAttribute('aria-hidden', 'true');
+  d.classList.remove('open', 'wide'); d.setAttribute('aria-hidden', 'true');
   $('#scrim').hidden = true; state.editing = null;
   if (lastFocus && lastFocus.focus && document.contains(lastFocus)) lastFocus.focus();
 }
@@ -1768,6 +2070,7 @@ async function saveForm(e) {
     notes: $('#f-notes').value.trim(), targetFlux: $('#f-flux').value.trim(), irrHours: parseHours($('#f-hours').value),
     tags: splitTags($('#f-tags').value), team: $('#f-team').value.trim(), goal: $('#f-goal').value.trim(), checklist: $('#f-checklist').value.trim(), checkDone: $('#f-checkdone').value.trim(), pct: $('#f-pct').value.trim(), duration: $('#f-duration').value.trim(), effort: $('#f-effort').value.trim(), effortDone: $('#f-effortdone').value.trim(), effortLeft: $('#f-effortleft').value.trim(), sprint: $('#f-sprint').value.trim(), milestone: $('#f-milestone').value.trim()
   });
+  { const sl = readSales(l); l.req = sl.req; l.feas = sl.feas; l.quote = sl.quote; }
   if (!l.oppId) l.oppId = nextOppId(l, state.leads.filter(x => x.id !== l.id).map(x => x.oppId));
   const now = new Date().toISOString();
   l.activity = (prev ? prev.activity : []).slice();
@@ -1775,6 +2078,10 @@ async function saveForm(e) {
   else {
     if (prev.stage !== l.stage) l.activity.push({ at: now, by: who(), text: 'Moved to ' + stageOf(l.stage).label });
     if (prev.value !== l.value) l.activity.push({ at: now, by: who(), text: `Value changed to ${money(l.value)}` });
+    const pn = prev.req ? reqAnswered(normaliseSales(JSON.parse(JSON.stringify(prev)))) : 0, nn = reqAnswered(l);
+    if (nn !== pn) l.activity.push({ at: now, by: who(), text: `Requirements updated (${nn} of ${REQ_COUNTED.length} answered)` });
+    const pf = normaliseSales(JSON.parse(JSON.stringify(prev))).feas;
+    FEAS.forEach(([k, name]) => { if (pf[k].status !== l.feas[k].status) l.activity.push({ at: now, by: who(), text: `Feasibility, ${name}: ${(FEAS_STATUS.find(x => x[0] === l.feas[k].status) || FEAS_STATUS[0])[1]}${l.feas[k].by ? ' (' + l.feas[k].by + ')' : ''}` }); });
   }
   const note = $('#f-log').value.trim();
   if (note) l.activity.push({ at: now, by: who(), text: note });
@@ -2427,6 +2734,9 @@ function bindUI() {
 
   $('#lead-form').addEventListener('submit', saveForm);
   $('#dr-close').addEventListener('click', closeDrawer);
+  $('#drawer').addEventListener('click', salesClick);
+  $('#drawer').addEventListener('input', e => { if (e.target.closest('[data-dpanel="req"],[data-dpanel="feas"],[data-dpanel="quote"]') || e.target.id === 'f-stage') syncSales(); });
+  $('#drawer').addEventListener('change', e => { const m = e.target.id.match(/^fe-(\w+)-status$/); if (m && e.target.value && !$('#fe-' + m[1] + '-date').value) $('#fe-' + m[1] + '-date').value = new Date().toLocaleDateString('en-CA'); syncSales(); });
   $('#dr-cancel').addEventListener('click', closeDrawer);
   $('#scrim').addEventListener('click', closeDrawer);
   $('#btn-delete').addEventListener('click', deleteLead);
