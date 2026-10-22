@@ -545,6 +545,19 @@ button.nchip:hover{border-color:currentColor}
 .nnews{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 .nnews li{border:1px solid var(--line);background:var(--card-2);border-radius:12px;padding:9px 12px;font-size:13px}
 .nnews small{display:block;color:var(--ink-2);font-size:12px}
+
+/* planner labels + drag order */
+.ltags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px}
+.ltag{font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;line-height:1.35;background:var(--lt-bg,var(--fill));color:var(--lt-ink,var(--ink-2))}
+.ltag.c0{--lt-bg:#F7E3D7;--lt-ink:#8A4B23} .ltag.c1{--lt-bg:#E9E1F7;--lt-ink:#5B3F96} .ltag.c2{--lt-bg:#FBE0EC;--lt-ink:#9A2E5E}
+.ltag.c3{--lt-bg:#D7F1F2;--lt-ink:#1D6B70} .ltag.c4{--lt-bg:#E6E8EB;--lt-ink:#4A5560} .ltag.c5{--lt-bg:#FCE1DE;--lt-ink:#A3271A}
+.ltag.c6{--lt-bg:#DDF2E3;--lt-ink:#22693B} .ltag.c7{--lt-bg:#FFF0C9;--lt-ink:#7A5800}
+:root[data-theme="dark"] .ltag.c0{--lt-bg:rgba(240,150,100,.18);--lt-ink:#F2B591} :root[data-theme="dark"] .ltag.c1{--lt-bg:rgba(160,130,240,.2);--lt-ink:#C6B5F5}
+:root[data-theme="dark"] .ltag.c2{--lt-bg:rgba(240,110,170,.18);--lt-ink:#F5A9CC} :root[data-theme="dark"] .ltag.c3{--lt-bg:rgba(60,190,200,.18);--lt-ink:#8ADBE0}
+:root[data-theme="dark"] .ltag.c4{--lt-bg:rgba(170,180,190,.16);--lt-ink:#C3CBD3} :root[data-theme="dark"] .ltag.c5{--lt-bg:rgba(240,110,95,.2);--lt-ink:#F5A398}
+:root[data-theme="dark"] .ltag.c6{--lt-bg:rgba(80,200,130,.18);--lt-ink:#93DDB0} :root[data-theme="dark"] .ltag.c7{--lt-bg:rgba(240,200,80,.16);--lt-ink:#F0D27E}
+.card .team{font-size:11.5px;color:var(--ink-3);margin-top:4px}
+.dropmark{height:3px;border-radius:3px;background:var(--blue);margin:6px 2px 0;box-shadow:0 0 0 3px var(--wash)}
 </style>
 </head>
 <body>
@@ -696,6 +709,20 @@ button.nchip:hover{border-color:currentColor}
         <label>Due date<input id="f-date" type="date"></label>
         <label>Action owner<select id="f-nextowner"></select></label>
         <div class="doneWrap span2"><button type="button" class="btn" id="btn-done">Done, set the next one</button></div>
+        <div class="fsec">Planner details</div>
+        <label class="span2">Labels<input id="f-tags" list="dl-tags" placeholder="e.g. Irradiation, Conference lead, Emailed" autocomplete="off"><span class="hint">Separate labels with commas</span></label>
+        <label>Assigned to<input id="f-team" placeholder="e.g. Harriet Allen, Becky Scoon" autocomplete="off"></label>
+        <label>Goal<input id="f-goal" autocomplete="off"></label>
+        <label class="span2">Checklist<textarea id="f-checklist" rows="2" placeholder="One item per line"></textarea></label>
+        <label>Checklist completed<input id="f-checkdone" placeholder="e.g. 1/2" autocomplete="off"></label>
+        <label>% complete<input id="f-pct" inputmode="decimal" autocomplete="off"></label>
+        <label>Duration<input id="f-duration" placeholder="e.g. 120 days" autocomplete="off"></label>
+        <label>Effort<input id="f-effort" placeholder="e.g. 80 hours" autocomplete="off"></label>
+        <label>Effort completed<input id="f-effortdone" autocomplete="off"></label>
+        <label>Effort remaining<input id="f-effortleft" autocomplete="off"></label>
+        <label>Sprint<input id="f-sprint" autocomplete="off"></label>
+        <label>Milestone<select id="f-milestone"><option value="">Not set</option><option>No</option><option>Yes</option></select></label>
+        <datalist id="dl-tags"></datalist>
         <div class="fsec">Notes</div>
         <label class="span2">Notes<textarea id="f-notes" rows="4"></textarea></label>
         <label class="span2">Log a note<input id="f-log" placeholder="e.g. Call with Sam, wants a quote for 200 samples" autocomplete="off"></label>
@@ -785,18 +812,17 @@ button.nchip:hover{border-color:currentColor}
 /* ---------- config & constants ---------- */
 const DEFAULT_STAGES = [
   // Harriet's MS Planner stages. "closed" marks stages outside the open pipeline.
-  { id: 'legacy',       label: 'Not yet qualified',       prob: 0,   color: '#C9D6EE' },
   { id: 'initial',      label: 'Initial lead',            prob: 5,   color: '#9DBCF8' },
   { id: 'requirements', label: 'Requirement capture',     prob: 25,  color: '#6E9BF0' },
   { id: 'proposal',     label: 'Proposal in development', prob: 50,  color: '#3B7CF6' },
   { id: 'negotiation',  label: 'Negotiation',             prob: 75,  color: '#2558C9' },
-  { id: 'won',          label: 'Won',                     prob: 100, color: '#23794A', closed: 'won' },
-  { id: 'hold',         label: 'On hold',                 prob: 0,   color: '#C08A2E', closed: 'hold' },
-  { id: 'disqualified', label: 'Disqualified',            prob: 0,   color: '#B7BFB9', closed: 'lost' },
-  { id: 'lost',         label: 'Lost',                    prob: 0,   color: '#8E9891', closed: 'lost' }
+  { id: 'won',          label: 'Closed (won)',            prob: 100, color: '#23794A', closed: 'won' },
+  { id: 'lost',         label: 'Closed (lost)',           prob: 0,   color: '#8E9891', closed: 'lost' }
 ];
 // earlier stage ids, so leads saved before the switch still land in the right column
-const STAGE_ALIASES = { identified: 'initial', contacted: 'initial', replied: 'initial', call: 'requirements', quoted: 'proposal' };
+const STAGE_ALIASES = { identified: 'initial', contacted: 'initial', replied: 'initial', call: 'requirements', quoted: 'proposal',
+  legacy: 'initial', 'not yet qualified': 'initial', hold: 'lost', 'on hold': 'lost', disqualified: 'lost',
+  'initial lead': 'initial', 'requirement capture': 'requirements', 'proposal in development': 'proposal', 'closed won': 'won', 'closed lost': 'lost' };
 const STATUS_HINTS = {
   won: ['Initial project involvement', 'Project planning', 'Project in progress', 'Irradiation complete - report/certificate to send', 'Delivered - handover to Ops', 'Delivered - irradiation and report'],
   hold: ['Project on hold', 'Waiting on customer funding'],
@@ -898,9 +924,14 @@ function blankLead() {
   const now = new Date().toISOString();
   return { id: uid(), opportunity: '', oppId: '', company: '', type: '', sector: '', value: 0, startDate: '', closeDate: '', nda: false, priority: '',
            group: '', contact: '', contactId: '', role: '', email: '', website: '', source: '', fit: 3,
-           stage: STAGES[0].id, status: '', plannerId: '', targetFlux: '', irrHours: 0, nextAction: '', nextDate: '', nextOwner: '', owner: '', notes: '', activity: [], created: now, updated: now };
+           stage: STAGES[0].id, status: '', plannerId: '', targetFlux: '', irrHours: 0, tags: [], rank: 0, team: '', goal: '', checklist: '', checkDone: '', duration: '', effort: '', effortDone: '', effortLeft: '', pct: '', sprint: '', milestone: '', nextAction: '', nextDate: '', nextOwner: '', owner: '', notes: '', activity: [], created: now, updated: now };
 }
+function splitTags(v) { return [...new Set(String(v || '').split(/[;,]/).map(x => x.trim()).filter(Boolean))]; }
 function parseHours(v) { const n = parseFloat(String(v == null ? '' : v).replace(/,/g, '').replace(/[^\d.]/g, '')); return isFinite(n) && n > 0 ? Math.round(n * 10) / 10 : 0; }
+const LABEL_COLOURS = { 'irradiation': 0, 'installation project': 1, 'research project': 2, 'conference lead': 3, 'emailed': 4, 'no nda': 5, 'nda': 6, 'visit': 7 };
+function tagClass(t) { const k = t.toLowerCase(); if (k in LABEL_COLOURS) return 'c' + LABEL_COLOURS[k]; let h = 0; for (const ch of k) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return 'c' + (h % 8); }
+const tagsHtml = tags => tags.length ? `<div class="ltags">${tags.map(t => `<span class="ltag ${tagClass(t)}">${esc(t)}</span>`).join('')}</div>` : '';
+function boardOrder(list) { const base = sortLeads(list, 'next', 1); return base.map((l, i) => [l, i]).sort((a, b) => (a[0].rank || 1e15 + a[1]) - (b[0].rank || 1e15 + b[1])).map(x => x[0]); }
 const hrsFmt = n => (Math.round(n * 10) / 10).toLocaleString('en-GB');
 function normalise(raw) {
   const b = blankLead();
@@ -913,6 +944,9 @@ function normalise(raw) {
     .forEach(k => { l[k] = l[k] == null ? '' : String(l[k]); });
   l.value = parseMoney(l.value);
   l.targetFlux = l.targetFlux == null ? '' : String(l.targetFlux);
+  l.tags = Array.isArray(l.tags) ? l.tags.map(String).filter(Boolean) : splitTags(l.tags);
+  l.rank = +l.rank || 0;
+  ['team', 'goal', 'checklist', 'checkDone', 'duration', 'effort', 'effortDone', 'effortLeft', 'pct', 'sprint', 'milestone'].forEach(k => { l[k] = l[k] == null ? '' : String(l[k]); });
   l.irrHours = parseHours(l.irrHours);
   l.nda = l.nda === true || /^(yes|y|true|1)$/i.test(String(l.nda));
   if (!l.sector && l.group) { const hit = CFG.sectors.find(x => x.toLowerCase() === l.group.toLowerCase()); if (hit) l.sector = hit; }
@@ -1045,7 +1079,7 @@ function matches(l, ignoreStage) {
   if (state.type && l.type !== state.type) return false;
   if (state.owner && l.owner !== state.owner && l.nextOwner !== state.owner) return false;
   if (state.q) {
-    const hay = [l.opportunity, l.oppId, l.status, l.company, l.sector, l.type, l.contact, l.role, l.email, l.nextAction, l.notes, l.owner, l.nextOwner].join(' ').toLowerCase();
+    const hay = [l.opportunity, l.oppId, l.status, l.company, l.sector, l.type, l.contact, l.role, l.email, l.nextAction, l.notes, l.owner, l.nextOwner, l.tags.join(' '), l.team, l.goal, l.plannerId && '#' + l.plannerId].join(' ').toLowerCase();
     if (!state.q.toLowerCase().split(/\s+/).filter(Boolean).every(t => hay.includes(t))) return false;
   }
   return true;
@@ -1248,7 +1282,7 @@ function render() {
   $('#app').classList.toggle('board-view', v === 'pipeline');
   $('#btn-new .newlbl').textContent = v === 'contacts' ? 'New contact' : 'New lead';
   const longDate = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
-  $('#page-sub').textContent = { home: longDate, leads: 'Every opportunity in the pipeline', pipeline: 'Drag a card to move it to another stage',
+  $('#page-sub').textContent = { home: longDate, leads: 'Every opportunity in the pipeline', pipeline: 'Drag cards up and down, or across to another stage',
     followups: 'Overdue, today and the rest of the week', analytics: 'How the pipeline is moving', contacts: 'People you know at each organisation', news: 'Daily industry briefing from the research agent' }[v];
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   renderBadges();
@@ -1605,14 +1639,15 @@ function renderDue(host, list) {
 function renderBoard(host, list) {
   const keep = host.querySelector('.board') ? host.querySelector('.board').scrollLeft : 0;
   host.innerHTML = `<div class="boardnav"><span>Scroll across the stages</span><button type="button" class="iconbtn" data-bscroll="-1" aria-label="Scroll left" title="Scroll left"><svg class="i"><use href="#i-left"/></svg></button><button type="button" class="iconbtn" data-bscroll="1" aria-label="Scroll right" title="Scroll right"><svg class="i" style="transform:rotate(180deg)"><use href="#i-left"/></svg></button></div><div class="board">` + STAGES.map(st => {
-    const items = sortLeads(list.filter(l => l.stage === st.id), 'next', 1);
+    const items = boardOrder(list.filter(l => l.stage === st.id));
     const v = items.reduce((a, l) => a + l.value, 0);
     return `<div class="col" data-stage="${st.id}"><div class="colbar" style="--c:${st.color}"></div><h3><span><span class="pill"><i style="background:${st.color}"></i>${esc(st.label)} <span class="pct">${st.prob}%</span></span><span class="tot">${v ? `${moneyC(v)} · ${moneyC(v * st.prob / 100)} weighted` : 'No value yet'}</span></span><span class="c">${items.length}</span></h3><div class="cards">` +
       items.map(l => {
         const b = bucket(l);
-        return `<div class="card" draggable="true" data-id="${esc(l.id)}"><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
+        return `<div class="card" draggable="true" data-id="${esc(l.id)}">${tagsHtml(l.tags)}<button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
           `<div class="sub">${esc([l.company !== oppTitle(l) ? l.company : '', l.sector].filter(Boolean).join(' · '))}</div>` +
           (l.nextAction ? `<div style="margin-top:6px">${esc(l.nextAction)}</div>` : '') +
+          (l.team ? `<div class="team">${esc(l.team)}</div>` : '') +
           `<div class="val"><span class="money">${l.value ? moneyC(l.value) : ''}</span><span class="sub">${l.closeDate ? 'Close ' + esc(shortMonth(l.closeDate)) : ''}</span></div>` +
           `<div class="meta">${l.nextDate ? `<span class="chip ${b}">${esc(fmtDue(l))}</span>` : '<span></span>'}${l.priority ? `<span class="prio ${esc(l.priority)}">${esc(l.priority)}</span>` : fitHtml(l.fit)}</div></div>`;
       }).join('') + `</div></div>`;
@@ -1671,6 +1706,8 @@ function openDrawer(id) {
   $('#f-priority').value = l.priority; $('#f-fit').value = String(l.fit); $('#f-owner').value = l.owner; $('#f-nda').value = l.nda ? 'yes' : 'no';
   $('#f-source').value = l.source; $('#f-status').value = l.status;
   $('#f-flux').value = l.targetFlux; $('#f-hours').value = l.irrHours ? String(l.irrHours) : '';
+  $('#f-tags').value = l.tags.join(', '); $('#f-team').value = l.team; $('#f-goal').value = l.goal; $('#f-checklist').value = l.checklist; $('#f-checkdone').value = l.checkDone; $('#f-pct').value = l.pct; $('#f-duration').value = l.duration; $('#f-effort').value = l.effort; $('#f-effortdone').value = l.effortDone; $('#f-effortleft').value = l.effortLeft; $('#f-sprint').value = l.sprint; $('#f-milestone').value = l.milestone;
+  $('#dl-tags').innerHTML = [...new Set(state.leads.flatMap(x => x.tags))].sort().map(t => `<option value="${esc(t)}">`).join('');
   $('#dl-status').innerHTML = [...new Set(Object.values(STATUS_HINTS).flat().concat(state.leads.map(x => x.status).filter(Boolean)))].map(x => `<option value="${esc(x)}">`).join('');
   $('#f-contact').value = l.contact; $('#f-role').value = l.role; $('#f-email').value = l.email; $('#f-website').value = l.website;
   $('#f-next').value = l.nextAction; $('#f-date').value = l.nextDate; $('#f-nextowner').value = l.nextOwner;
@@ -1728,7 +1765,8 @@ async function saveForm(e) {
     source: $('#f-source').value.trim(), status: $('#f-status').value.trim(), contact: $('#f-contact').value.trim(), role: $('#f-role').value.trim(), email: $('#f-email').value.trim(),
     website: $('#f-website').value.trim(), stage: $('#f-stage').value, fit: parseInt($('#f-fit').value, 10) || 3,
     owner: $('#f-owner').value, nextAction: $('#f-next').value.trim(), nextDate: $('#f-date').value, nextOwner: $('#f-nextowner').value,
-    notes: $('#f-notes').value.trim(), targetFlux: $('#f-flux').value.trim(), irrHours: parseHours($('#f-hours').value)
+    notes: $('#f-notes').value.trim(), targetFlux: $('#f-flux').value.trim(), irrHours: parseHours($('#f-hours').value),
+    tags: splitTags($('#f-tags').value), team: $('#f-team').value.trim(), goal: $('#f-goal').value.trim(), checklist: $('#f-checklist').value.trim(), checkDone: $('#f-checkdone').value.trim(), pct: $('#f-pct').value.trim(), duration: $('#f-duration').value.trim(), effort: $('#f-effort').value.trim(), effortDone: $('#f-effortdone').value.trim(), effortLeft: $('#f-effortleft').value.trim(), sprint: $('#f-sprint').value.trim(), milestone: $('#f-milestone').value.trim()
   });
   if (!l.oppId) l.oppId = nextOppId(l, state.leads.filter(x => x.id !== l.id).map(x => x.oppId));
   const now = new Date().toISOString();
@@ -1753,6 +1791,20 @@ async function deleteLead() {
   catch (err) { toast('Could not delete: ' + (err.message || err)); }
 }
 
+async function moveCard(id, stageId, order) {
+  const l = state.leads.find(x => x.id === id); if (!l || !store) return;
+  const now = new Date().toISOString(), byId = new Map(state.leads.map(x => [x.id, x])), changed = [];
+  order.forEach((oid, i) => {
+    const x = byId.get(oid); if (!x) return;
+    const rank = (i + 1) * 1000, moved = oid === id && x.stage !== stageId;
+    if (x.rank === rank && !moved) return;
+    const n = Object.assign({}, x, { rank });
+    if (moved) { n.stage = stageId; n.updated = now; n.activity = x.activity.concat({ at: now, by: who(), text: 'Moved to ' + stageOf(stageId).label }); }
+    changed.push(n);
+  });
+  if (!changed.length) return;
+  try { await store.saveMany(changed); } catch (err) { toast('Could not move lead: ' + (err.message || err)); }
+}
 async function changeStage(id, stageId) {
   const l = state.leads.find(x => x.id === id);
   if (!l || l.stage === stageId) return;
@@ -1806,6 +1858,18 @@ const HMAP = {
   status: ['statusdetail', 'status detail', 'bucketdetail'],
   plannerId: ['plannertask', 'plannertasknumber', 'plannerid'],
   targetFlux: ['targetflux', 'flux', 'neutronflux'],
+  tags: ['labels', 'tags', 'label'],
+  team: ['assignedto', 'assigned', 'team'],
+  goal: ['goal'],
+  checklist: ['checklistitems', 'checklist'],
+  checkDone: ['checklistcompleted', 'completed'],
+  duration: ['duration'],
+  effort: ['effort'],
+  effortDone: ['effortcompleted'],
+  effortLeft: ['effortremaining'],
+  pct: ['complete', 'percentcomplete', 'pctcomplete'],
+  sprint: ['sprint'],
+  milestone: ['milestone'],
   irrHours: ['estirradiationhrs', 'estirradiationhours', 'estimatedirradiationhours', 'irradiationhours', 'irradiationhrs', 'esthours', 'estimatedhours', 'hours'],
   notes: ['notes', 'note', 'reason', 'why', 'rationale', 'comments']
 };
@@ -1830,6 +1894,8 @@ function rowsToLeads(rows) {
     l.startDate = parseDateCell(get(r, 'startDate')); l.closeDate = parseDateCell(get(r, 'closeDate'));
     l.nda = /^(yes|y|true|1)$/i.test(get(r, 'nda')); l.nextOwner = get(r, 'nextOwner'); l.status = get(r, 'status'); l.plannerId = get(r, 'plannerId');
     l.targetFlux = get(r, 'targetFlux'); l.irrHours = parseHours(get(r, 'irrHours'));
+    l.tags = splitTags(get(r, 'tags')); ['team', 'goal', 'checklist', 'checkDone', 'duration', 'effort', 'effortDone', 'effortLeft', 'pct', 'sprint', 'milestone'].forEach(k => { l[k] = get(r, k); });
+    if (l.checklist) l.checklist = l.checklist.split(';').map(x => x.trim()).filter(Boolean).join('\n');
     const ty = get(r, 'type').toLowerCase(); const th = CFG.types.find(t => t.label.toLowerCase() === ty || t.code.toLowerCase() === ty); l.type = th ? th.label : '';
     const se = get(r, 'sector').toLowerCase(); l.sector = CFG.sectors.find(x => x.toLowerCase() === se) || (se ? 'Other' : '');
     const pr = get(r, 'priority').toLowerCase(); l.priority = CFG.priorities.find(x => x.toLowerCase() === pr) || '';
@@ -1838,7 +1904,7 @@ function rowsToLeads(rows) {
     l.owner = get(r, 'owner'); l.nextAction = get(r, 'nextAction'); l.nextDate = parseDateCell(get(r, 'nextDate'));
     l.notes = get(r, 'notes');
     const fit = parseInt(get(r, 'fit'), 10); l.fit = fit >= 1 && fit <= 5 ? fit : 3;
-    const st = get(r, 'stage').toLowerCase(); const hit = STAGES.find(s => s.label.toLowerCase() === st || s.id === st) || STAGES.find(s => s.id === STAGE_ALIASES[st]);
+    const st = get(r, 'stage').toLowerCase().replace(/\(\d+%\)/g, '').replace(/[()]/g, '').replace(/\s+/g, ' ').trim(); const hit = STAGES.find(s => s.label.toLowerCase().replace(/[()]/g, '') === st || s.id === st) || STAGES.find(s => s.id === STAGE_ALIASES[st]);
     l.stage = hit ? hit.id : STAGES[0].id;
     l.activity = [{ at: now, by: who(), text: 'Imported from CSV' }];
     return l;
@@ -1881,17 +1947,18 @@ function download(name, text) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 const CSV_HEAD = ['Opportunity', 'Opportunity ID', 'Company', 'Type', 'Sector', 'Value (£)', 'Start date', 'Target close date', 'Stage', 'Status detail', 'Probability', 'Weighted value (£)', 'Target flux', 'Est. irradiation hrs',
+  'Labels', 'Assigned to', 'Goal', 'Checklist items', 'Checklist completed', 'Duration', 'Effort', 'Effort completed', 'Effort remaining', '% complete', 'Sprint', 'Milestone', 'Planner task',
   'Priority', 'Fit', 'NDA', 'Source', 'Owner', 'Contact name', 'Contact role', 'Email', 'Website', 'Next action', 'Next action date', 'Next action owner', 'Notes'];
 function exportCSV() {
   if (!state.leads.length) { toast('No leads to export yet'); return; }
   const lines = [CSV_HEAD.concat('Last updated').map(csvCell).join(',')];
   sortLeads(state.leads, 'opp', 1).forEach(l => lines.push([oppTitle(l), l.oppId, l.company, l.type, l.sector, l.value || '', l.startDate, l.closeDate,
-    stageOf(l.stage).label, l.status, stageOf(l.stage).prob + '%', l.value ? Math.round(weightedOf(l)) : '', l.targetFlux, l.irrHours || '', l.priority, l.fit, l.nda ? 'Yes' : 'No', l.source, l.owner,
+    stageOf(l.stage).label, l.status, stageOf(l.stage).prob + '%', l.value ? Math.round(weightedOf(l)) : '', l.targetFlux, l.irrHours || '', l.tags.join('; '), l.team, l.goal, l.checklist.split('\n').filter(Boolean).join('; '), l.checkDone, l.duration, l.effort, l.effortDone, l.effortLeft, l.pct, l.sprint, l.milestone, l.plannerId, l.priority, l.fit, l.nda ? 'Yes' : 'No', l.source, l.owner,
     l.contact, l.role, l.email, l.website, l.nextAction, l.nextDate, l.nextOwner, l.notes, l.updated].map(csvCell).join(',')));
   download(`astral-bd-leads-${today()}.csv`, lines.join('\r\n'));
 }
 function downloadTemplate() {
-  const ex = ['Blanket materials irradiation campaign', '', 'Example Co', 'Irradiation', 'Fusion', '120000', '2026-11-01', '2027-03-31', STAGES[1].label, '', '', '', '1e10 n/cm²/s', '200',
+  const ex = ['Blanket materials irradiation campaign', '', 'Example Co', 'Irradiation', 'Fusion', '120000', '2026-11-01', '2027-03-31', STAGES[1].label, '', '', '', '1e10 n/cm²/s', '200', 'Irradiation; Conference lead', 'Harriet Allen', '', '', '', '', '', '', '', '', '', '', '',
     'Important', '4', 'No', 'AI research', '', 'Jo Bloggs', 'Head of Materials', 'jo@example.com', 'https://example.com', 'Send intro email', '', '', 'Why they might need an irradiation source'];
   download('astral-bd-import-template.csv', CSV_HEAD.map(csvCell).join(',') + '\r\n' + ex.map(csvCell).join(','));
 }
@@ -2321,9 +2388,24 @@ function bindUI() {
   const view = $('#view');
   let dragId = null;
   view.addEventListener('dragstart', e => { const c = e.target.closest('.card'); if (!c) return; dragId = c.dataset.id; c.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', dragId); });
-  view.addEventListener('dragend', e => { const c = e.target.closest('.card'); if (c) c.classList.remove('dragging'); view.querySelectorAll('.col.over').forEach(x => x.classList.remove('over')); });
-  view.addEventListener('dragover', e => { const col = e.target.closest('.col'); if (!col || !dragId) return; e.preventDefault(); view.querySelectorAll('.col.over').forEach(x => x.classList.remove('over')); col.classList.add('over'); });
-  view.addEventListener('drop', e => { const col = e.target.closest('.col'); if (!col || !dragId) return; e.preventDefault(); const id = dragId; dragId = null; changeStage(id, col.dataset.stage); });
+  const clearDrop = () => { view.querySelectorAll('.col.over').forEach(x => x.classList.remove('over')); view.querySelectorAll('.dropmark').forEach(x => x.remove()); };
+  const dropIndex = (col, y) => { const cards = [...col.querySelectorAll('.card:not(.dragging)')]; const i = cards.findIndex(c => { const r = c.getBoundingClientRect(); return y < r.top + r.height / 2; }); return i < 0 ? cards.length : i; };
+  view.addEventListener('dragend', e => { const c = e.target.closest('.card'); if (c) c.classList.remove('dragging'); clearDrop(); dragId = null; });
+  view.addEventListener('dragover', e => {
+    const col = e.target.closest('.col'); if (!col || !dragId) return; e.preventDefault();
+    if (!col.classList.contains('over')) { view.querySelectorAll('.col.over').forEach(x => x.classList.remove('over')); col.classList.add('over'); }
+    const wrap = col.querySelector('.cards'), cards = [...col.querySelectorAll('.card:not(.dragging)')], i = dropIndex(col, e.clientY);
+    let mark = view.querySelector('.dropmark'); if (!mark) { mark = document.createElement('div'); mark.className = 'dropmark'; }
+    const ref = cards[i] || null; if (mark.parentNode !== wrap || mark.nextSibling !== ref) wrap.insertBefore(mark, ref);
+    const r = wrap.getBoundingClientRect(); if (e.clientY < r.top + 40) wrap.scrollTop -= 12; else if (e.clientY > r.bottom - 40) wrap.scrollTop += 12;
+  });
+  view.addEventListener('drop', e => {
+    const col = e.target.closest('.col'); if (!col || !dragId) return; e.preventDefault();
+    const id = dragId; dragId = null; const i = dropIndex(col, e.clientY); clearDrop();
+    const order = [...col.querySelectorAll('.card')].map(c => c.dataset.id).filter(x => x !== id);
+    order.splice(i, 0, id);
+    moveCard(id, col.dataset.stage, order);
+  });
 
   /* hover / focus tooltips for charts */
   const tip = $('#tip');
