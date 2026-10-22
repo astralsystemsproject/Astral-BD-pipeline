@@ -215,7 +215,7 @@ svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .cx{display:flex;gap:8px;margin-top:8px}
 .cx span{flex:1;text-align:center;font-size:11.5px;color:var(--ink-3);white-space:nowrap}
 
-.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:18px}
+.tiles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;margin-bottom:18px}
 .tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
 .tile .lbl{font-size:13px;font-weight:600;color:var(--ink-2)}
 .tile .num{font-size:30px;font-weight:800;letter-spacing:-.03em;margin-top:6px;font-variant-numeric:tabular-nums}
@@ -354,6 +354,7 @@ dialog form{display:flex;flex-direction:column;gap:12px}
 
 @media (max-width:1180px){
   .kpis,.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tile.hrs{grid-column:1/-1}
   .grid2,.grid2.even{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:900px){
@@ -682,6 +683,9 @@ button.nchip:hover{border-color:currentColor}
         <label>NDA<select id="f-nda"><option value="no">No</option><option value="yes">Yes</option></select></label>
         <label>Source<input id="f-source" list="dl-sources" autocomplete="off"></label>
         <label>Status detail<input id="f-status" list="dl-status" placeholder="e.g. Project in progress" autocomplete="off"></label>
+        <div class="fsec">Irradiation</div>
+        <label>Target flux<input id="f-flux" placeholder="e.g. 1e10 n/cm²/s" autocomplete="off"><span class="hint">Neutron flux the customer needs</span></label>
+        <label>Est. irradiation hours<input id="f-hours" inputmode="decimal" placeholder="0" autocomplete="off"><span class="hint" id="f-whours"></span></label>
         <div class="fsec">Contact</div>
         <label class="span2">Contact name<input id="f-contact" list="dl-contacts" placeholder="Start typing to pick from Contacts" autocomplete="off"><span class="hint" id="f-contact-hint"></span></label>
         <label>Contact role<input id="f-role" autocomplete="off"></label>
@@ -894,8 +898,10 @@ function blankLead() {
   const now = new Date().toISOString();
   return { id: uid(), opportunity: '', oppId: '', company: '', type: '', sector: '', value: 0, startDate: '', closeDate: '', nda: false, priority: '',
            group: '', contact: '', contactId: '', role: '', email: '', website: '', source: '', fit: 3,
-           stage: STAGES[0].id, status: '', plannerId: '', nextAction: '', nextDate: '', nextOwner: '', owner: '', notes: '', activity: [], created: now, updated: now };
+           stage: STAGES[0].id, status: '', plannerId: '', targetFlux: '', irrHours: 0, nextAction: '', nextDate: '', nextOwner: '', owner: '', notes: '', activity: [], created: now, updated: now };
 }
+function parseHours(v) { const n = parseFloat(String(v == null ? '' : v).replace(/,/g, '').replace(/[^\d.]/g, '')); return isFinite(n) && n > 0 ? Math.round(n * 10) / 10 : 0; }
+const hrsFmt = n => (Math.round(n * 10) / 10).toLocaleString('en-GB');
 function normalise(raw) {
   const b = blankLead();
   const l = Object.assign(b, raw || {});
@@ -906,6 +912,8 @@ function normalise(raw) {
   ['status','plannerId','opportunity','oppId','company','type','sector','priority','group','contact','contactId','role','email','website','source','nextAction','nextDate','nextOwner','owner','notes','startDate','closeDate']
     .forEach(k => { l[k] = l[k] == null ? '' : String(l[k]); });
   l.value = parseMoney(l.value);
+  l.targetFlux = l.targetFlux == null ? '' : String(l.targetFlux);
+  l.irrHours = parseHours(l.irrHours);
   l.nda = l.nda === true || /^(yes|y|true|1)$/i.test(String(l.nda));
   if (!l.sector && l.group) { const hit = CFG.sectors.find(x => x.toLowerCase() === l.group.toLowerCase()); if (hit) l.sector = hit; }
   if (l.type && !CFG.types.some(t => t.label === l.type)) { const hit = CFG.types.find(t => t.label.toLowerCase() === l.type.toLowerCase() || t.code.toLowerCase() === l.type.toLowerCase()); l.type = hit ? hit.label : l.type; }
@@ -1462,17 +1470,18 @@ function barsHtml(rows) {
 
 /* ---------- analytics ---------- */
 function aggregate(list, keyFn, keys) {
-  const m = new Map((keys || []).map(k => [k, { key: k, n: 0, v: 0, w: 0 }]));
-  list.forEach(l => { const k = keyFn(l); if (!m.has(k)) m.set(k, { key: k, n: 0, v: 0, w: 0 }); const r = m.get(k); r.n++; r.v += l.value; r.w += weightedOf(l); });
+  const m = new Map((keys || []).map(k => [k, { key: k, n: 0, v: 0, w: 0, h: 0, wh: 0 }]));
+  list.forEach(l => { const k = keyFn(l); if (!m.has(k)) m.set(k, { key: k, n: 0, v: 0, w: 0, h: 0, wh: 0 }); const r = m.get(k); r.n++; r.v += l.value; r.w += weightedOf(l); r.h += l.irrHours || 0; r.wh += (l.irrHours || 0) * stageOf(l.stage).prob / 100; });
   return [...m.values()];
 }
 function aTable(rows, labelHead, opts = {}) {
-  const tot = rows.reduce((a, r) => ({ n: a.n + r.n, v: a.v + r.v, w: a.w + r.w }), { n: 0, v: 0, w: 0 });
+  const tot = rows.reduce((a, r) => ({ n: a.n + r.n, v: a.v + r.v, w: a.w + r.w, h: a.h + (r.h || 0), wh: a.wh + (r.wh || 0) }), { n: 0, v: 0, w: 0, h: 0, wh: 0 });
+  const hc = h => h ? hrsFmt(h) : '–';
   const maxW = Math.max(1, ...rows.map(r => r.v));
-  return `<div class="tablewrap" style="border:0;box-shadow:none;border-radius:0 0 16px 16px"><table class="atable"><thead><tr><th>${labelHead}</th>${opts.prob ? '<th class="num">Probability</th>' : ''}<th class="num">Leads</th><th class="num">Value</th><th class="num">Weighted</th><th class="barcell hide-sm"><span class="sr">Share of value</span></th></tr></thead><tbody>` +
-    rows.map(r => `<tr><td>${opts.dot ? `<span class="pill" style="background:none;padding:0"><i style="background:${r.color}"></i>${esc(r.label)}</span>` : esc(r.label)}</td>${opts.prob ? `<td class="num">${r.prob}%</td>` : ''}<td class="num">${r.n}</td><td class="num">${money(r.v)}</td><td class="num">${money(r.w)}</td>
+  return `<div class="tablewrap" style="border:0;box-shadow:none;border-radius:0 0 16px 16px"><table class="atable"><thead><tr><th>${labelHead}</th>${opts.prob ? '<th class="num">Probability</th>' : ''}<th class="num">Leads</th><th class="num">Value</th><th class="num">Weighted</th><th class="num hide-sm">Irr. hours</th><th class="num hide-sm">Weighted hrs</th><th class="barcell hide-sm"><span class="sr">Share of value</span></th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td>${opts.dot ? `<span class="pill" style="background:none;padding:0"><i style="background:${r.color}"></i>${esc(r.label)}</span>` : esc(r.label)}</td>${opts.prob ? `<td class="num">${r.prob}%</td>` : ''}<td class="num">${r.n}</td><td class="num">${money(r.v)}</td><td class="num">${money(r.w)}</td><td class="num hide-sm">${hc(r.h)}</td><td class="num hide-sm">${hc(r.wh)}</td>
       <td class="barcell hide-sm"><div class="mbar" data-tip="${esc(r.label)}: ${money(r.v)} value, ${money(r.w)} weighted"><i style="width:${r.v / maxW * 100}%"></i></div></td></tr>`).join('') +
-    `</tbody><tfoot><tr><td>Total</td>${opts.prob ? '<td></td>' : ''}<td class="num">${tot.n}</td><td class="num">${money(tot.v)}</td><td class="num">${money(tot.w)}</td><td class="hide-sm"></td></tr></tfoot></table></div>`;
+    `</tbody><tfoot><tr><td>Total</td>${opts.prob ? '<td></td>' : ''}<td class="num">${tot.n}</td><td class="num">${money(tot.v)}</td><td class="num">${money(tot.w)}</td><td class="num hide-sm">${hc(tot.h)}</td><td class="num hide-sm">${hc(tot.wh)}</td><td class="hide-sm"></td></tr></tfoot></table></div>`;
 }
 function analyticsData() {
   const L = state.leads;
@@ -1507,6 +1516,7 @@ function renderAnalytics(host) {
   if (state.ayear && state.ayear !== 'none' && !years.includes(state.ayear)) state.ayear = '';
   const D = analyticsData();
   const pv = D.F.reduce((a, l) => a + l.value, 0), wv = D.F.reduce((a, l) => a + weightedOf(l), 0);
+  const withH = D.F.filter(l => l.irrHours), hv = withH.reduce((a, l) => a + l.irrHours, 0), whv = withH.reduce((a, l) => a + l.irrHours * stageOf(l.stage).prob / 100, 0);
   const scopeLabel = { open: 'Open pipeline', won: 'Open and won', all: 'All, including on hold and lost' }[state.ascope];
   const yearLabel = !state.ayear ? 'all years' : state.ayear === 'none' ? 'no close date' : state.ayear;
 
@@ -1549,6 +1559,7 @@ function renderAnalytics(host) {
       <div class="tile"><div class="lbl">Pipeline value</div><div class="num">${moneyC(pv)}</div><div class="sub">Unweighted</div></div>
       <div class="tile"><div class="lbl">Weighted value</div><div class="num">${moneyC(wv)}</div><div class="sub">${pv ? Math.round(wv / pv * 100) + '% of value' : 'By stage probability'}</div></div>
       <div class="tile"><div class="lbl">Win rate</div><div class="num">${D.won + D.lost ? Math.round(D.won / (D.won + D.lost) * 100) + '%' : '–'}</div><div class="sub">${D.won} won, ${D.lost} lost (excl. internal)</div></div>
+      <div class="tile hrs"><div class="lbl">Irradiation hours forecast</div><div class="num">${hv ? hrsFmt(hv) + ' hrs' : '–'}</div><div class="sub">${hv ? hrsFmt(whv) + ' hrs weighted · ' + plural(withH.length, 'lead') + ' with an estimate' : 'Add Est. irradiation hours to leads'}</div></div>
     </div>
     <div class="grid2 even">
       <section class="panel span2"><div class="ph"><h2>Pipeline by stage</h2><span class="note">${esc(scopeLabel)}, ${esc(yearLabel)}</span></div><div class="pb flush">${aTable(D.byStage, 'Stage', { prob: true, dot: true })}</div></section>
@@ -1565,8 +1576,8 @@ function exportAnalytics() {
   const lines = [];
   const add = (title, rows, prob) => {
     lines.push(csvCell(title));
-    lines.push([title.split(' by ')[1] || 'Group'].concat(prob ? ['Probability'] : [], ['Leads', 'Value (£)', 'Weighted value (£)']).map(csvCell).join(','));
-    rows.forEach(r => lines.push([r.label].concat(prob ? [r.prob + '%'] : [], [r.n, Math.round(r.v), Math.round(r.w)]).map(csvCell).join(',')));
+    lines.push([title.split(' by ')[1] || 'Group'].concat(prob ? ['Probability'] : [], ['Leads', 'Value (£)', 'Weighted value (£)', 'Est. irradiation hrs', 'Weighted irradiation hrs']).map(csvCell).join(','));
+    rows.forEach(r => lines.push([r.label].concat(prob ? [r.prob + '%'] : [], [r.n, Math.round(r.v), Math.round(r.w), Math.round(r.h * 10) / 10, Math.round(r.wh * 10) / 10]).map(csvCell).join(',')));
     lines.push('');
   };
   const scope = { open: 'Open pipeline', won: 'Open and won', all: 'All including lost' }[state.ascope];
@@ -1637,6 +1648,8 @@ const contactLabel = c => `${cName(c) || 'Organisation contact'}${c.company ? ' 
 function updateWeightedHint() {
   const v = parseMoney($('#f-value').value), st = stageOf($('#f-stage').value);
   $('#f-weighted').textContent = v ? `Weighted: ${money(v * st.prob / 100)} at ${st.prob}%` : `Stage probability ${st.prob}%`;
+  const h = parseHours($('#f-hours').value);
+  $('#f-whours').textContent = h ? `Weighted: ${hrsFmt(h * st.prob / 100)} hrs at ${st.prob}%` : 'Beam time this job would need';
 }
 function syncContactHint() {
   const c = state.contacts.find(x => x.id === state.editing.contactId);
@@ -1657,6 +1670,7 @@ function openDrawer(id) {
   $('#f-stage').value = l.stage; $('#f-start').value = l.startDate; $('#f-close').value = l.closeDate;
   $('#f-priority').value = l.priority; $('#f-fit').value = String(l.fit); $('#f-owner').value = l.owner; $('#f-nda').value = l.nda ? 'yes' : 'no';
   $('#f-source').value = l.source; $('#f-status').value = l.status;
+  $('#f-flux').value = l.targetFlux; $('#f-hours').value = l.irrHours ? String(l.irrHours) : '';
   $('#dl-status').innerHTML = [...new Set(Object.values(STATUS_HINTS).flat().concat(state.leads.map(x => x.status).filter(Boolean)))].map(x => `<option value="${esc(x)}">`).join('');
   $('#f-contact').value = l.contact; $('#f-role').value = l.role; $('#f-email').value = l.email; $('#f-website').value = l.website;
   $('#f-next').value = l.nextAction; $('#f-date').value = l.nextDate; $('#f-nextowner').value = l.nextOwner;
@@ -1714,7 +1728,7 @@ async function saveForm(e) {
     source: $('#f-source').value.trim(), status: $('#f-status').value.trim(), contact: $('#f-contact').value.trim(), role: $('#f-role').value.trim(), email: $('#f-email').value.trim(),
     website: $('#f-website').value.trim(), stage: $('#f-stage').value, fit: parseInt($('#f-fit').value, 10) || 3,
     owner: $('#f-owner').value, nextAction: $('#f-next').value.trim(), nextDate: $('#f-date').value, nextOwner: $('#f-nextowner').value,
-    notes: $('#f-notes').value.trim()
+    notes: $('#f-notes').value.trim(), targetFlux: $('#f-flux').value.trim(), irrHours: parseHours($('#f-hours').value)
   });
   if (!l.oppId) l.oppId = nextOppId(l, state.leads.filter(x => x.id !== l.id).map(x => x.oppId));
   const now = new Date().toISOString();
@@ -1791,6 +1805,8 @@ const HMAP = {
   nextOwner: ['nextactionowner', 'actionowner'],
   status: ['statusdetail', 'status detail', 'bucketdetail'],
   plannerId: ['plannertask', 'plannertasknumber', 'plannerid'],
+  targetFlux: ['targetflux', 'flux', 'neutronflux'],
+  irrHours: ['estirradiationhrs', 'estirradiationhours', 'estimatedirradiationhours', 'irradiationhours', 'irradiationhrs', 'esthours', 'estimatedhours', 'hours'],
   notes: ['notes', 'note', 'reason', 'why', 'rationale', 'comments']
 };
 function parseDateCell(v) {
@@ -1813,6 +1829,7 @@ function rowsToLeads(rows) {
     l.opportunity = get(r, 'opportunity'); l.oppId = get(r, 'oppId'); l.value = parseMoney(get(r, 'value'));
     l.startDate = parseDateCell(get(r, 'startDate')); l.closeDate = parseDateCell(get(r, 'closeDate'));
     l.nda = /^(yes|y|true|1)$/i.test(get(r, 'nda')); l.nextOwner = get(r, 'nextOwner'); l.status = get(r, 'status'); l.plannerId = get(r, 'plannerId');
+    l.targetFlux = get(r, 'targetFlux'); l.irrHours = parseHours(get(r, 'irrHours'));
     const ty = get(r, 'type').toLowerCase(); const th = CFG.types.find(t => t.label.toLowerCase() === ty || t.code.toLowerCase() === ty); l.type = th ? th.label : '';
     const se = get(r, 'sector').toLowerCase(); l.sector = CFG.sectors.find(x => x.toLowerCase() === se) || (se ? 'Other' : '');
     const pr = get(r, 'priority').toLowerCase(); l.priority = CFG.priorities.find(x => x.toLowerCase() === pr) || '';
@@ -1863,18 +1880,18 @@ function download(name, text) {
   const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-const CSV_HEAD = ['Opportunity', 'Opportunity ID', 'Company', 'Type', 'Sector', 'Value (£)', 'Start date', 'Target close date', 'Stage', 'Status detail', 'Probability', 'Weighted value (£)',
+const CSV_HEAD = ['Opportunity', 'Opportunity ID', 'Company', 'Type', 'Sector', 'Value (£)', 'Start date', 'Target close date', 'Stage', 'Status detail', 'Probability', 'Weighted value (£)', 'Target flux', 'Est. irradiation hrs',
   'Priority', 'Fit', 'NDA', 'Source', 'Owner', 'Contact name', 'Contact role', 'Email', 'Website', 'Next action', 'Next action date', 'Next action owner', 'Notes'];
 function exportCSV() {
   if (!state.leads.length) { toast('No leads to export yet'); return; }
   const lines = [CSV_HEAD.concat('Last updated').map(csvCell).join(',')];
   sortLeads(state.leads, 'opp', 1).forEach(l => lines.push([oppTitle(l), l.oppId, l.company, l.type, l.sector, l.value || '', l.startDate, l.closeDate,
-    stageOf(l.stage).label, l.status, stageOf(l.stage).prob + '%', l.value ? Math.round(weightedOf(l)) : '', l.priority, l.fit, l.nda ? 'Yes' : 'No', l.source, l.owner,
+    stageOf(l.stage).label, l.status, stageOf(l.stage).prob + '%', l.value ? Math.round(weightedOf(l)) : '', l.targetFlux, l.irrHours || '', l.priority, l.fit, l.nda ? 'Yes' : 'No', l.source, l.owner,
     l.contact, l.role, l.email, l.website, l.nextAction, l.nextDate, l.nextOwner, l.notes, l.updated].map(csvCell).join(',')));
   download(`astral-bd-leads-${today()}.csv`, lines.join('\r\n'));
 }
 function downloadTemplate() {
-  const ex = ['Blanket materials irradiation campaign', '', 'Example Co', 'Irradiation', 'Fusion', '120000', '2026-11-01', '2027-03-31', STAGES[1].label, '', '', '',
+  const ex = ['Blanket materials irradiation campaign', '', 'Example Co', 'Irradiation', 'Fusion', '120000', '2026-11-01', '2027-03-31', STAGES[1].label, '', '', '', '1e10 n/cm²/s', '200',
     'Important', '4', 'No', 'AI research', '', 'Jo Bloggs', 'Head of Materials', 'jo@example.com', 'https://example.com', 'Send intro email', '', '', 'Why they might need an irradiation source'];
   download('astral-bd-import-template.csv', CSV_HEAD.map(csvCell).join(',') + '\r\n' + ex.map(csvCell).join(','));
 }
@@ -2258,6 +2275,7 @@ function bindUI() {
   $('#flt-owner').addEventListener('change', e => { state.owner = e.target.value; render(); });
   $('#flt-type').addEventListener('change', e => { state.type = e.target.value; render(); });
   $('#f-value').addEventListener('input', updateWeightedHint);
+  $('#f-hours').addEventListener('input', updateWeightedHint);
   $('#f-stage').addEventListener('change', updateWeightedHint);
   $('#f-contact').addEventListener('change', pickContactFromInput);
   $('#f-contact').addEventListener('input', () => { if (state.contacts.some(x => contactLabel(x) === $('#f-contact').value)) pickContactFromInput(); });
