@@ -1394,6 +1394,7 @@ function salesChips(l) {
 
 /* render the three panels for the lead being edited */
 function renderSalesPanels(l) {
+  if (!l.req || !l.feas || !l.quote) normaliseSales(l);
   const optHtml = (opts, v) => opts.map(o => `<option value="${esc(o)}"${o === v ? ' selected' : ''}>${esc(o || 'Choose')}</option>`).join('');
   const field = ([k, label, kind]) => {
     const v = l.req[k] || '', id = 'rq-' + k;
