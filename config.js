@@ -8,7 +8,7 @@ window.CRM_CONFIG = {
   appName: 'BD pipeline',
 
   // People who can own a lead (shown in the Owner dropdown)
-  owners: ['Jiffin', 'Harriet'],
+  owners: ['Harriet', 'Jiffin', 'Ram', 'Talmon'],
 
   // Suggested lead sources (people can still type their own)
   sources: ['AI research', "Harriet's network", 'Conference', 'LinkedIn', 'Inbound enquiry', 'Other'],
