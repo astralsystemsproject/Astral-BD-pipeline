@@ -756,19 +756,19 @@ button.nchip:hover{border-color:currentColor}
         <label>Due date<input id="f-date" type="date"></label>
         <label>Action owner<select id="f-nextowner"></select></label>
         <div class="doneWrap span2"><button type="button" class="btn" id="btn-done">Done, set the next one</button></div>
-        <div class="fsec">Planner details</div>
-        <label class="span2">Labels<input id="f-tags" list="dl-tags" placeholder="e.g. Irradiation, Conference lead, Emailed" autocomplete="off"><span class="hint">Separate labels with commas</span></label>
-        <label>Assigned to<input id="f-team" placeholder="e.g. Harriet Allen, Becky Scoon" autocomplete="off"></label>
-        <label>Goal<input id="f-goal" autocomplete="off"></label>
-        <label class="span2">Checklist<textarea id="f-checklist" rows="2" placeholder="One item per line"></textarea></label>
-        <label>Checklist completed<input id="f-checkdone" placeholder="e.g. 1/2" autocomplete="off"></label>
-        <label>% complete<input id="f-pct" inputmode="decimal" autocomplete="off"></label>
-        <label>Duration<input id="f-duration" placeholder="e.g. 120 days" autocomplete="off"></label>
-        <label>Effort<input id="f-effort" placeholder="e.g. 80 hours" autocomplete="off"></label>
-        <label>Effort completed<input id="f-effortdone" autocomplete="off"></label>
-        <label>Effort remaining<input id="f-effortleft" autocomplete="off"></label>
-        <label>Sprint<input id="f-sprint" autocomplete="off"></label>
-        <label>Milestone<select id="f-milestone"><option value="">Not set</option><option>No</option><option>Yes</option></select></label>
+        <div hidden class="fsec">Planner details</div>
+        <label hidden class="span2">Labels<input id="f-tags" list="dl-tags" placeholder="e.g. Irradiation, Conference lead, Emailed" autocomplete="off"><span class="hint">Separate labels with commas</span></label>
+        <label hidden>Assigned to<input id="f-team" placeholder="e.g. Harriet Allen, Becky Scoon" autocomplete="off"></label>
+        <label hidden>Goal<input id="f-goal" autocomplete="off"></label>
+        <label hidden class="span2">Checklist<textarea id="f-checklist" rows="2" placeholder="One item per line"></textarea></label>
+        <label hidden>Checklist completed<input id="f-checkdone" placeholder="e.g. 1/2" autocomplete="off"></label>
+        <label hidden>% complete<input id="f-pct" inputmode="decimal" autocomplete="off"></label>
+        <label hidden>Duration<input id="f-duration" placeholder="e.g. 120 days" autocomplete="off"></label>
+        <label hidden>Effort<input id="f-effort" placeholder="e.g. 80 hours" autocomplete="off"></label>
+        <label hidden>Effort completed<input id="f-effortdone" autocomplete="off"></label>
+        <label hidden>Effort remaining<input id="f-effortleft" autocomplete="off"></label>
+        <label hidden>Sprint<input id="f-sprint" autocomplete="off"></label>
+        <label hidden>Milestone<select id="f-milestone"><option value="">Not set</option><option>No</option><option>Yes</option></select></label>
         <datalist id="dl-tags"></datalist>
         <div class="fsec">Notes</div>
         <label class="span2">Notes<textarea id="f-notes" rows="4"></textarea></label>
@@ -884,7 +884,7 @@ const CFG = Object.assign({
   owners: [],
   sources: ['Conference', 'Website', 'UKAEA referral', 'QR code', 'Inbound enquiry', 'AI research', 'LinkedIn', 'Contacts', 'Other'],
   types: [{ label: 'Irradiation', code: 'IRR' }, { label: 'Device sale', code: 'DEV' }, { label: 'Research/Project', code: 'RES' }, { label: 'Internal', code: 'INT' }],
-  sectors: ['Fusion', 'Nuclear', 'Electronics', 'Aerospace', 'Other'],
+  sectors: ['Fusion', 'Nuclear', 'Electronics', 'Aerospace', 'Medical', 'Multi', 'Other'],
   priorities: ['Urgent', 'Important', 'Medium', 'Low'],
   idFormat: '{TYPE}-{CLIENT}-{NNN}',   // e.g. IRR-REN-001, as used on the Planner board
   stages: null,
@@ -1946,10 +1946,10 @@ function renderBoard(host, list) {
     return `<div class="col" data-stage="${st.id}"><div class="colbar" style="--c:${st.color}"></div><h3><span><span class="pill"><i style="background:${st.color}"></i>${esc(st.label)} <span class="pct">${st.prob}%</span></span><span class="tot">${v ? `${moneyC(v)} · ${moneyC(v * st.prob / 100)} weighted` : 'No value yet'}</span></span><span class="c">${items.length}</span></h3><div class="cards">` +
       items.map(l => {
         const b = bucket(l);
-        return `<div class="card" draggable="true" data-id="${esc(l.id)}">${tagsHtml(l.tags)}<button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
+        return `<div class="card" draggable="true" data-id="${esc(l.id)}"><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
           `<div class="sub">${esc([l.company !== oppTitle(l) ? l.company : '', l.sector].filter(Boolean).join(' · '))}</div>` +
           (l.nextAction ? `<div style="margin-top:6px">${esc(l.nextAction)}</div>` : '') +
-          (l.team ? `<div class="team">${esc(l.team)}</div>` : '') + salesChips(l) +
+          salesChips(l) +
           `<div class="val"><span class="money">${l.value ? moneyC(l.value) : ''}</span><span class="sub">${l.closeDate ? 'Close ' + esc(shortMonth(l.closeDate)) : ''}</span></div>` +
           `<div class="meta">${l.nextDate ? `<span class="chip ${b}">${esc(fmtDue(l))}</span>` : '<span></span>'}${l.priority ? `<span class="prio ${esc(l.priority)}">${esc(l.priority)}</span>` : fitHtml(l.fit)}</div></div>`;
       }).join('') + `</div></div>`;
@@ -2255,18 +2255,18 @@ function download(name, text) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 const CSV_HEAD = ['Opportunity', 'Opportunity ID', 'Company', 'Type', 'Sector', 'Value (£)', 'Start date', 'Target close date', 'Stage', 'Status detail', 'Probability', 'Weighted value (£)', 'Target flux', 'Est. irradiation hrs',
-  'Labels', 'Assigned to', 'Goal', 'Checklist items', 'Checklist completed', 'Duration', 'Effort', 'Effort completed', 'Effort remaining', '% complete', 'Sprint', 'Milestone', 'Planner task',
+  'Planner task',
   'Priority', 'Fit', 'NDA', 'Source', 'Owner', 'Contact name', 'Contact role', 'Email', 'Website', 'Next action', 'Next action date', 'Next action owner', 'Notes'];
 function exportCSV() {
   if (!state.leads.length) { toast('No leads to export yet'); return; }
   const lines = [CSV_HEAD.concat('Last updated').map(csvCell).join(',')];
   sortLeads(state.leads, 'opp', 1).forEach(l => lines.push([oppTitle(l), l.oppId, l.company, l.type, l.sector, l.value || '', l.startDate, l.closeDate,
-    stageOf(l.stage).label, l.status, stageOf(l.stage).prob + '%', l.value ? Math.round(weightedOf(l)) : '', l.targetFlux, l.irrHours || '', l.tags.join('; '), l.team, l.goal, l.checklist.split('\n').filter(Boolean).join('; '), l.checkDone, l.duration, l.effort, l.effortDone, l.effortLeft, l.pct, l.sprint, l.milestone, l.plannerId, l.priority, l.fit, l.nda ? 'Yes' : 'No', l.source, l.owner,
+    stageOf(l.stage).label, l.status, stageOf(l.stage).prob + '%', l.value ? Math.round(weightedOf(l)) : '', l.targetFlux, l.irrHours || '', l.plannerId, l.priority, l.fit, l.nda ? 'Yes' : 'No', l.source, l.owner,
     l.contact, l.role, l.email, l.website, l.nextAction, l.nextDate, l.nextOwner, l.notes, l.updated].map(csvCell).join(',')));
   download(`astral-bd-leads-${today()}.csv`, lines.join('\r\n'));
 }
 function downloadTemplate() {
-  const ex = ['Blanket materials irradiation campaign', '', 'Example Co', 'Irradiation', 'Fusion', '120000', '2026-11-01', '2027-03-31', STAGES[1].label, '', '', '', '1e10 n/cm²/s', '200', 'Irradiation; Conference lead', 'Harriet Allen', '', '', '', '', '', '', '', '', '', '', '',
+  const ex = ['Blanket materials irradiation campaign', '', 'Example Co', 'Irradiation', 'Fusion', '120000', '2026-11-01', '2027-03-31', STAGES[1].label, '', '', '', '1e10 n/cm²/s', '200', '',
     'Important', '4', 'No', 'AI research', '', 'Jo Bloggs', 'Head of Materials', 'jo@example.com', 'https://example.com', 'Send intro email', '', '', 'Why they might need an irradiation source'];
   download('astral-bd-import-template.csv', CSV_HEAD.map(csvCell).join(',') + '\r\n' + ex.map(csvCell).join(','));
 }
