@@ -598,6 +598,11 @@ button.nchip:hover{border-color:currentColor}
 .btn.sm{padding:6px 10px;font-size:12.5px}
 .cardsp{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
 @media (max-width:600px){.area,.sp-docs{grid-template-columns:1fr}}
+
+.nact{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.nact-t{flex:1 1 120px;min-width:0}
+.nact-d{flex:none;font-size:12px;font-weight:700;padding:2px 8px;border-radius:7px;background:var(--fill);color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.nact-d.overdue{background:var(--alert-wash);color:var(--alert)} .nact-d.today{background:var(--amber-wash);color:var(--amber)} .nact-d.week{background:var(--wash);color:var(--blue-ink)}
 </style>
 </head>
 <body>
@@ -1651,6 +1656,7 @@ const COLS = [
   { k: 'opp', t: 'Opportunity', w: '27%' }, { k: 'stage', t: 'Stage', cls: 'hide-sm', w: '14%' }, { k: 'value', t: 'Value', w: '13%' },
   { k: 'close', t: 'Close', cls: 'hide-sm', w: '9%' }, { k: 'next', t: 'Next action', w: '24%' }, { k: 'owner', t: 'Owner', cls: 'hide-sm', w: '13%' }
 ];
+const dueFmt = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 const shortMonth = d => d ? monthFmt.format(parseYmd(d)) : '';
 
 function rowHtml(l) {
@@ -1663,8 +1669,9 @@ function rowHtml(l) {
     `<td class="hide-sm">${pillHtml(l)}<div class="sub">${l.status ? esc(l.status) : stageOf(l.stage).prob + '% probability'}</div></td>` +
     `<td>${l.value ? `<span class="money">${money(l.value)}</span><div class="sub">${money(weightedOf(l))} weighted</div>` : '<span class="muted">Not set</span>'}</td>` +
     `<td class="hide-sm">${l.closeDate ? esc(shortMonth(l.closeDate)) : '<span class="muted">–</span>'}</td>` +
-    `<td>${l.nextAction ? esc(l.nextAction) : '<span class="muted">Not set</span>'}` +
-      (l.nextDate || l.nextOwner ? `<div class="due ${b}">${esc([fmtDue(l), l.nextOwner].filter(Boolean).join(' · '))}</div>` : '') + `</td>` +
+    `<td><div class="nact"><span class="nact-t">${l.nextAction ? esc(l.nextAction) : '<span class="muted">Not set</span>'}</span>` +
+      (l.nextDate ? `<span class="nact-d ${b}" title="Due date">${esc(dueFmt.format(parseYmd(l.nextDate)))}</span>` : '') + `</div>` +
+      ((rel => rel || l.nextOwner ? `<div class="due ${b}">${esc([rel, l.nextOwner].filter(Boolean).join(' · '))}</div>` : '')(l.nextDate && diffDays(l.nextDate, today()) <= 1 ? fmtDue(l) : '')) + `</td>` +
     `<td class="hide-sm">${ownerHtml(l.owner)}</td></tr>`;
 }
 
@@ -1928,7 +1935,7 @@ function exportAnalytics() {
 /* ---------- follow-ups and board ---------- */
 function renderDue(host, list) {
   const open = list.filter(l => !isClosed(l));
-  const groups = [['overdue', 'Overdue'], ['today', 'Due today'], ['week', 'Later this week'], ['none', 'Needs a next action'], ['later', 'Coming up']];
+  const groups = [['overdue', 'Overdue'], ['today', 'Due today'], ['week', 'Later this week'], ['later', 'Coming up'], ['none', 'Needs a next action']];
   let html = '';
   groups.forEach(([k, title]) => {
     const items = sortLeads(open.filter(l => bucket(l) === k), 'next', 1);
