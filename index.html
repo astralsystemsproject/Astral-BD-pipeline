@@ -745,6 +745,7 @@ button.nchip:hover{border-color:currentColor}
         <label>Priority<select id="f-priority"></select></label>
         <label>Fit (1 weak, 5 strong)<select id="f-fit"></select></label>
         <label>Owner<select id="f-owner"></select></label>
+        <label>Technical lead<select id="f-tech"></select></label>
         <label>NDA<select id="f-nda"><option value="no">No</option><option value="yes">Yes</option></select></label>
         <label>Source<input id="f-source" list="dl-sources" autocomplete="off"></label>
         <label>Status detail<input id="f-status" list="dl-status" placeholder="e.g. Project in progress" autocomplete="off"></label>
@@ -887,6 +888,7 @@ const STATUS_HINTS = {
 const CFG = Object.assign({
   appName: 'BD pipeline',
   owners: [],
+  techLeads: ['Hugo Dominguez', 'Han-Ying', 'Sophie Towel', 'Jonathan Wood', 'Henry Bichard'],
   sources: ['Conference', 'Website', 'UKAEA referral', 'QR code', 'Inbound enquiry', 'AI research', 'LinkedIn', 'Contacts', 'Other'],
   types: [{ label: 'Irradiation', code: 'IRR' }, { label: 'Device sale', code: 'DEV' }, { label: 'Research/Project', code: 'RES' }, { label: 'Internal', code: 'INT' }],
   sectors: ['Fusion', 'Nuclear', 'Electronics', 'Aerospace', 'Medical', 'Multi', 'Other'],
@@ -980,7 +982,7 @@ function blankLead() {
   const now = new Date().toISOString();
   return { id: uid(), opportunity: '', oppId: '', company: '', type: '', sector: '', value: 0, startDate: '', closeDate: '', nda: false, priority: '',
            group: '', contact: '', contactId: '', role: '', email: '', website: '', source: '', fit: 3,
-           stage: STAGES[0].id, status: '', plannerId: '', targetFlux: '', irrHours: 0, tags: [], rank: 0, team: '', goal: '', checklist: '', checkDone: '', duration: '', effort: '', effortDone: '', effortLeft: '', pct: '', sprint: '', milestone: '', nextAction: '', nextDate: '', nextOwner: '', owner: '', notes: '', activity: [], created: now, updated: now };
+           stage: STAGES[0].id, status: '', plannerId: '', targetFlux: '', irrHours: 0, techLead: '', tags: [], rank: 0, team: '', goal: '', checklist: '', checkDone: '', duration: '', effort: '', effortDone: '', effortLeft: '', pct: '', sprint: '', milestone: '', nextAction: '', nextDate: '', nextOwner: '', owner: '', notes: '', activity: [], created: now, updated: now };
 }
 function splitTags(v) { return [...new Set(String(v || '').split(/[;,]/).map(x => x.trim()).filter(Boolean))]; }
 function parseHours(v) { const n = parseFloat(String(v == null ? '' : v).replace(/,/g, '').replace(/[^\d.]/g, '')); return isFinite(n) && n > 0 ? Math.round(n * 10) / 10 : 0; }
@@ -1000,6 +1002,7 @@ function normalise(raw) {
     .forEach(k => { l[k] = l[k] == null ? '' : String(l[k]); });
   l.value = parseMoney(l.value);
   l.targetFlux = l.targetFlux == null ? '' : String(l.targetFlux);
+  l.techLead = l.techLead == null ? '' : String(l.techLead);
   l.tags = Array.isArray(l.tags) ? l.tags.map(String).filter(Boolean) : splitTags(l.tags);
   l.rank = +l.rank || 0;
   normaliseSales(l);
@@ -1136,7 +1139,7 @@ function matches(l, ignoreStage) {
   if (state.type && l.type !== state.type) return false;
   if (state.owner && l.owner !== state.owner && l.nextOwner !== state.owner) return false;
   if (state.q) {
-    const hay = [l.opportunity, l.oppId, l.status, l.company, l.sector, l.type, l.contact, l.role, l.email, l.nextAction, l.notes, l.owner, l.nextOwner, l.tags.join(' '), l.team, l.goal, l.plannerId && '#' + l.plannerId].join(' ').toLowerCase();
+    const hay = [l.opportunity, l.oppId, l.status, l.company, l.sector, l.type, l.contact, l.role, l.email, l.nextAction, l.notes, l.owner, l.nextOwner, l.techLead, l.tags.join(' '), l.team, l.goal, l.plannerId && '#' + l.plannerId].join(' ').toLowerCase();
     if (!state.q.toLowerCase().split(/\s+/).filter(Boolean).every(t => hay.includes(t))) return false;
   }
   return true;
@@ -1956,7 +1959,7 @@ function renderBoard(host, list) {
         return `<div class="card" draggable="true" data-id="${esc(l.id)}"><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
           `<div class="sub">${esc([l.company !== oppTitle(l) ? l.company : '', l.sector].filter(Boolean).join(' · '))}</div>` +
           (l.nextAction ? `<div style="margin-top:6px">${esc(l.nextAction)}</div>` : '') +
-          salesChips(l) +
+          (l.techLead ? `<div class="team">Tech lead: ${esc(l.techLead)}</div>` : '') + salesChips(l) +
           `<div class="val"><span class="money">${l.value ? moneyC(l.value) : ''}</span><span class="sub">${l.closeDate ? 'Close ' + esc(shortMonth(l.closeDate)) : ''}</span></div>` +
           `<div class="meta">${l.nextDate ? `<span class="chip ${b}">${esc(fmtDue(l))}</span>` : '<span></span>'}${l.priority ? `<span class="prio ${esc(l.priority)}">${esc(l.priority)}</span>` : fitHtml(l.fit)}</div></div>`;
       }).join('') + `</div></div>`;
@@ -2012,6 +2015,7 @@ function openDrawer(id) {
   $('#f-opp').value = l.opportunity; $('#f-oppid').value = l.oppId; $('#f-company').value = l.company;
   $('#f-type').value = l.type; $('#f-sector').value = l.sector; $('#f-value').value = l.value ? String(l.value) : '';
   $('#f-stage').value = l.stage; $('#f-start').value = l.startDate; $('#f-close').value = l.closeDate;
+  $('#f-tech').innerHTML = '<option value="">Not set</option>' + [...new Set([...(CFG.techLeads || []), l.techLead].filter(Boolean))].map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join(''); $('#f-tech').value = l.techLead;
   $('#f-priority').value = l.priority; $('#f-fit').value = String(l.fit); $('#f-owner').value = l.owner; $('#f-nda').value = l.nda ? 'yes' : 'no';
   $('#f-source').value = l.source; $('#f-status').value = l.status;
   $('#f-flux').value = l.targetFlux; $('#f-hours').value = l.irrHours ? String(l.irrHours) : '';
@@ -2074,7 +2078,7 @@ async function saveForm(e) {
     startDate: $('#f-start').value, closeDate: $('#f-close').value, priority: $('#f-priority').value, nda: $('#f-nda').value === 'yes',
     source: $('#f-source').value.trim(), status: $('#f-status').value.trim(), contact: $('#f-contact').value.trim(), role: $('#f-role').value.trim(), email: $('#f-email').value.trim(),
     website: $('#f-website').value.trim(), stage: $('#f-stage').value, fit: parseInt($('#f-fit').value, 10) || 3,
-    owner: $('#f-owner').value, nextAction: $('#f-next').value.trim(), nextDate: $('#f-date').value, nextOwner: $('#f-nextowner').value,
+    owner: $('#f-owner').value, techLead: $('#f-tech').value, nextAction: $('#f-next').value.trim(), nextDate: $('#f-date').value, nextOwner: $('#f-nextowner').value,
     notes: $('#f-notes').value.trim(), targetFlux: $('#f-flux').value.trim(), irrHours: parseHours($('#f-hours').value),
     tags: splitTags($('#f-tags').value), team: $('#f-team').value.trim(), goal: $('#f-goal').value.trim(), checklist: $('#f-checklist').value.trim(), checkDone: $('#f-checkdone').value.trim(), pct: $('#f-pct').value.trim(), duration: $('#f-duration').value.trim(), effort: $('#f-effort').value.trim(), effortDone: $('#f-effortdone').value.trim(), effortLeft: $('#f-effortleft').value.trim(), sprint: $('#f-sprint').value.trim(), milestone: $('#f-milestone').value.trim()
   });
@@ -2086,6 +2090,7 @@ async function saveForm(e) {
   else {
     if (prev.stage !== l.stage) l.activity.push({ at: now, by: who(), text: 'Moved to ' + stageOf(l.stage).label });
     if (prev.value !== l.value) l.activity.push({ at: now, by: who(), text: `Value changed to ${money(l.value)}` });
+    if ((prev.techLead || '') !== l.techLead) l.activity.push({ at: now, by: who(), text: l.techLead ? `Technical lead set to ${l.techLead}` : 'Technical lead removed' });
     const pn = prev.req ? reqAnswered(normaliseSales(JSON.parse(JSON.stringify(prev)))) : 0, nn = reqAnswered(l);
     if (nn !== pn) l.activity.push({ at: now, by: who(), text: `Requirements updated (${nn} of ${REQ_COUNTED.length} answered)` });
     const pf = normaliseSales(JSON.parse(JSON.stringify(prev))).feas;
@@ -2167,6 +2172,7 @@ const HMAP = {
   fit: ['fit', 'fitscore', 'fit15', 'score'],
   stage: ['stage', 'pipelinestage', 'bucket'],
   owner: ['owner'],
+  techLead: ['technicallead', 'techlead', 'technicalcontact'],
   nextAction: ['nextaction'],
   nextDate: ['nextactiondate', 'nextdate', 'due', 'duedate'],
   nextOwner: ['nextactionowner', 'actionowner'],
@@ -2216,7 +2222,7 @@ function rowsToLeads(rows) {
     const pr = get(r, 'priority').toLowerCase(); l.priority = CFG.priorities.find(x => x.toLowerCase() === pr) || '';
     l.company = get(r, 'company') || l.opportunity; l.group = get(r, 'group'); l.contact = get(r, 'contact'); l.role = get(r, 'role');
     l.email = get(r, 'email'); l.website = get(r, 'website'); l.source = get(r, 'source') || 'Import';
-    l.owner = get(r, 'owner'); l.nextAction = get(r, 'nextAction'); l.nextDate = parseDateCell(get(r, 'nextDate'));
+    l.owner = get(r, 'owner'); l.techLead = get(r, 'techLead'); l.nextAction = get(r, 'nextAction'); l.nextDate = parseDateCell(get(r, 'nextDate'));
     l.notes = get(r, 'notes');
     const fit = parseInt(get(r, 'fit'), 10); l.fit = fit >= 1 && fit <= 5 ? fit : 3;
     const st = get(r, 'stage').toLowerCase().replace(/\(\d+%\)/g, '').replace(/[()]/g, '').replace(/\s+/g, ' ').trim(); const hit = STAGES.find(s => s.label.toLowerCase().replace(/[()]/g, '') === st || s.id === st) || STAGES.find(s => s.id === STAGE_ALIASES[st]);
@@ -2263,18 +2269,18 @@ function download(name, text) {
 }
 const CSV_HEAD = ['Opportunity', 'Opportunity ID', 'Company', 'Type', 'Sector', 'Value (£)', 'Start date', 'Target close date', 'Stage', 'Status detail', 'Probability', 'Weighted value (£)', 'Target flux', 'Est. irradiation hrs',
   'Planner task',
-  'Priority', 'Fit', 'NDA', 'Source', 'Owner', 'Contact name', 'Contact role', 'Email', 'Website', 'Next action', 'Next action date', 'Next action owner', 'Notes'];
+  'Priority', 'Fit', 'NDA', 'Source', 'Owner', 'Technical lead', 'Contact name', 'Contact role', 'Email', 'Website', 'Next action', 'Next action date', 'Next action owner', 'Notes'];
 function exportCSV() {
   if (!state.leads.length) { toast('No leads to export yet'); return; }
   const lines = [CSV_HEAD.concat('Last updated').map(csvCell).join(',')];
   sortLeads(state.leads, 'opp', 1).forEach(l => lines.push([oppTitle(l), l.oppId, l.company, l.type, l.sector, l.value || '', l.startDate, l.closeDate,
-    stageOf(l.stage).label, l.status, stageOf(l.stage).prob + '%', l.value ? Math.round(weightedOf(l)) : '', l.targetFlux, l.irrHours || '', l.plannerId, l.priority, l.fit, l.nda ? 'Yes' : 'No', l.source, l.owner,
+    stageOf(l.stage).label, l.status, stageOf(l.stage).prob + '%', l.value ? Math.round(weightedOf(l)) : '', l.targetFlux, l.irrHours || '', l.plannerId, l.priority, l.fit, l.nda ? 'Yes' : 'No', l.source, l.owner, l.techLead,
     l.contact, l.role, l.email, l.website, l.nextAction, l.nextDate, l.nextOwner, l.notes, l.updated].map(csvCell).join(',')));
   download(`astral-bd-leads-${today()}.csv`, lines.join('\r\n'));
 }
 function downloadTemplate() {
   const ex = ['Blanket materials irradiation campaign', '', 'Example Co', 'Irradiation', 'Fusion', '120000', '2026-11-01', '2027-03-31', STAGES[1].label, '', '', '', '1e10 n/cm²/s', '200', '',
-    'Important', '4', 'No', 'AI research', '', 'Jo Bloggs', 'Head of Materials', 'jo@example.com', 'https://example.com', 'Send intro email', '', '', 'Why they might need an irradiation source'];
+    'Important', '4', 'No', 'AI research', '', '', 'Jo Bloggs', 'Head of Materials', 'jo@example.com', 'https://example.com', 'Send intro email', '', '', 'Why they might need an irradiation source'];
   download('astral-bd-import-template.csv', CSV_HEAD.map(csvCell).join(',') + '\r\n' + ex.map(csvCell).join(','));
 }
 

@@ -10,6 +10,9 @@ window.CRM_CONFIG = {
   // People who can own a lead (shown in the Owner dropdown)
   owners: ['Harriet', 'Jiffin', 'Ram', 'Talmon'],
 
+  // Names in the Technical lead dropdown
+  techLeads: ['Hugo Dominguez', 'Han-Ying', 'Sophie Towel', 'Jonathan Wood', 'Henry Bichard'],
+
   // Suggested lead sources (people can still type their own)
   sources: ['AI research', "Harriet's network", 'Conference', 'LinkedIn', 'Inbound enquiry', 'Other'],
 
