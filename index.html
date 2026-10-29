@@ -264,6 +264,8 @@ tbody tr:hover td{background:var(--hover)}
 .sub{font-size:12.5px;color:var(--ink-2)}
 .pill{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;padding:3px 10px 3px 8px;border-radius:999px;background:var(--fill);font-size:12.5px;font-weight:600;color:var(--ink)}
 .pill i{width:8px;height:8px;border-radius:50%}
+td .pill{white-space:normal;max-width:100%;line-height:1.25}
+td .pill i{flex:none}
 .fit{display:inline-flex;gap:3px;align-items:flex-end;height:14px}
 .fit i{width:5px;background:var(--line);border-radius:2px}
 .fit i:nth-child(1){height:6px}.fit i:nth-child(2){height:8px}.fit i:nth-child(3){height:10px}.fit i:nth-child(4){height:12px}.fit i:nth-child(5){height:14px}
@@ -1730,8 +1732,8 @@ const pillHtml = l => { const st = stageOf(l.stage); return `<span class="pill">
 const ownerHtml = o => o ? `<span class="owner"><i aria-hidden="true">${esc(initials(o))}</i>${esc(o)}</span>` : '<span class="muted">Unassigned</span>';
 
 const COLS = [
-  { k: 'opp', t: 'Opportunity', w: '27%' }, { k: 'stage', t: 'Stage', cls: 'hide-sm', w: '14%' }, { k: 'value', t: 'Value', w: '13%' },
-  { k: 'close', t: 'Close', cls: 'hide-sm', w: '9%' }, { k: 'next', t: 'Next action', w: '24%' }, { k: 'owner', t: 'Owner', cls: 'hide-sm', w: '13%' }
+  { k: 'opp', t: 'Opportunity', w: '27%' }, { k: 'stage', t: 'Stage', cls: 'hide-sm', w: '17%' }, { k: 'value', t: 'Value', w: '13%' },
+  { k: 'close', t: 'Close', cls: 'hide-sm', w: '9%' }, { k: 'next', t: 'Next action', w: '21%' }, { k: 'owner', t: 'Owner', cls: 'hide-sm', w: '13%' }
 ];
 const dueFmt = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 const shortMonth = d => d ? monthFmt.format(parseYmd(d)) : '';
