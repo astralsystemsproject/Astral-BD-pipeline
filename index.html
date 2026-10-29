@@ -603,6 +603,19 @@ button.nchip:hover{border-color:currentColor}
 .nact-t{flex:1 1 120px;min-width:0}
 .nact-d{flex:none;font-size:12px;font-weight:700;padding:2px 8px;border-radius:7px;background:var(--fill);color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums}
 .nact-d.overdue{background:var(--alert-wash);color:var(--alert)} .nact-d.today{background:var(--amber-wash);color:var(--amber)} .nact-d.week{background:var(--wash);color:var(--blue-ink)}
+
+/* customer logos */
+.lg{--s:28px;position:relative;flex:none;width:var(--s);height:var(--s);border-radius:8px;display:inline-grid;place-items:center;overflow:hidden;background:var(--lg-bg,var(--fill));color:#fff;font-weight:700;font-size:calc(var(--s) * .38);letter-spacing:.02em;line-height:1;border:1px solid var(--line)}
+.lg img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;padding:calc(var(--s) * .12)}
+.lg.c0{--lg-bg:#2a78d6}.lg.c1{--lg-bg:#c2531f}.lg.c2{--lg-bg:#147a55}.lg.c3{--lg-bg:#8a6400}.lg.c4{--lg-bg:#b8436f}.lg.c5{--lg-bg:#2f6b2f}.lg.c6{--lg-bg:#5546c2}.lg.c7{--lg-bg:#b53a39}
+.withlogo{display:flex;gap:10px;align-items:flex-start;min-width:0}
+.withlogo > div{min-width:0}
+.card .cardtop{display:flex;gap:9px;align-items:flex-start}
+.card .cardtop > div{min-width:0}
+.dr-head .dr-title-wrap{display:flex;gap:10px;align-items:center;min-width:0}
+.logorow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.logorow .hint{font-weight:400;color:var(--ink-3);flex-basis:100%}
+.logorow .btn{padding:6px 10px;font-size:12.5px}
 </style>
 </head>
 <body>
@@ -720,7 +733,7 @@ button.nchip:hover{border-color:currentColor}
 <aside id="drawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-title" aria-hidden="true">
   <form id="lead-form" novalidate>
     <header class="dr-head">
-      <h2 id="dr-title">New lead</h2>
+      <div class="dr-title-wrap"><span id="dr-logo"></span><h2 id="dr-title">New lead</h2></div>
       <button type="button" class="btn ghost" id="dr-close">Close</button>
     </header>
     <nav class="dtabs" role="tablist" aria-label="Lead sections">
@@ -757,6 +770,7 @@ button.nchip:hover{border-color:currentColor}
         <label>Contact role<input id="f-role" autocomplete="off"></label>
         <label>Contact email<input id="f-email" type="email" autocomplete="off"></label>
         <label class="span2">Website<input id="f-website" inputmode="url" autocomplete="off"></label>
+        <div class="span2 logorow"><span>Logo</span><span id="f-logo-prev"></span><button type="button" class="btn" id="f-logo-up">Upload logo</button><button type="button" class="btn" id="f-logo-remove" hidden>Remove</button><input type="file" id="f-logo-file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" hidden><span class="hint" id="f-logo-hint"></span></div>
         <div class="fsec">Next action</div>
         <label class="span2">Next action<input id="f-next" autocomplete="off"></label>
         <label>Due date<input id="f-date" type="date"></label>
@@ -982,7 +996,7 @@ function blankLead() {
   const now = new Date().toISOString();
   return { id: uid(), opportunity: '', oppId: '', company: '', type: '', sector: '', value: 0, startDate: '', closeDate: '', nda: false, priority: '',
            group: '', contact: '', contactId: '', role: '', email: '', website: '', source: '', fit: 3,
-           stage: STAGES[0].id, status: '', plannerId: '', targetFlux: '', irrHours: 0, techLead: '', tags: [], rank: 0, team: '', goal: '', checklist: '', checkDone: '', duration: '', effort: '', effortDone: '', effortLeft: '', pct: '', sprint: '', milestone: '', nextAction: '', nextDate: '', nextOwner: '', owner: '', notes: '', activity: [], created: now, updated: now };
+           stage: STAGES[0].id, status: '', plannerId: '', targetFlux: '', irrHours: 0, techLead: '', logo: '', tags: [], rank: 0, team: '', goal: '', checklist: '', checkDone: '', duration: '', effort: '', effortDone: '', effortLeft: '', pct: '', sprint: '', milestone: '', nextAction: '', nextDate: '', nextOwner: '', owner: '', notes: '', activity: [], created: now, updated: now };
 }
 function splitTags(v) { return [...new Set(String(v || '').split(/[;,]/).map(x => x.trim()).filter(Boolean))]; }
 function parseHours(v) { const n = parseFloat(String(v == null ? '' : v).replace(/,/g, '').replace(/[^\d.]/g, '')); return isFinite(n) && n > 0 ? Math.round(n * 10) / 10 : 0; }
@@ -1003,6 +1017,7 @@ function normalise(raw) {
   l.value = parseMoney(l.value);
   l.targetFlux = l.targetFlux == null ? '' : String(l.targetFlux);
   l.techLead = l.techLead == null ? '' : String(l.techLead);
+  l.logo = typeof l.logo === 'string' && /^data:image\/(png|jpeg|webp|gif);base64,/.test(l.logo) ? l.logo : '';
   l.tags = Array.isArray(l.tags) ? l.tags.map(String).filter(Boolean) : splitTags(l.tags);
   l.rank = +l.rank || 0;
   normaliseSales(l);
@@ -1584,6 +1599,65 @@ function salesClick(e) {
   }
 }
 
+
+/* ---------- customer logos ---------- */
+function domainOf(u) {
+  u = String(u || '').trim(); if (!u) return '';
+  try { return new URL(/^https?:\/\//i.test(u) ? u : 'https://' + u).hostname.replace(/^www\./i, ''); } catch { return ''; }
+}
+function logoInitials(name) {
+  const w = String(name || '').replace(/\(.*?\)/g, '').split(/[\s\/\-&,]+/).filter(x => x && !/^(of|the|and|uni|university|ltd|inc|plc)$/i.test(x));
+  if (!w.length) return '?';
+  return (w.length === 1 ? w[0].slice(0, 2) : w[0][0] + w[1][0]).toUpperCase();
+}
+function logoClass(name) { let h = 0; for (const ch of orgKey(name)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return 'c' + (h % 8); }
+// uploaded logo on this lead > uploaded logo on another lead for the same company > website icon > initials
+function logoSrc(l) {
+  if (l.logo) return l.logo;
+  const k = orgKey(l.company);
+  const same = k && state.leads.find(x => x.logo && orgKey(x.company) === k);
+  if (same) return same.logo;
+  const d = domainOf(l.website) || (k && domainOf((state.leads.find(x => x.website && orgKey(x.company) === k) || {}).website));
+  return d ? `https://www.google.com/s2/favicons?domain=${encodeURIComponent(d)}&sz=128` : '';
+}
+function logoHtml(l, size = 28) {
+  const name = l.company || oppTitle(l), src = logoSrc(l);
+  return `<span class="lg ${logoClass(name)}" style="--s:${size}px" aria-hidden="true">${esc(logoInitials(name))}${src ? `<img class="lg-img" src="${esc(src)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : ''}</span>`;
+}
+// a logo that fails to load drops back to the initials underneath
+document.addEventListener('error', e => { const t = e.target; if (t && t.classList && t.classList.contains('lg-img')) t.remove(); }, true);
+// Google answers unknown sites with a tiny grey globe: treat anything under 32px as "no logo"
+document.addEventListener('load', e => { const t = e.target; if (t && t.classList && t.classList.contains('lg-img') && t.src.includes('s2/favicons') && t.naturalWidth && t.naturalWidth < 32) t.remove(); }, true);
+function shrinkImage(file) {
+  return new Promise((resolve, reject) => {
+    if (!/^image\//.test(file.type)) { reject(new Error('That file is not an image')); return; }
+    const fr = new FileReader();
+    fr.onerror = () => reject(new Error('Could not read the file'));
+    fr.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Could not open that image'));
+      img.onload = () => {
+        const N = 160, c = document.createElement('canvas'); c.width = N; c.height = N;
+        const g = c.getContext('2d'), r = Math.min(N / img.width, N / img.height), w = img.width * r, h = img.height * r;
+        g.drawImage(img, (N - w) / 2, (N - h) / 2, w, h);
+        let out = c.toDataURL('image/webp', 0.85);
+        if (!out.startsWith('data:image/webp')) out = c.toDataURL('image/png');
+        resolve(out);
+      };
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+function syncLogoPreview() {
+  if (!state.editing) return;
+  const l = Object.assign({}, state.editing, { company: $('#f-company').value.trim() || state.editing.company, website: $('#f-website').value.trim() });
+  $('#f-logo-prev').innerHTML = logoHtml(l, 44);
+  $('#dr-logo').innerHTML = state.isNew && !l.company ? '' : logoHtml(l, 32);
+  $('#f-logo-remove').hidden = !state.editing.logo;
+  $('#f-logo-hint').textContent = state.editing.logo ? 'Uploaded logo.' : (domainOf(l.website) ? `Using the logo from ${domainOf(l.website)}. Upload one to replace it.` : 'Add the website to show their logo automatically, or upload one.');
+}
+
 /* ---------- rendering ---------- */
 function render() {
   const v = state.view;
@@ -1666,9 +1740,9 @@ function rowHtml(l) {
   const b = bucket(l);
   const sub = [l.company !== oppTitle(l) ? l.company : '', l.sector, l.type].filter(Boolean).join(' · ');
   return `<tr data-id="${esc(l.id)}">` +
-    `<td><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
+    `<td><div class="withlogo">${logoHtml(l, 32)}<div><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
       (sub ? `<div class="sub">${esc(sub)}</div>` : '') +
-      `<div>${l.oppId ? `<span class="idtag">${esc(l.oppId)}</span> ` : ''}${l.priority ? `<span class="prio ${esc(l.priority)}">${esc(l.priority)}</span>` : ''}</div></td>` +
+      `<div>${l.oppId ? `<span class="idtag">${esc(l.oppId)}</span> ` : ''}${l.priority ? `<span class="prio ${esc(l.priority)}">${esc(l.priority)}</span>` : ''}</div></div></div></td>` +
     `<td class="hide-sm">${pillHtml(l)}<div class="sub">${l.status ? esc(l.status) : stageOf(l.stage).prob + '% probability'}</div></td>` +
     `<td>${l.value ? `<span class="money">${money(l.value)}</span><div class="sub">${money(weightedOf(l))} weighted</div>` : '<span class="muted">Not set</span>'}</td>` +
     `<td class="hide-sm">${l.closeDate ? esc(shortMonth(l.closeDate)) : '<span class="muted">–</span>'}</td>` +
@@ -1747,7 +1821,7 @@ function renderHome(host) {
 
   const fu = open.slice().sort((a, b) => (a.nextDate || '9999').localeCompare(b.nextDate || '9999') || oppTitle(a).localeCompare(oppTitle(b))).slice(0, 7);
   const fuRows = fu.map(l => { const b = bucket(l); return `<tr data-id="${esc(l.id)}">
-      <td><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button><div class="sub">${esc(l.company !== oppTitle(l) ? l.company : (l.sector || ''))}</div><div class="sub only-sm">${l.nextAction ? esc(l.nextAction) : 'Set a next action'}</div></td>
+      <td><div class="withlogo">${logoHtml(l, 28)}<div><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button><div class="sub">${esc(l.company !== oppTitle(l) ? l.company : (l.sector || ''))}</div><div class="sub only-sm">${l.nextAction ? esc(l.nextAction) : 'Set a next action'}</div></div></div></td>
       <td class="hide-sm">${l.nextAction ? esc(l.nextAction) : '<span class="muted">Set a next action</span>'}${l.nextOwner ? `<div class="sub">${esc(l.nextOwner)}</div>` : ''}</td>
       <td>${l.nextDate ? `<span class="chip ${b}">${esc(fmtDue(l))}</span>` : '<span class="chip none">No date</span>'}</td>
       <td class="hide-sm">${l.value ? `<span class="money">${moneyC(l.value)}</span>` : '<span class="muted">–</span>'}</td></tr>`; }).join('');
@@ -1956,8 +2030,8 @@ function renderBoard(host, list) {
     return `<div class="col" data-stage="${st.id}"><div class="colbar" style="--c:${st.color}"></div><h3><span><span class="pill"><i style="background:${st.color}"></i>${esc(st.label)} <span class="pct">${st.prob}%</span></span><span class="tot">${v ? `${moneyC(v)} · ${moneyC(v * st.prob / 100)} weighted` : 'No value yet'}</span></span><span class="c">${items.length}</span></h3><div class="cards">` +
       items.map(l => {
         const b = bucket(l);
-        return `<div class="card" draggable="true" data-id="${esc(l.id)}"><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
-          `<div class="sub">${esc([l.company !== oppTitle(l) ? l.company : '', l.sector].filter(Boolean).join(' · '))}</div>` +
+        return `<div class="card" draggable="true" data-id="${esc(l.id)}"><div class="cardtop">${logoHtml(l, 30)}<div><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
+          `<div class="sub">${esc([l.company !== oppTitle(l) ? l.company : '', l.sector].filter(Boolean).join(' · '))}</div></div></div>` +
           (l.nextAction ? `<div style="margin-top:6px">${esc(l.nextAction)}</div>` : '') +
           (l.techLead ? `<div class="team">Tech lead: ${esc(l.techLead)}</div>` : '') + salesChips(l) +
           `<div class="val"><span class="money">${l.value ? moneyC(l.value) : ''}</span><span class="sub">${l.closeDate ? 'Close ' + esc(shortMonth(l.closeDate)) : ''}</span></div>` +
@@ -2023,6 +2097,8 @@ function openDrawer(id) {
   $('#dl-tags').innerHTML = [...new Set(state.leads.flatMap(x => x.tags))].sort().map(t => `<option value="${esc(t)}">`).join('');
   $('#dl-status').innerHTML = [...new Set(Object.values(STATUS_HINTS).flat().concat(state.leads.map(x => x.status).filter(Boolean)))].map(x => `<option value="${esc(x)}">`).join('');
   $('#f-contact').value = l.contact; $('#f-role').value = l.role; $('#f-email').value = l.email; $('#f-website').value = l.website;
+  state.logoAtOpen = l.logo || '';
+  syncLogoPreview();
   $('#f-next').value = l.nextAction; $('#f-date').value = l.nextDate; $('#f-nextowner').value = l.nextOwner;
   $('#f-notes').value = l.notes; $('#f-log').value = '';
   $('#dl-contacts').innerHTML = state.contacts.filter(c => cName(c)).map(c => `<option value="${esc(contactLabel(c))}">`).join('');
@@ -2090,6 +2166,7 @@ async function saveForm(e) {
   else {
     if (prev.stage !== l.stage) l.activity.push({ at: now, by: who(), text: 'Moved to ' + stageOf(l.stage).label });
     if (prev.value !== l.value) l.activity.push({ at: now, by: who(), text: `Value changed to ${money(l.value)}` });
+    if ((state.logoAtOpen || '') !== (l.logo || '')) l.activity.push({ at: now, by: who(), text: l.logo ? 'Logo uploaded' : 'Uploaded logo removed' });
     if ((prev.techLead || '') !== l.techLead) l.activity.push({ at: now, by: who(), text: l.techLead ? `Technical lead set to ${l.techLead}` : 'Technical lead removed' });
     const pn = prev.req ? reqAnswered(normaliseSales(JSON.parse(JSON.stringify(prev)))) : 0, nn = reqAnswered(l);
     if (nn !== pn) l.activity.push({ at: now, by: who(), text: `Requirements updated (${nn} of ${REQ_COUNTED.length} answered)` });
@@ -2577,27 +2654,27 @@ async function loadExamples() {
   const demo = 'Demo example only, not a real opportunity. ';
   const D = n => addDays(n);
   const list = [
-    mk({ opportunity: 'Blanket materials irradiation campaign', company: 'UKAEA (Culham Campus)', type: 'Irradiation', sector: 'Fusion', value: 180000, startDate: D(-18), closeDate: D(120), priority: 'Important', nda: true,
+    mk({ opportunity: 'Blanket materials irradiation campaign', company: 'UKAEA (Culham Campus)', website: 'https://ukaea.org', type: 'Irradiation', sector: 'Fusion', value: 180000, startDate: D(-18), closeDate: D(120), priority: 'Important', nda: true,
          role: 'Materials testing lead (target role)', source: 'Example', stage: 'requirements', fit: 5, nextAction: 'Prepare call agenda: neutron testing for blanket materials', nextDate: today(), owner, notes: demo + 'UK national fusion lab. Large materials and component testing need.' }, 18),
-    mk({ opportunity: 'Magnet component radiation testing', company: 'Tokamak Energy', type: 'Irradiation', sector: 'Fusion', value: 250000, startDate: D(-26), closeDate: D(150), priority: 'Important',
+    mk({ opportunity: 'Magnet component radiation testing', company: 'Tokamak Energy', website: 'https://tokamakenergy.com', type: 'Irradiation', sector: 'Fusion', value: 250000, startDate: D(-26), closeDate: D(150), priority: 'Important',
          role: 'Head of materials (target role)', source: 'Example', stage: 'initial', fit: 5, nextAction: 'Chase reply to intro email', nextDate: D(-2), nextOwner: owner2, owner, notes: demo + 'UK spherical tokamak developer. Components and magnets need radiation testing.' }, 26),
-    mk({ opportunity: 'Tungsten armour neutron exposure', company: 'Oxford Sigma', type: 'Irradiation', sector: 'Fusion', value: 95000, startDate: D(-31), closeDate: D(60), priority: 'Medium', nda: true,
+    mk({ opportunity: 'Tungsten armour neutron exposure', company: 'Oxford Sigma', website: 'https://oxfordsigma.com', type: 'Irradiation', sector: 'Fusion', value: 95000, startDate: D(-31), closeDate: D(60), priority: 'Medium', nda: true,
          role: 'CTO (target role)', source: 'Example', stage: 'proposal', fit: 5, nextAction: 'Send proposal draft', nextDate: D(2), owner: owner2, notes: demo + 'Fusion materials and engineering company in Oxford.' }, 31),
-    mk({ opportunity: 'Breeder blanket tritium study', company: 'Kyoto Fusioneering UK', type: 'Research/Project', sector: 'Fusion', value: 320000, startDate: D(-44), closeDate: D(40), priority: 'Important', nda: true,
+    mk({ opportunity: 'Breeder blanket tritium study', company: 'Kyoto Fusioneering UK', website: 'https://kyotofusioneering.com', type: 'Research/Project', sector: 'Fusion', value: 320000, startDate: D(-44), closeDate: D(40), priority: 'Important', nda: true,
          role: 'Blanket programme lead (target role)', source: 'Example', stage: 'negotiation', fit: 4, nextAction: 'Follow up on proposal', nextDate: D(5), owner: owner2, notes: demo + 'Breeding blanket and fusion plant technology supplier.' }, 44),
-    mk({ opportunity: 'Diagnostics neutron calibration', company: 'First Light Fusion', type: 'Research/Project', sector: 'Fusion', value: 60000, startDate: D(-9), closeDate: D(200), priority: 'Medium',
+    mk({ opportunity: 'Diagnostics neutron calibration', company: 'First Light Fusion', website: 'https://firstlightfusion.com', type: 'Research/Project', sector: 'Fusion', value: 60000, startDate: D(-9), closeDate: D(200), priority: 'Medium',
          role: 'Head of engineering (target role)', source: 'Example', stage: 'initial', fit: 4, nextAction: 'Book intro call', nextDate: D(1), owner, notes: demo + 'Oxford-based inertial fusion company.' }, 9),
-    mk({ opportunity: 'Stellarator materials screening', company: 'Proxima Fusion', type: 'Irradiation', sector: 'Fusion', value: 150000, closeDate: D(300), priority: 'Low',
+    mk({ opportunity: 'Stellarator materials screening', company: 'Proxima Fusion', website: 'https://proximafusion.com', type: 'Irradiation', sector: 'Fusion', value: 150000, closeDate: D(300), priority: 'Low',
          role: 'Materials engineer (target role)', source: 'Example', stage: 'legacy', fit: 3, notes: demo + 'German stellarator developer. Check appetite for UK testing.' }, 4),
-    mk({ opportunity: 'Neutron source evaluation', company: 'Commonwealth Fusion Systems', type: 'Device sale', sector: 'Fusion', value: 1200000, closeDate: D(420), priority: 'Medium',
+    mk({ opportunity: 'Neutron source evaluation', company: 'Commonwealth Fusion Systems', website: 'https://cfs.energy', type: 'Device sale', sector: 'Fusion', value: 1200000, closeDate: D(420), priority: 'Medium',
          role: 'Radiation effects lead (target role)', source: 'Example', stage: 'initial', fit: 3, notes: demo + 'US tokamak developer. Longer shot, but a large testing programme.' }, 2),
-    mk({ opportunity: 'Supply chain partnership', company: 'Frazer-Nash Consultancy', type: 'Research/Project', sector: 'Nuclear', value: 40000, startDate: D(-12), closeDate: D(90), priority: 'Low',
+    mk({ opportunity: 'Supply chain partnership', company: 'Frazer-Nash Consultancy', website: 'https://fnc.co.uk', type: 'Research/Project', sector: 'Nuclear', value: 40000, startDate: D(-12), closeDate: D(90), priority: 'Low',
          role: 'Fusion business lead (target role)', source: 'Example', stage: 'requirements', fit: 3, nextAction: 'Send overview deck', nextDate: D(3), owner: owner2, notes: demo + 'UK engineering consultancy. Possible channel partner.' }, 12),
-    mk({ opportunity: 'Electronics radiation hardness tests', company: 'University of Birmingham', type: 'Irradiation', sector: 'Electronics', value: 35000, startDate: D(-60), closeDate: D(-10), nda: true,
+    mk({ opportunity: 'Electronics radiation hardness tests', company: 'University of Birmingham', website: 'https://birmingham.ac.uk', type: 'Irradiation', sector: 'Electronics', value: 35000, startDate: D(-60), closeDate: D(-10), nda: true,
          role: 'Nuclear materials research group (target)', source: 'Example', stage: 'won', fit: 4, owner, notes: demo + 'Shown as won for the demo.' }, 60),
     mk({ opportunity: 'Satellite component screening', company: 'Example aerospace supplier', type: 'Irradiation', sector: 'Aerospace', value: 70000, startDate: D(-7), closeDate: D(75), priority: 'Medium',
          role: 'Head of reliability (target role)', source: 'Example', stage: 'initial', fit: 3, nextAction: 'Share data sheet', nextDate: D(6), owner, notes: demo + 'Fictional aerospace example.' }, 7),
-    mk({ opportunity: 'Component qualification programme', company: 'Gauss Fusion', type: 'Irradiation', sector: 'Fusion', value: 210000, startDate: D(-50), closeDate: D(-20),
+    mk({ opportunity: 'Component qualification programme', company: 'Gauss Fusion', website: 'https://gauss-fusion.com', type: 'Irradiation', sector: 'Fusion', value: 210000, startDate: D(-50), closeDate: D(-20),
          role: 'Procurement (target role)', source: 'Example', stage: 'lost', fit: 2, owner: owner2, notes: demo + 'Shown as lost for the demo.' }, 50)
   ];
   const taken = state.leads.map(x => x.oppId);
@@ -2748,6 +2825,10 @@ function bindUI() {
 
   $('#lead-form').addEventListener('submit', saveForm);
   $('#dr-close').addEventListener('click', closeDrawer);
+  $('#f-logo-up').addEventListener('click', () => $('#f-logo-file').click());
+  $('#f-logo-file').addEventListener('change', async e => { const f = e.target.files[0]; e.target.value = ''; if (!f || !state.editing) return; try { state.editing.logo = await shrinkImage(f); syncLogoPreview(); toast('Logo added. Save the lead to keep it.'); } catch (err) { toast(err.message); } });
+  $('#f-logo-remove').addEventListener('click', () => { if (!state.editing) return; state.editing.logo = ''; syncLogoPreview(); toast('Logo removed. Save the lead to keep it.'); });
+  ['#f-website', '#f-company'].forEach(id => $(id).addEventListener('change', syncLogoPreview));
   $('#drawer').addEventListener('click', salesClick);
   $('#drawer').addEventListener('input', e => { if (e.target.closest('[data-dpanel="req"],[data-dpanel="feas"],[data-dpanel="quote"]') || e.target.id === 'f-stage') syncSales(); });
   $('#drawer').addEventListener('change', e => { const m = e.target.id.match(/^fe-(\w+)-status$/); if (m && e.target.value && !$('#fe-' + m[1] + '-date').value) $('#fe-' + m[1] + '-date').value = new Date().toLocaleDateString('en-CA'); syncSales(); });
