@@ -618,6 +618,78 @@ button.nchip:hover{border-color:currentColor}
 .logorow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:12.5px;font-weight:600;color:var(--ink-2)}
 .logorow .hint{font-weight:400;color:var(--ink-3);flex-basis:100%}
 .logorow .btn{padding:6px 10px;font-size:12.5px}
+/* revenue forecast */
+:root{--rv-won:#2E9E5B;--rv-negotiation:#1D5A7C;--rv-proposal:#3C9AD0;--rv-requirements:#85C3E6;--rv-initial:#C4E2F3;--rv-cum:#B4471F;--rv-tip-bg:#1A2B1F;--rv-tip-ink:#FFFFFF;--rv-tip-mute:#B9C4BD}
+:root[data-theme="dark"]{--rv-won:#3CC27A;--rv-negotiation:#93CBEB;--rv-proposal:#4FA6D8;--rv-requirements:#2A6E95;--rv-initial:#1E4559;--rv-cum:#F29A6E;--rv-tip-bg:#E7EEEA;--rv-tip-ink:#0E1813;--rv-tip-mute:#4C5A52}
+.rv{display:grid;gap:18px}
+.rv .panel{min-width:0}
+.rv-tiles{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:0}
+.rv-ctl{padding:16px 20px;display:grid;gap:14px}
+.rv-row{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end}
+.rv-f{display:grid;gap:5px;font-size:12px;font-weight:600;color:var(--ink-2);min-width:0}
+.rv-f select,.rv-pair select,.rv-spread input{font:inherit;font-size:13.5px;font-weight:500;color:var(--ink);background:var(--input);border:1px solid var(--line);border-radius:9px;padding:7px 9px;min-height:36px}
+.rv-pair{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.rv-pair span{font-weight:500;color:var(--ink-3)}
+.rv-seg{display:inline-flex;background:var(--fill);border-radius:10px;padding:3px;gap:2px}
+.rv-seg button{border:0;background:transparent;color:var(--ink-2);font:inherit;font-size:13px;font-weight:600;padding:7px 12px;border-radius:8px;cursor:pointer}
+.rv-seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.rv-chips{display:flex;flex-wrap:wrap;gap:6px}
+.rv-chips button{font:inherit;font-size:12px;font-weight:600;color:var(--ink-2);background:var(--fill);border:0;border-radius:999px;padding:7px 11px;cursor:pointer}
+.rv-chips button:hover{color:var(--ink)}
+.rv-spread{display:grid;gap:10px;padding:12px 14px;background:var(--fill);border-radius:12px}
+.rv-t{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.rv .rv-spread label{display:flex;flex-direction:row;gap:7px;align-items:center;font-size:13px;font-weight:500;color:var(--ink-2);margin:0}
+.rv .rv-spread .rv-row{align-items:center}
+.rv-spread input{width:64px;font-variant-numeric:tabular-nums}
+.rv-grp{font-size:12px;font-weight:600;color:var(--ink-3)}
+.rv-hint{font-size:12px;color:var(--ink-3)}
+.rv-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-2);justify-content:flex-end}
+.rv-legend span{display:inline-flex;align-items:center;gap:6px}
+.rv-legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.rv-legend i.ln{height:3px;width:16px;border-radius:2px;background:var(--rv-cum)}
+.rv .ph{flex-wrap:wrap}
+.rv-chart{overflow-x:auto}
+.rv-chart svg{display:block}
+.rv-chart text{font-family:inherit;fill:var(--ink-3);font-size:11px;font-variant-numeric:tabular-nums}
+.rv-chart text.yr{font-weight:600}
+.rv-chart text.tt{fill:var(--ink-2);font-weight:600;font-size:10.5px}
+.rv-chart text.ct{font-weight:700;fill:var(--rv-cum)}
+.rv-chart .g{stroke:var(--line);stroke-width:1}
+.rv-chart .ax{stroke:var(--ink-3)}
+.rv-chart .sg{stroke:var(--card);stroke-width:1;cursor:pointer}
+.rv-chart .rv-col{cursor:pointer}
+.rv-chart .rv-col:hover .sg,.rv-chart .rv-col.sel .sg{filter:brightness(1.08)}
+.rv-chart .rv-col.sel .hit{fill:var(--wash)}
+.rv-chart .now{stroke:var(--amber);stroke-dasharray:3 3}
+.rv-chart .nowt{fill:var(--amber);font-weight:600}
+.rv-notes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.rv-note{font-size:12.5px;color:var(--ink-2);background:var(--fill);border-radius:999px;padding:5px 11px}
+.rv-note.warn{color:var(--amber);background:var(--amber-wash)}
+.rv-deals{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))}
+.rv-deal{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 20px;border-bottom:1px solid var(--line-2)}
+.rv-dot{width:10px;height:10px;border-radius:3px}
+.rv-dm{min-width:0}
+.rv-dm .co{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;text-align:left}
+.rv-dd{font-size:12px;color:var(--ink-3)}
+.rv-da{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.rv-da small{display:block;font-weight:400;color:var(--ink-3);font-size:11.5px}
+.rv-unset{font-weight:400;color:var(--ink-3);font-size:12.5px}
+.rv-acts{display:flex;gap:8px;flex-wrap:wrap}
+.rv-tw{border:0;box-shadow:none;border-radius:0 0 16px 16px}
+.rv-table td,.rv-table th{white-space:nowrap}
+.rv-table td.z{color:var(--ink-3)}
+.rv-table .rv-cumc{color:var(--rv-cum)}
+.rv-table tr.rv-q td{font-weight:700;background:var(--fill)}
+.rv-table tr.rv-m{cursor:pointer}
+.rv-table tr.rv-m:hover td{background:var(--hover)}
+.rv-table tr.rv-m.sel td{background:var(--wash)}
+.rv-how{margin:0;font-size:12.5px;color:var(--ink-3);max-width:100ch}
+.rv-tip{position:fixed;pointer-events:none;background:var(--rv-tip-bg);color:var(--rv-tip-ink);border-radius:10px;padding:10px 12px;font-size:12.5px;min-width:210px;max-width:290px;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:200}
+.rv-tip b{display:block;margin-bottom:4px}
+.rv-tip .r{display:flex;justify-content:space-between;gap:12px;font-variant-numeric:tabular-nums}
+.rv-tip .r i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px}
+.rv-tip .m{color:var(--rv-tip-mute);margin-top:5px}
+@media (max-width:900px){.rv-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -627,6 +699,7 @@ button.nchip:hover{border-color:currentColor}
   <symbol id="i-pipe" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="11" rx="1.5"/><rect x="17" y="4" width="4" height="7" rx="1.5"/></symbol>
   <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15.5l2 2 4-4"/></symbol>
   <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 21h18M6 17v-5M11 17V7M16 17v-8M21 17v-3"/></symbol>
+  <symbol id="i-revenue" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol>
   <symbol id="i-import" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
   <symbol id="i-export" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M4 21h16"/></symbol>
   <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
@@ -667,6 +740,7 @@ button.nchip:hover{border-color:currentColor}
       <a href="#pipeline" data-nav="pipeline" title="Pipeline"><svg class="i"><use href="#i-pipe"/></svg><span class="t">Pipeline</span></a>
       <a href="#followups" data-nav="followups" title="Follow-ups"><svg class="i"><use href="#i-cal"/></svg><span class="t">Follow-ups</span><span class="nbadge" id="nb-over" hidden></span></a>
       <a href="#analytics" data-nav="analytics" title="Analytics"><svg class="i"><use href="#i-chart"/></svg><span class="t">Analytics</span></a>
+      <a href="#revenue" data-nav="revenue" title="Revenue"><svg class="i"><use href="#i-revenue"/></svg><span class="t">Revenue</span></a>
       <a href="#news" data-nav="news" title="News brief"><svg class="i"><use href="#i-radio"/></svg><span class="t">News brief</span><span class="nbadge soft" id="nb-news" hidden>New</span></a>
     </nav>
 
@@ -752,6 +826,7 @@ button.nchip:hover{border-color:currentColor}
         <label>Opportunity ID<input id="f-oppid" placeholder="Created when you save" autocomplete="off"></label>
         <label>Company<input id="f-company" list="dl-orgs" autocomplete="off"></label>
         <label>Type<select id="f-type"></select></label>
+        <label id="f-size-wrap" hidden>Project size<select id="f-size"><option value="">Not set (counts as medium)</option><option>Small</option><option>Medium</option><option>Large</option></select><span class="hint">Sets how long its revenue is spread on the Revenue page</span></label>
         <label>Sector<select id="f-sector"></select></label>
         <label>Value (£)<input id="f-value" inputmode="decimal" placeholder="0" autocomplete="off"><span class="hint" id="f-weighted"></span></label>
         <label>Stage<select id="f-stage"></select></label>
@@ -998,7 +1073,7 @@ function blankLead() {
   const now = new Date().toISOString();
   return { id: uid(), opportunity: '', oppId: '', company: '', type: '', sector: '', value: 0, startDate: '', closeDate: '', nda: false, priority: '',
            group: '', contact: '', contactId: '', role: '', email: '', website: '', source: '', fit: 3,
-           stage: STAGES[0].id, status: '', plannerId: '', targetFlux: '', irrHours: 0, techLead: '', logo: '', tags: [], rank: 0, team: '', goal: '', checklist: '', checkDone: '', duration: '', effort: '', effortDone: '', effortLeft: '', pct: '', sprint: '', milestone: '', nextAction: '', nextDate: '', nextOwner: '', owner: '', notes: '', activity: [], created: now, updated: now };
+           stage: STAGES[0].id, status: '', plannerId: '', targetFlux: '', irrHours: 0, techLead: '', projectSize: '', logo: '', tags: [], rank: 0, team: '', goal: '', checklist: '', checkDone: '', duration: '', effort: '', effortDone: '', effortLeft: '', pct: '', sprint: '', milestone: '', nextAction: '', nextDate: '', nextOwner: '', owner: '', notes: '', activity: [], created: now, updated: now };
 }
 function splitTags(v) { return [...new Set(String(v || '').split(/[;,]/).map(x => x.trim()).filter(Boolean))]; }
 function parseHours(v) { const n = parseFloat(String(v == null ? '' : v).replace(/,/g, '').replace(/[^\d.]/g, '')); return isFinite(n) && n > 0 ? Math.round(n * 10) / 10 : 0; }
@@ -1019,6 +1094,7 @@ function normalise(raw) {
   l.value = parseMoney(l.value);
   l.targetFlux = l.targetFlux == null ? '' : String(l.targetFlux);
   l.techLead = l.techLead == null ? '' : String(l.techLead);
+  l.projectSize = ['Small', 'Medium', 'Large'].includes(l.projectSize) ? l.projectSize : '';
   l.logo = typeof l.logo === 'string' && /^data:image\/(png|jpeg|webp|gif);base64,/.test(l.logo) ? l.logo : '';
   l.tags = Array.isArray(l.tags) ? l.tags.map(String).filter(Boolean) : splitTags(l.tags);
   l.rank = +l.rank || 0;
@@ -1115,7 +1191,7 @@ async function createFirebaseStore(cfg, onSignedIn, onSignedOut, onError) {
 
 
 /* ---------- state ---------- */
-const VIEWS = { home: 'Home', leads: 'Leads', contacts: 'Contacts', pipeline: 'Pipeline', followups: 'Follow-ups', analytics: 'Analytics', news: 'News brief' };
+const VIEWS = { home: 'Home', leads: 'Leads', contacts: 'Contacts', pipeline: 'Pipeline', followups: 'Follow-ups', analytics: 'Analytics', revenue: 'Revenue', news: 'News brief' };
 const state = { briefings: [], nsel: null, ntab: 'script', type: '', ayear: '', ascope: 'open', contacts: [], interest: null, cowner: '', ccheck: '', csort: { k: 'name', dir: 1 }, cediting: null, cisNew: false, leads: [], view: 'home', stage: null, group: '', owner: '', q: '', sort: { k: 'opp', dir: 1 }, editing: null, isNew: false };
 let store = null;
 let lastFocus = null;
@@ -1669,7 +1745,7 @@ function render() {
   $('#btn-new .newlbl').textContent = v === 'contacts' ? 'New contact' : 'New lead';
   const longDate = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
   $('#page-sub').textContent = { home: longDate, leads: 'Every opportunity in the pipeline', pipeline: 'Drag cards up and down, or across to another stage',
-    followups: 'Overdue, today and the rest of the week', analytics: 'How the pipeline is moving', contacts: 'People you know at each organisation', news: 'Daily industry briefing from the research agent' }[v];
+    followups: 'Overdue, today and the rest of the week', analytics: 'How the pipeline is moving', revenue: 'Expected revenue by month, spread from each close date', contacts: 'People you know at each organisation', news: 'Daily industry briefing from the research agent' }[v];
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   renderBadges();
   const listView = v === 'leads' || v === 'pipeline' || v === 'followups';
@@ -1681,6 +1757,7 @@ function render() {
   const host = $('#view');
   if (v === 'home') renderHome(host);
   else if (v === 'analytics') renderAnalytics(host);
+  else if (v === 'revenue') renderRevenue(host);
   else if (v === 'news') renderNews(host);
   else if (v === 'contacts') renderContacts(host);
   else if (!state.leads.length) host.innerHTML = emptyHtml();
@@ -1890,6 +1967,270 @@ function barsHtml(rows) {
       <span class="bv">${r.value}</span></div>`).join('') + `</div>`;
 }
 
+/* ---------- revenue forecast (monthly phasing) ---------- */
+// Each deal's value is spread over N months from its close month and stacked by stage.
+// Settings are kept in this browser only.
+const RV_SIZES = ['Small', 'Medium', 'Large'];
+const RV_SPREAD_DEFAULT = { 'Irradiation': 3, 'Device sale': 6, 'Research – Small': 3, 'Research – Medium': 6, 'Research – Large': 12, 'Other / not set': 3 };
+const RV_ORDER = ['won', 'negotiation', 'proposal', 'requirements', 'initial'];   // bottom to top
+const RV_SHORT = { won: 'Won', negotiation: 'Negotiation', proposal: 'Proposal', requirements: 'Req. capture', initial: 'Initial lead' };
+const RV_MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const RV = (() => {
+  const N = new Date(), nowKey = N.getFullYear() * 12 + N.getMonth();
+  let saved = {}; try { saved = JSON.parse(localStorage.getItem('astral-revenue-settings') || '{}') || {}; } catch {}
+  const s = {
+    weighted: true, startShift: saved.startShift || 0, sector: '', type: '', owner: '', sel: null,
+    from: saved.from ?? N.getFullYear() * 12, to: saved.to ?? N.getFullYear() * 12 + 23,
+    fy: saved.fy ?? 0, cum: saved.cum || 'year', spread: Object.assign({ ...RV_SPREAD_DEFAULT }, saved.spread || {})
+  };
+  return { s, nowKey, cur: null };
+})();
+function rvSave() { const s = RV.s; try { localStorage.setItem('astral-revenue-settings', JSON.stringify({ from: s.from, to: s.to, fy: s.fy, cum: s.cum, spread: s.spread, startShift: s.startShift })); } catch {} }
+const rvKey = (k, long) => (long ? new Date(Math.floor(k / 12), k % 12, 1).toLocaleDateString('en-GB', { month: 'long' }) + ' ' + Math.floor(k / 12) : RV_MON[k % 12] + ' ' + String(Math.floor(k / 12)).slice(2));
+const rvShort = n => { const a = Math.abs(n); if (a >= 1e6) return '£' + (n / 1e6).toFixed(a >= 1e7 ? 1 : 2).replace(/\.?0+$/, '') + 'M'; if (a >= 1e3) return '£' + Math.round(n / 1e3) + 'k'; return '£' + Math.round(n); };
+const rvSize = l => RV_SIZES.includes(l.projectSize) ? l.projectSize : 'Medium';
+const rvSpreadKey = l => l.type === 'Irradiation' || l.type === 'Device sale' ? l.type : l.type === 'Research/Project' ? 'Research – ' + rvSize(l) : 'Other / not set';
+const rvTypeLabel = l => l.type === 'Research/Project' ? 'Research (' + rvSize(l).toLowerCase() + ')' : (l.type || 'Type not set');
+const rvFyStart = k => k - ((k % 12 - RV.s.fy + 12) % 12);
+const rvFyName = k => { const y = Math.floor(rvFyStart(k) / 12); return RV.s.fy === 0 ? String(y) : 'FY' + String(y).slice(2) + '/' + String(y + 1).slice(2); };
+const rvColor = id => getComputedStyle(document.documentElement).getPropertyValue('--rv-' + id).trim();
+function rvNice(raw) { const p = Math.pow(10, Math.floor(Math.log10(raw || 1))), f = raw / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; }
+
+function rvPhase(leads, opt) {
+  const rows = [], skipped = { nodate: [], novalue: [] }, moved = [];
+  for (const l of leads) {
+    if (!RV_ORDER.includes(l.stage) || l.type === 'Internal') continue;
+    if (!l.value) { skipped.novalue.push(l); continue; }
+    if (!/^\d{4}-\d{2}/.test(l.closeDate || '')) { skipped.nodate.push(l); continue; }
+    let k = (+l.closeDate.slice(0, 4)) * 12 + (+l.closeDate.slice(5, 7) - 1) + opt.startShift;
+    if (l.stage !== 'won' && k < RV.nowKey) { moved.push(l); k = RV.nowKey; }
+    const n = Math.max(1, Math.round(opt.spread[rvSpreadKey(l)] || 1)), w = opt.weighted ? stageOf(l.stage).prob / 100 : 1;
+    for (let i = 0; i < n; i++) rows.push({ k: k + i, stage: l.stage, amt: l.value * w / n, lead: l, i: i + 1, n });
+  }
+  return { rows, skipped, moved };
+}
+
+function renderRevenue(host) {
+  if (!state.leads.length) { host.innerHTML = emptyHtml(); return; }
+  const s = RV.s;
+  const leads = state.leads.filter(l => (!s.sector || (l.sector || 'Not set') === s.sector) && (!s.type || rvTypeLabel(l).startsWith(s.type)) && (!s.owner || (l.owner || 'Not set') === s.owner));
+  const o = { startShift: s.startShift, spread: s.spread };
+  const P = rvPhase(leads, { ...o, weighted: s.weighted }), PU = rvPhase(leads, { ...o, weighted: false }), PW = rvPhase(leads, { ...o, weighted: true });
+  const months = []; for (let k = s.from; k <= s.to; k++) months.push(k);
+  const by = new Map(months.map(k => [k, Object.fromEntries(RV_ORDER.map(id => [id, 0]))]));
+  let after = 0, before = 0;
+  for (const r of P.rows) { if (r.k > s.to) after += r.amt; else if (r.k < s.from) before += r.amt; else by.get(r.k)[r.stage] += r.amt; }
+  const tot = k => RV_ORDER.reduce((a, id) => a + by.get(k)[id], 0);
+  const cum = new Map(), sec = new Map(); let run = 0, runS = 0;
+  for (const k of months) { if (s.cum === 'year' && k !== s.from && rvFyStart(k) === k) { run = 0; runS = 0; } run += tot(k); runS += by.get(k).won; cum.set(k, run); sec.set(k, runS); }
+  const inRange = rows => rows.filter(r => r.k >= s.from && r.k <= s.to).reduce((a, r) => a + r.amt, 0);
+  RV.cur = { P, months, by, tot, cum, sec };
+  const peak = months.reduce((b, k) => tot(k) > tot(b) ? k : b, months[0]);
+  const secured = PU.rows.filter(r => r.k >= s.from && r.k <= s.to && r.stage === 'won').reduce((a, r) => a + r.amt, 0);
+  const uniq = f => [...new Set(state.leads.map(f))].sort();
+  const opt = (vals, cur, all) => `<option value="">${all}</option>` + vals.map(v => `<option${v === cur ? ' selected' : ''}>${esc(v)}</option>`).join('');
+  const years = []; for (let y = 2023; y <= new Date().getFullYear() + 5; y++) years.push(y);
+  const my = (pre, k) => `<select data-rv="${pre}-m" aria-label="${pre === 'from' ? 'From' : 'To'} month">${RV_MON.map((m, i) => `<option value="${i}"${k % 12 === i ? ' selected' : ''}>${m}</option>`).join('')}</select><select data-rv="${pre}-y" aria-label="${pre === 'from' ? 'From' : 'To'} year">${years.map(y => `<option${Math.floor(k / 12) === y ? ' selected' : ''}>${y}</option>`).join('')}</select>`;
+  const spIn = (t, label) => `<label>${esc(label)} <input type="number" min="1" max="60" step="1" value="${s.spread[t]}" data-rvsp="${esc(t)}" aria-label="${esc(t)} months"></label>`;
+  const notes = [];
+  if (P.moved.length) notes.push(`<span class="rv-note warn">${plural(P.moved.length, 'open deal')} past the close date, moved to ${rvKey(RV.nowKey, true)}</span>`);
+  if (before > 0.5) notes.push(`<span class="rv-note">${rvShort(before)} falls before ${rvKey(s.from, true)}</span>`);
+  if (after > 0.5) notes.push(`<span class="rv-note">${rvShort(after)} falls after ${rvKey(s.to, true)}</span>`);
+  if (P.skipped.nodate.length) notes.push(`<span class="rv-note warn">Not shown, no close date: ${P.skipped.nodate.map(l => esc(oppTitle(l))).join(', ')}</span>`);
+  if (P.skipped.novalue.length) notes.push(`<span class="rv-note warn">Not shown, no value: ${P.skipped.novalue.map(l => esc(oppTitle(l))).join(', ')}</span>`);
+  const legend = RV_ORDER.map(id => `<span><i style="background:var(--rv-${id})"></i>${esc(stageOf(id).label)}</span>`).join('');
+  const research = state.leads.filter(l => l.type === 'Research/Project' && !isClosed(l) || (l.type === 'Research/Project' && closedKind(l) === 'won'));
+
+  host.innerHTML = `<div class="rv">
+    <div class="tiles rv-tiles">
+      <div class="tile"><div class="lbl">Weighted in range</div><div class="num">${moneyC(inRange(PW.rows))}</div><div class="sub">${rvKey(s.from)} to ${rvKey(s.to)}</div></div>
+      <div class="tile"><div class="lbl">Unweighted in range</div><div class="num">${moneyC(inRange(PU.rows))}</div><div class="sub">Full value of every deal</div></div>
+      <div class="tile"><div class="lbl">Secured in range</div><div class="num">${moneyC(secured)}</div><div class="sub">Closed (won) deals</div></div>
+      <div class="tile"><div class="lbl">Peak month</div><div class="num">${moneyC(tot(peak))}</div><div class="sub">${rvKey(peak, true)}, ${s.weighted ? 'weighted' : 'unweighted'}</div></div>
+    </div>
+    <section class="panel rv-ctl">
+      <div class="rv-row">
+        <div class="rv-f">View<div class="rv-seg" role="group" aria-label="Weighting"><button type="button" data-rv="w" aria-pressed="${s.weighted}">Weighted</button><button type="button" data-rv="u" aria-pressed="${!s.weighted}">Unweighted</button></div></div>
+        <div class="rv-f">Dates<div class="rv-pair">${my('from', s.from)}<span>to</span>${my('to', s.to)}</div></div>
+        <div class="rv-f">Quick dates<div class="rv-chips">${['This year', 'Next year', 'Next 12 months', 'Next 18 months', 'Last 12 months', 'This year and next'].map((n, i) => `<button type="button" data-rvp="${i}">${n}</button>`).join('')}</div></div>
+      </div>
+      <div class="rv-row">
+        <label class="rv-f">Year starts in<select data-rv="fy">${['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((m, i) => `<option value="${i}"${s.fy === i ? ' selected' : ''}>${m}</option>`).join('')}</select></label>
+        <label class="rv-f">Running total<select data-rv="cum"><option value="year"${s.cum === 'year' ? ' selected' : ''}>Starts again each year</option><option value="range"${s.cum === 'range' ? ' selected' : ''}>From the start date</option></select></label>
+        <label class="rv-f">Spread starts<select data-rv="shift"><option value="0"${!s.startShift ? ' selected' : ''}>In the close month</option><option value="1"${s.startShift ? ' selected' : ''}>The month after close</option></select></label>
+        <label class="rv-f">Sector<select data-rv="sector">${opt(uniq(l => l.sector || 'Not set'), s.sector, 'All sectors')}</select></label>
+        <label class="rv-f">Type<select data-rv="type">${opt(['Irradiation', 'Device sale', 'Research (small)', 'Research (medium)', 'Research (large)', 'Type not set'], s.type, 'All types')}</select></label>
+        <label class="rv-f">Owner<select data-rv="owner">${opt(uniq(l => l.owner || 'Not set'), s.owner, 'All owners')}</select></label>
+      </div>
+      <div class="rv-spread">
+        <span class="rv-t">Spread over (months)</span>
+        <div class="rv-row">${spIn('Irradiation', 'Irradiation')}${spIn('Device sale', 'Device sale')}${spIn('Other / not set', 'Other / not set')}<button type="button" class="btn" data-rv="reset">Reset spreads</button></div>
+        <div class="rv-row"><span class="rv-grp">Research/Project</span>${RV_SIZES.map(z => spIn('Research – ' + z, z)).join('')}<span class="rv-hint">Set each project's size on the lead</span></div>
+      </div>
+    </section>
+    <section class="panel"><div class="ph"><h2>${s.weighted ? 'Weighted' : 'Unweighted'} revenue by month</h2><div class="rv-legend">${legend}</div></div>
+      <div class="pb"><div class="rv-chart" id="rv-chart"></div>${notes.length ? `<div class="rv-notes">${notes.join('')}</div>` : ''}</div></section>
+    <section class="panel"><div class="ph"><h2>${s.weighted ? 'Weighted' : 'Unweighted'} running total${s.cum === 'year' ? ', starting again each year' : ' from ' + rvKey(s.from, true)}</h2><div class="rv-legend"><span><i class="ln"></i>Total so far</span><span><i style="background:var(--rv-won)"></i>Of which secured</span></div></div>
+      <div class="pb"><div class="rv-chart" id="rv-cum"></div></div></section>
+    <section class="panel"><div class="ph"><h2 id="rv-dt"></h2><span class="note" id="rv-ds"></span></div><div class="rv-deals" id="rv-deals"></div></section>
+    <section class="panel"><div class="ph"><h2>Month by month</h2><div class="rv-acts"><button type="button" class="btn" data-rv="copy">Copy for Excel</button><button type="button" class="btn" data-rv="csv">${icon('export')}Export CSV</button></div></div>
+      <div class="tablewrap rv-tw"><table class="atable rv-table" id="rv-tbl"></table></div></section>
+    ${research.length ? `<section class="panel"><div class="ph"><h2>Research project sizes</h2><span class="note">Open and won research projects</span></div><div class="rv-deals">${research.map(l => `<div class="rv-deal"><span class="rv-dot" style="background:var(--rv-${l.stage})"></span><div class="rv-dm"><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button><div class="rv-dd">${esc(stageOf(l.stage).label)} · ${money(l.value)}</div></div><div class="rv-da">${RV_SIZES.includes(l.projectSize) ? esc(l.projectSize) : '<span class="rv-unset">Not set (medium)</span>'}</div></div>`).join('')}</div></section>` : ''}
+    <p class="rv-how">How it works: each deal's value is split evenly across its spread months, starting from its target close date. The weighted view multiplies by the stage probability. Open deals past their close date are moved to this month. Lost and internal deals are left out. Spread settings are saved in this browser.</p>
+  </div>`;
+  rvDraw(); rvTable(); rvDeals();
+}
+
+function rvDraw() {
+  const box = document.getElementById('rv-chart'); if (!box || !RV.cur) return;
+  const { months, by, tot } = RV.cur, W0 = box.clientWidth || 900;
+  const bw = Math.max(18, Math.min(56, (W0 - 70) / months.length * .66)), gap = bw * .5;
+  const L = 58, R = 12, T = 24, H = 300, B = 42, W = Math.max(W0, L + R + months.length * (bw + gap));
+  const max = Math.max(1, ...months.map(tot)), step = rvNice(max / 4), top = Math.ceil(max / step) * step, y = v => T + H - v / top * H;
+  const every = months.length > 36 ? 4 : months.length > 24 ? 3 : months.length > 14 ? 2 : 1;
+  let s = `<svg width="${W}" height="${T + H + B}" viewBox="0 0 ${W} ${T + H + B}" role="img" aria-label="Stacked bar chart of revenue by month">`;
+  for (let v = 0; v <= top + 1e-6; v += step) s += `<line class="g" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${rvShort(v)}</text>`;
+  months.forEach((k, i) => {
+    const x = L + gap / 2 + i * (bw + gap); let acc = 0;
+    s += `<g class="rv-col${RV.s.sel === k ? ' sel' : ''}" data-k="${k}"><rect class="hit" x="${x - gap / 2}" y="${T}" width="${bw + gap}" height="${H}" fill="transparent"/>`;
+    for (const id of RV_ORDER) { const v = by.get(k)[id]; if (v <= 0) continue; const y1 = y(acc + v); s += `<rect class="sg" x="${x}" y="${y1}" width="${bw}" height="${Math.max(1, y(acc) - y1)}" rx="2" fill="${rvColor(id)}"/>`; acc += v; }
+    if (acc > 0 && bw >= 22) s += `<text class="tt" x="${x + bw / 2}" y="${y(acc) - 6}" text-anchor="middle">${rvShort(acc)}</text>`;
+    if (i % every === 0) s += `<text x="${x + bw / 2}" y="${T + H + 16}" text-anchor="middle">${RV_MON[k % 12]}</text>`;
+    if (k % 12 === 0 || i === 0) s += `<text x="${x + bw / 2}" y="${T + H + 31}" text-anchor="middle" class="yr">${Math.floor(k / 12)}</text>`;
+    if (k === RV.nowKey) s += `<line class="now" x1="${x - gap / 4}" x2="${x - gap / 4}" y1="${T - 8}" y2="${T + H}"/><text class="nowt" x="${x - gap / 4 + 4}" y="${T - 10}">This month</text>`;
+    s += '</g>';
+  });
+  box.innerHTML = s + `<line class="ax" x1="${L}" x2="${W - R}" y1="${T + H}" y2="${T + H}"/></svg>`;
+  rvDrawCum();
+}
+function rvDrawCum() {
+  const box = document.getElementById('rv-cum'); if (!box || !RV.cur) return;
+  const { months, cum, sec } = RV.cur, W0 = box.clientWidth || 900;
+  const bw = Math.max(18, Math.min(56, (W0 - 70) / months.length * .66)), gap = bw * .5;
+  const L = 58, R = 12, T = 24, H = 220, B = 42, W = Math.max(W0, L + R + months.length * (bw + gap));
+  const max = Math.max(1, ...months.map(k => cum.get(k))), step = rvNice(max / 4), top = Math.ceil(max / step) * step;
+  const y = v => T + H - v / top * H, xc = i => L + gap / 2 + i * (bw + gap) + bw / 2;
+  const every = months.length > 36 ? 4 : months.length > 24 ? 3 : months.length > 14 ? 2 : 1;
+  const cumC = rvColor('cum'), wonC = rvColor('won'), card = getComputedStyle(document.documentElement).getPropertyValue('--card').trim();
+  let s = `<svg width="${W}" height="${T + H + B}" viewBox="0 0 ${W} ${T + H + B}" role="img" aria-label="Running total of revenue by month">`;
+  for (let v = 0; v <= top + 1e-6; v += step) s += `<line class="g" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${rvShort(v)}</text>`;
+  const segs = []; let g = [];
+  months.forEach((k, i) => { if (i > 0 && RV.s.cum === 'year' && rvFyStart(k) === k) { segs.push(g); g = []; } g.push(i); }); segs.push(g);
+  for (const g of segs) {
+    const line = m => g.map((i, j) => (j ? 'L' : 'M') + xc(i).toFixed(1) + ' ' + y(m.get(months[i])).toFixed(1)).join(' ');
+    const area = (m, c, op) => `<path d="${line(m)} L${xc(g[g.length - 1]).toFixed(1)} ${y(0)} L${xc(g[0]).toFixed(1)} ${y(0)} Z" fill="${c}" fill-opacity="${op}"/>`;
+    s += area(cum, cumC, .14) + area(sec, wonC, .55) + `<path d="${line(cum)}" fill="none" stroke="${cumC}" stroke-width="2.25" stroke-linejoin="round"/>`;
+    g.forEach(i => s += `<circle cx="${xc(i)}" cy="${y(cum.get(months[i]))}" r="3" fill="${card}" stroke="${cumC}" stroke-width="2"/>`);
+    const li = g[g.length - 1], v = cum.get(months[li]);
+    if (v > 0) s += `<text x="${xc(li)}" y="${y(v) - 9}" text-anchor="${li === months.length - 1 ? 'end' : 'middle'}" class="ct" fill="${cumC}">${rvShort(v)}</text>`;
+  }
+  months.forEach((k, i) => {
+    if (i % every === 0) s += `<text x="${xc(i)}" y="${T + H + 16}" text-anchor="middle">${RV_MON[k % 12]}</text>`;
+    if (k % 12 === 0 || i === 0) s += `<text x="${xc(i)}" y="${T + H + 31}" text-anchor="middle" class="yr">${Math.floor(k / 12)}</text>`;
+    if (k === RV.nowKey) s += `<line class="now" x1="${xc(i) - (bw + gap) / 2}" x2="${xc(i) - (bw + gap) / 2}" y1="${T - 6}" y2="${T + H}"/>`;
+  });
+  s += `<line class="ax" x1="${L}" x2="${W - R}" y1="${T + H}" y2="${T + H}"/>`;
+  months.forEach((k, i) => s += `<rect class="rv-ch" data-k="${k}" x="${xc(i) - (bw + gap) / 2}" y="${T}" width="${bw + gap}" height="${H}" fill="transparent"/>`);
+  box.innerHTML = s + '</svg>';
+}
+function rvTable() {
+  const el = document.getElementById('rv-tbl'); if (!el) return;
+  const { months, by, tot, cum } = RV.cur;
+  let body = '', q = null, qs = null, qk = null;
+  const qName = k => `Q${Math.floor(((k % 12 - RV.s.fy + 12) % 12) / 3) + 1} ${rvFyName(k)}`;
+  const flush = () => { if (qs) body += `<tr class="rv-q"><td>${qName(qk)} total</td>${RV_ORDER.map(id => `<td class="num">${money(qs[id])}</td>`).join('')}<td class="num">${money(RV_ORDER.reduce((a, id) => a + qs[id], 0))}</td><td></td></tr>`; };
+  for (const k of months) {
+    const qq = Math.floor((k - RV.s.fy) / 3); if (qq !== q) { flush(); q = qq; qk = k; qs = Object.fromEntries(RV_ORDER.map(id => [id, 0])); }
+    const v = by.get(k); RV_ORDER.forEach(id => qs[id] += v[id]);
+    body += `<tr class="rv-m${RV.s.sel === k ? ' sel' : ''}" data-k="${k}"><td>${rvKey(k, true)}</td>${RV_ORDER.map(id => `<td class="num${v[id] ? '' : ' z'}">${v[id] ? money(v[id]) : '–'}</td>`).join('')}<td class="num"><b>${money(tot(k))}</b></td><td class="num rv-cumc">${money(cum.get(k))}</td></tr>`;
+  }
+  flush();
+  el.innerHTML = `<thead><tr><th>Month</th>${RV_ORDER.map(id => `<th class="num">${RV_SHORT[id]}</th>`).join('')}<th class="num">Total</th><th class="num rv-cumc">Running total</th></tr></thead><tbody>${body}</tbody>`;
+}
+function rvDeals() {
+  const el = document.getElementById('rv-deals'); if (!el) return;
+  const k = RV.s.sel ?? Math.min(Math.max(RV.nowKey, RV.s.from), RV.s.to);
+  const rows = RV.cur.P.rows.filter(r => r.k === k).sort((a, b) => RV_ORDER.indexOf(a.stage) - RV_ORDER.indexOf(b.stage) || b.amt - a.amt);
+  document.getElementById('rv-dt').textContent = 'What makes up ' + rvKey(k, true);
+  document.getElementById('rv-ds').textContent = RV.s.sel == null ? 'Click a bar or a table row to change month' : plural(rows.length, 'deal');
+  el.innerHTML = rows.length ? rows.map(r => `<div class="rv-deal"><span class="rv-dot" style="background:var(--rv-${r.stage})"></span><div class="rv-dm"><button type="button" class="co" data-open="${esc(r.lead.id)}">${esc(oppTitle(r.lead))}</button><div class="rv-dd">${esc(stageOf(r.stage).label)} · ${esc(rvTypeLabel(r.lead))} · month ${r.i} of ${r.n}</div></div><div class="rv-da">${money(r.amt)}<small>of ${moneyC(r.lead.value)}</small></div></div>`).join('')
+    : '<div class="pempty" style="padding:18px 20px">No revenue phased into this month.</div>';
+}
+function rvSelect(k) { RV.s.sel = RV.s.sel === k ? null : k; rvDraw(); rvTable(); rvDeals(); }
+function rvTip(e, html) {
+  let t = document.getElementById('rv-tip'); if (!t) { t = document.createElement('div'); t.id = 'rv-tip'; t.className = 'rv-tip'; document.body.appendChild(t); }
+  if (!html) { t.hidden = true; return; }
+  t.innerHTML = html; t.hidden = false;
+  const r = t.getBoundingClientRect(); let x = e.clientX + 14, y = e.clientY + 14;
+  if (x + r.width > innerWidth - 8) x = e.clientX - r.width - 14; if (y + r.height > innerHeight - 8) y = e.clientY - r.height - 14;
+  t.style.left = x + 'px'; t.style.top = y + 'px';
+}
+function rvRows() {
+  return [['Month', ...RV_ORDER.map(id => stageOf(id).label), 'Total', 'Running total']].concat(RV.cur.months.map(k => [rvKey(k, true), ...RV_ORDER.map(id => Math.round(RV.cur.by.get(k)[id])), Math.round(RV.cur.tot(k)), Math.round(RV.cur.cum.get(k))]));
+}
+window.__rv = { RV, rvPhase, defaults: RV_SPREAD_DEFAULT, leads: () => state.leads };   // for testing
+function wireRevenue() {
+  const view = $('#view');
+  const rerender = () => { rvSave(); render(); };
+  view.addEventListener('change', e => {
+    const t = e.target; if (!t.closest('.rv')) return; const s = RV.s;
+    if (t.dataset.rvsp) return;
+    const k = t.dataset.rv;
+    if (k === 'from-m' || k === 'from-y' || k === 'to-m' || k === 'to-y') {
+      const v = n => +view.querySelector(`[data-rv="${n}"]`).value;
+      let f = v('from-y') * 12 + v('from-m'), to = v('to-y') * 12 + v('to-m'); const fromSide = k.startsWith('from');
+      if (to < f) { if (fromSide) to = f; else f = to; }
+      if (to - f > 59) { if (fromSide) to = f + 59; else f = to - 59; }
+      s.from = f; s.to = to; s.sel = null;
+    } else if (k === 'fy') s.fy = +t.value; else if (k === 'cum') s.cum = t.value; else if (k === 'shift') s.startShift = +t.value;
+    else if (k === 'sector' || k === 'type' || k === 'owner') { s[k] = t.value; s.sel = null; }
+    else return;
+    rerender();
+  });
+  let spT;
+  view.addEventListener('input', e => {
+    const t = e.target; if (!t.dataset || !t.dataset.rvsp) return;
+    RV.s.spread[t.dataset.rvsp] = Math.max(1, Math.min(60, parseInt(t.value, 10) || 1));
+    clearTimeout(spT); spT = setTimeout(() => { rvSave(); const f = document.activeElement && document.activeElement.dataset.rvsp; render(); if (f) { const n = view.querySelector(`[data-rvsp="${CSS.escape(f)}"]`); if (n) { n.focus(); const L = n.value.length; try { n.setSelectionRange(L, L); } catch {} } } }, 350);
+  });
+  view.addEventListener('click', async e => {
+    if (!e.target.closest('.rv')) return;
+    const s = RV.s, b = e.target.closest('[data-rv],[data-rvp]');
+    const col = e.target.closest('.rv-col'), row = e.target.closest('tr.rv-m');
+    if (col) { rvSelect(+col.dataset.k); return; }
+    if (row) { rvSelect(+row.dataset.k); return; }
+    if (!b) return;
+    if (b.dataset.rvp != null) {
+      const fs = rvFyStart(RV.nowKey), n = RV.nowKey;
+      const p = [[fs, fs + 11], [fs + 12, fs + 23], [n, n + 11], [n, n + 17], [n - 11, n], [fs, fs + 23]][+b.dataset.rvp];
+      s.from = p[0]; s.to = p[1]; s.sel = null; rerender(); return;
+    }
+    const k = b.dataset.rv;
+    if (k === 'w' || k === 'u') { s.weighted = k === 'w'; render(); }
+    else if (k === 'reset') { s.spread = { ...RV_SPREAD_DEFAULT }; rerender(); }
+    else if (k === 'csv') download(`astral-revenue-forecast-${s.weighted ? 'weighted' : 'unweighted'}-${today()}.csv`, rvRows().map(r => r.map(csvCell).join(',')).join('\r\n'));
+    else if (k === 'copy') {
+      const txt = rvRows().map(r => r.join('\t')).join('\n');
+      try { await navigator.clipboard.writeText(txt); toast('Copied. Paste it into Excel'); }
+      catch { toast('Copy did not work in this browser. Use Export CSV instead'); }
+    }
+  });
+  view.addEventListener('mousemove', e => {
+    if (!RV.cur) return;
+    const col = e.target.closest('.rv-col'), ch = e.target.closest('.rv-ch');
+    if (col) {
+      const k = +col.dataset.k, v = RV.cur.by.get(k), n = RV.cur.P.rows.filter(r => r.k === k).length;
+      rvTip(e, `<b>${rvKey(k, true)}: ${money(RV.cur.tot(k))}</b>` + RV_ORDER.filter(id => v[id] > 0).map(id => `<div class="r"><span><i style="background:var(--rv-${id})"></i>${esc(stageOf(id).label)}</span><span>${money(v[id])}</span></div>`).join('') + `<div class="r" style="margin-top:4px"><span>Running total</span><span>${money(RV.cur.cum.get(k))}</span></div><div class="m">${plural(n, 'deal')} this month. Click to list them</div>`);
+    } else if (ch) {
+      const k = +ch.dataset.k;
+      rvTip(e, `<b>${rvKey(k, true)}</b><div class="r"><span>Total so far</span><span>${money(RV.cur.cum.get(k))}</span></div><div class="r"><span>Of which secured</span><span>${money(RV.cur.sec.get(k))}</span></div><div class="r"><span>This month</span><span>${money(RV.cur.tot(k))}</span></div>`);
+    } else rvTip(e, '');
+  });
+  view.addEventListener('mouseleave', e => rvTip(e, ''));
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (state.view === 'revenue') rvDraw(); }, 120); });
+  new MutationObserver(() => { if (state.view === 'revenue') rvDraw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+}
+
 /* ---------- analytics ---------- */
 function aggregate(list, keyFn, keys) {
   const m = new Map((keys || []).map(k => [k, { key: k, n: 0, v: 0, w: 0, h: 0, wh: 0 }]));
@@ -2089,7 +2430,7 @@ function openDrawer(id) {
   ownerOptions(l.owner, l.nextOwner);
   $('#dr-title').textContent = state.isNew ? 'New lead' : oppTitle(l);
   $('#f-opp').value = l.opportunity; $('#f-oppid').value = l.oppId; $('#f-company').value = l.company;
-  $('#f-type').value = l.type; $('#f-sector').value = l.sector; $('#f-value').value = l.value ? String(l.value) : '';
+  $('#f-type').value = l.type; $('#f-size').value = l.projectSize || ''; $('#f-size-wrap').hidden = l.type !== 'Research/Project'; $('#f-sector').value = l.sector; $('#f-value').value = l.value ? String(l.value) : '';
   $('#f-stage').value = l.stage; $('#f-start').value = l.startDate; $('#f-close').value = l.closeDate;
   $('#f-tech').innerHTML = '<option value="">Not set</option>' + [...new Set([...(CFG.techLeads || []), l.techLead].filter(Boolean))].map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join(''); $('#f-tech').value = l.techLead;
   $('#f-priority').value = l.priority; $('#f-fit').value = String(l.fit); $('#f-owner').value = l.owner; $('#f-nda').value = l.nda ? 'yes' : 'no';
@@ -2156,7 +2497,7 @@ async function saveForm(e) {
     startDate: $('#f-start').value, closeDate: $('#f-close').value, priority: $('#f-priority').value, nda: $('#f-nda').value === 'yes',
     source: $('#f-source').value.trim(), status: $('#f-status').value.trim(), contact: $('#f-contact').value.trim(), role: $('#f-role').value.trim(), email: $('#f-email').value.trim(),
     website: $('#f-website').value.trim(), stage: $('#f-stage').value, fit: parseInt($('#f-fit').value, 10) || 3,
-    owner: $('#f-owner').value, techLead: $('#f-tech').value, nextAction: $('#f-next').value.trim(), nextDate: $('#f-date').value, nextOwner: $('#f-nextowner').value,
+    owner: $('#f-owner').value, techLead: $('#f-tech').value, projectSize: $('#f-type').value === 'Research/Project' ? $('#f-size').value : (state.editing.projectSize || ''), nextAction: $('#f-next').value.trim(), nextDate: $('#f-date').value, nextOwner: $('#f-nextowner').value,
     notes: $('#f-notes').value.trim(), targetFlux: $('#f-flux').value.trim(), irrHours: parseHours($('#f-hours').value),
     tags: splitTags($('#f-tags').value), team: $('#f-team').value.trim(), goal: $('#f-goal').value.trim(), checklist: $('#f-checklist').value.trim(), checkDone: $('#f-checkdone').value.trim(), pct: $('#f-pct').value.trim(), duration: $('#f-duration').value.trim(), effort: $('#f-effort').value.trim(), effortDone: $('#f-effortdone').value.trim(), effortLeft: $('#f-effortleft').value.trim(), sprint: $('#f-sprint').value.trim(), milestone: $('#f-milestone').value.trim()
   });
@@ -2169,6 +2510,7 @@ async function saveForm(e) {
     if (prev.stage !== l.stage) l.activity.push({ at: now, by: who(), text: 'Moved to ' + stageOf(l.stage).label });
     if (prev.value !== l.value) l.activity.push({ at: now, by: who(), text: `Value changed to ${money(l.value)}` });
     if ((state.logoAtOpen || '') !== (l.logo || '')) l.activity.push({ at: now, by: who(), text: l.logo ? 'Logo uploaded' : 'Uploaded logo removed' });
+    if ((prev.projectSize || '') !== (l.projectSize || '')) l.activity.push({ at: now, by: who(), text: l.projectSize ? `Project size set to ${l.projectSize}` : 'Project size cleared' });
     if ((prev.techLead || '') !== l.techLead) l.activity.push({ at: now, by: who(), text: l.techLead ? `Technical lead set to ${l.techLead}` : 'Technical lead removed' });
     const pn = prev.req ? reqAnswered(normaliseSales(JSON.parse(JSON.stringify(prev)))) : 0, nn = reqAnswered(l);
     if (nn !== pn) l.activity.push({ at: now, by: who(), text: `Requirements updated (${nn} of ${REQ_COUNTED.length} answered)` });
@@ -2252,6 +2594,7 @@ const HMAP = {
   stage: ['stage', 'pipelinestage', 'bucket'],
   owner: ['owner'],
   techLead: ['technicallead', 'techlead', 'technicalcontact'],
+  projectSize: ['projectsize', 'size'],
   nextAction: ['nextaction'],
   nextDate: ['nextactiondate', 'nextdate', 'due', 'duedate'],
   nextOwner: ['nextactionowner', 'actionowner'],
@@ -2301,6 +2644,7 @@ function rowsToLeads(rows) {
     const pr = get(r, 'priority').toLowerCase(); l.priority = CFG.priorities.find(x => x.toLowerCase() === pr) || '';
     l.company = get(r, 'company') || l.opportunity; l.group = get(r, 'group'); l.contact = get(r, 'contact'); l.role = get(r, 'role');
     l.email = get(r, 'email'); l.website = get(r, 'website'); l.source = get(r, 'source') || 'Import';
+    { const z = get(r, 'projectSize').toLowerCase(); l.projectSize = ['Small', 'Medium', 'Large'].find(x => x.toLowerCase() === z) || ''; }
     l.owner = get(r, 'owner'); l.techLead = get(r, 'techLead'); l.nextAction = get(r, 'nextAction'); l.nextDate = parseDateCell(get(r, 'nextDate'));
     l.notes = get(r, 'notes');
     const fit = parseInt(get(r, 'fit'), 10); l.fit = fit >= 1 && fit <= 5 ? fit : 3;
@@ -2346,19 +2690,19 @@ function download(name, text) {
   const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-const CSV_HEAD = ['Opportunity', 'Opportunity ID', 'Company', 'Type', 'Sector', 'Value (£)', 'Start date', 'Target close date', 'Stage', 'Status detail', 'Probability', 'Weighted value (£)', 'Target flux', 'Est. irradiation hrs',
+const CSV_HEAD = ['Opportunity', 'Opportunity ID', 'Company', 'Type', 'Project size', 'Sector', 'Value (£)', 'Start date', 'Target close date', 'Stage', 'Status detail', 'Probability', 'Weighted value (£)', 'Target flux', 'Est. irradiation hrs',
   'Planner task',
   'Priority', 'Fit', 'NDA', 'Source', 'Owner', 'Technical lead', 'Contact name', 'Contact role', 'Email', 'Website', 'Next action', 'Next action date', 'Next action owner', 'Notes'];
 function exportCSV() {
   if (!state.leads.length) { toast('No leads to export yet'); return; }
   const lines = [CSV_HEAD.concat('Last updated').map(csvCell).join(',')];
-  sortLeads(state.leads, 'opp', 1).forEach(l => lines.push([oppTitle(l), l.oppId, l.company, l.type, l.sector, l.value || '', l.startDate, l.closeDate,
+  sortLeads(state.leads, 'opp', 1).forEach(l => lines.push([oppTitle(l), l.oppId, l.company, l.type, l.projectSize, l.sector, l.value || '', l.startDate, l.closeDate,
     stageOf(l.stage).label, l.status, stageOf(l.stage).prob + '%', l.value ? Math.round(weightedOf(l)) : '', l.targetFlux, l.irrHours || '', l.plannerId, l.priority, l.fit, l.nda ? 'Yes' : 'No', l.source, l.owner, l.techLead,
     l.contact, l.role, l.email, l.website, l.nextAction, l.nextDate, l.nextOwner, l.notes, l.updated].map(csvCell).join(',')));
   download(`astral-bd-leads-${today()}.csv`, lines.join('\r\n'));
 }
 function downloadTemplate() {
-  const ex = ['Blanket materials irradiation campaign', '', 'Example Co', 'Irradiation', 'Fusion', '120000', '2026-11-01', '2027-03-31', STAGES[1].label, '', '', '', '1e10 n/cm²/s', '200', '',
+  const ex = ['Blanket materials irradiation campaign', '', 'Example Co', 'Irradiation', '', 'Fusion', '120000', '2026-11-01', '2027-03-31', STAGES[1].label, '', '', '', '1e10 n/cm²/s', '200', '',
     'Important', '4', 'No', 'AI research', '', '', 'Jo Bloggs', 'Head of Materials', 'jo@example.com', 'https://example.com', 'Send intro email', '', '', 'Why they might need an irradiation source'];
   download('astral-bd-import-template.csv', CSV_HEAD.map(csvCell).join(',') + '\r\n' + ex.map(csvCell).join(','));
 }
@@ -2743,6 +3087,7 @@ function bindUI() {
   $('#flt-type').addEventListener('change', e => { state.type = e.target.value; render(); });
   $('#f-value').addEventListener('input', updateWeightedHint);
   $('#f-hours').addEventListener('input', updateWeightedHint);
+  $('#f-type').addEventListener('change', () => { $('#f-size-wrap').hidden = $('#f-type').value !== 'Research/Project'; });
   $('#f-stage').addEventListener('change', updateWeightedHint);
   $('#f-contact').addEventListener('change', pickContactFromInput);
   $('#f-contact').addEventListener('input', () => { if (state.contacts.some(x => contactLabel(x) === $('#f-contact').value)) pickContactFromInput(); });
@@ -2752,6 +3097,7 @@ function bindUI() {
     render();
   });
   $('#view').addEventListener('click', e => { if (e.target.closest('[data-actl="export"]')) exportAnalytics(); });
+  wireRevenue();
   $('#view').addEventListener('click', e => {
     const b = e.target.closest('[data-bscroll]'); if (!b) return;
     const board = $('#view .board'); const col = board && board.querySelector('.col');
