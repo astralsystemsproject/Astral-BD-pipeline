@@ -690,6 +690,53 @@ button.nchip:hover{border-color:currentColor}
 .rv-tip .r i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px}
 .rv-tip .m{color:var(--rv-tip-mute);margin-top:5px}
 @media (max-width:900px){.rv-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* strategic partnerships */
+.ptools{margin-bottom:14px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:16px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:16px 18px;display:flex;flex-direction:column;gap:10px;cursor:pointer;min-width:0;transition:border-color .12s,box-shadow .12s}
+.pcard:hover{border-color:var(--line-strong);box-shadow:var(--shadow-lift)}
+.pc-top{display:flex;gap:12px;align-items:flex-start;min-width:0}
+.pc-h{min-width:0}
+.pc-h .co{font-size:15px;text-align:left}
+.pc-types{display:flex;flex-wrap:wrap;gap:6px}
+.ptag{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap;background:var(--pt-bg);color:var(--pt-ink)}
+.ptag.pt0{--pt-bg:#E6F0FE;--pt-ink:#2558C9}.ptag.pt1{--pt-bg:#E6F4EC;--pt-ink:#1E6B41}.ptag.pt2{--pt-bg:#FDF1E1;--pt-ink:#8A4B00}.ptag.pt3{--pt-bg:#EEF0FD;--pt-ink:#4B4FC4}
+:root[data-theme="dark"] .ptag.pt0{--pt-bg:rgba(59,124,246,.18);--pt-ink:#9CBBF6}:root[data-theme="dark"] .ptag.pt1{--pt-bg:rgba(35,121,74,.26);--pt-ink:#7FD8A5}:root[data-theme="dark"] .ptag.pt2{--pt-bg:rgba(242,179,94,.16);--pt-ink:#F2B35E}:root[data-theme="dark"] .ptag.pt3{--pt-bg:rgba(99,102,241,.22);--pt-ink:#B9BBF8}
+.pc-ov{margin:0;font-size:13px;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pc-st{font-size:12.5px;color:var(--ink);background:var(--fill);border-radius:10px;padding:8px 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pc-l{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin-right:6px}
+.pc-foot{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:4px;flex-wrap:wrap}
+.pc-meta{font-size:12px;color:var(--ink-2)}
+.pc-up{font-size:11.5px;color:var(--ink-3)}
+#pdrawer .fgrid textarea{min-height:90px}
+#pdrawer .ptxt textarea{min-height:120px}
+#pdrawer .hint{font-weight:400}
+#p-meta{font-size:12.5px;color:var(--ink-3);margin:14px 0 0}
+.pc-act{font-size:12.5px;border-left:3px solid var(--blue);padding:2px 0 2px 10px;display:grid;gap:2px}
+.pc-act.late{border-left-color:var(--alert)}
+.pc-act.today{border-left-color:var(--amber)}
+.pc-due{font-size:12px;color:var(--ink-3)}
+.pc-act.late .pc-due{color:var(--alert);font-weight:600}
+.pc-act.today .pc-due{color:var(--amber);font-weight:600}
+.pc-more{font-size:11.5px;color:var(--ink-3)}
+.pa-add{display:grid;gap:8px;padding:12px;background:var(--fill);border-radius:12px;margin-bottom:14px}
+.pa-row{display:flex;gap:8px;flex-wrap:wrap}
+.pa-row input,.pa-row select{flex:1 1 140px;min-width:0}
+.pal{list-style:none;margin:0 0 14px;padding:0;display:grid}
+.pa{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px 2px;border-bottom:1px solid var(--line-2)}
+.pa-chk{display:block;padding-top:2px}
+.pa-chk input{width:18px;height:18px;margin:0;accent-color:var(--blue);box-shadow:none}
+.pa-t{font-weight:600;font-size:13.5px}
+.pa.done .pa-t{text-decoration:line-through;color:var(--ink-3);font-weight:500}
+.pa-s{font-size:12px;color:var(--ink-3)}
+.pa-s.late{color:var(--alert);font-weight:600}
+.pa-s.today{color:var(--amber);font-weight:600}
+.pa-x{border:0;background:none;color:var(--ink-3);font:inherit;font-size:12px;cursor:pointer;padding:2px 4px}
+.pa-x:hover{color:var(--alert)}
+.pa-empty{font-size:13px;margin:4px 0 14px}
+.pa-add input,.pa-add select{border:1px solid var(--line);border-radius:10px;background:var(--input);padding:9px 11px;color:var(--ink);font:inherit;font-size:14px;width:100%;min-height:40px}
+.pa-add input:focus,.pa-add select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,124,246,.18)}
+.pa-row input,.pa-row select{width:auto}
 </style>
 </head>
 <body>
@@ -699,6 +746,7 @@ button.nchip:hover{border-color:currentColor}
   <symbol id="i-pipe" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="11" rx="1.5"/><rect x="17" y="4" width="4" height="7" rx="1.5"/></symbol>
   <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15.5l2 2 4-4"/></symbol>
   <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 21h18M6 17v-5M11 17V7M16 17v-8M21 17v-3"/></symbol>
+  <symbol id="i-partner" viewBox="0 0 24 24"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/></symbol>
   <symbol id="i-revenue" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol>
   <symbol id="i-import" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
   <symbol id="i-export" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M4 21h16"/></symbol>
@@ -737,6 +785,7 @@ button.nchip:hover{border-color:currentColor}
       <a href="#home" data-nav="home" title="Home"><svg class="i"><use href="#i-home"/></svg><span class="t">Home</span></a>
       <a href="#leads" data-nav="leads" title="Leads"><svg class="i"><use href="#i-leads"/></svg><span class="t">Leads</span><span class="nbadge soft" id="nb-leads" hidden></span></a>
       <a href="#contacts" data-nav="contacts" title="Contacts"><svg class="i"><use href="#i-contacts"/></svg><span class="t">Contacts</span><span class="nbadge soft" id="nb-contacts" hidden></span></a>
+      <a href="#partners" data-nav="partners" title="Partnerships"><svg class="i"><use href="#i-partner"/></svg><span class="t">Partnerships</span></a>
       <a href="#pipeline" data-nav="pipeline" title="Pipeline"><svg class="i"><use href="#i-pipe"/></svg><span class="t">Pipeline</span></a>
       <a href="#followups" data-nav="followups" title="Follow-ups"><svg class="i"><use href="#i-cal"/></svg><span class="t">Follow-ups</span><span class="nbadge" id="nb-over" hidden></span></a>
       <a href="#analytics" data-nav="analytics" title="Analytics"><svg class="i"><use href="#i-chart"/></svg><span class="t">Analytics</span></a>
@@ -926,6 +975,47 @@ button.nchip:hover{border-color:currentColor}
       <span class="grow"></span>
       <button type="button" class="btn" id="c-lead">Create lead</button>
       <button type="submit" class="btn primary">Save contact</button>
+    </footer>
+  </form>
+</aside>
+<aside id="pdrawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="p-title-h" aria-hidden="true">
+  <form id="partner-form" novalidate>
+    <header class="dr-head">
+      <div class="dr-title-wrap"><span id="p-logo"></span><h2 id="p-title-h">New partnership</h2></div>
+      <button type="button" class="btn ghost" id="p-close">Close</button>
+    </header>
+    <nav class="dtabs" role="tablist" aria-label="Partnership sections">
+      <button type="button" role="tab" class="dtab" data-ptab="details" aria-selected="true">Details</button>
+      <button type="button" role="tab" class="dtab" data-ptab="actions" aria-selected="false">Actions <span class="dcount" id="pt-count"></span></button>
+    </nav>
+    <div class="dr-body">
+      <div data-ppanel="actions" hidden>
+        <div class="pa-add">
+          <input id="pa-text" placeholder="Next step, e.g. Send draft MoU to their legal team" autocomplete="off" aria-label="Action">
+          <div class="pa-row"><input type="date" id="pa-due" aria-label="Due date"><select id="pa-owner" aria-label="Action owner"></select><button type="button" class="btn primary" id="pa-add">Add action</button></div>
+        </div>
+        <div id="pa-list"></div>
+      </div>
+      <div data-ppanel="details">
+      <div class="fgrid">
+        <label class="span2">Title<input id="p-title" placeholder="e.g. Fusion materials testing partnership" autocomplete="off"></label>
+        <label>Organisation<input id="p-org" list="dl-orgs" autocomplete="off"></label>
+        <label>Relationship owner<select id="p-owner"></select></label>
+        <fieldset class="ichecks span2" id="p-types"></fieldset>
+        <label class="span2">Overview<textarea id="p-overview" rows="3" placeholder="What the partnership is and why it matters to Astral"></textarea></label>
+        <label class="span2">Current status / dependency<textarea id="p-status" rows="3" placeholder="Where it stands now, and anything it is waiting on"></textarea></label>
+        <label class="span2 ptxt">Strategy<textarea id="p-strategy" rows="5"></textarea></label>
+        <label class="span2 ptxt">Partnership model<textarea id="p-model" rows="5"></textarea></label>
+        <label class="span2 ptxt">Plan<textarea id="p-plan" rows="5"></textarea></label>
+      </div>
+      <div id="p-linked"></div>
+      <p id="p-meta"></p>
+      </div>
+    </div>
+    <footer class="dr-foot">
+      <button type="button" class="btn danger" id="p-delete">Delete</button>
+      <span class="grow"></span>
+      <button type="submit" class="btn primary">Save partnership</button>
     </footer>
   </form>
 </aside>
@@ -1179,8 +1269,9 @@ async function createFirebaseStore(cfg, onSignedIn, onSignedOut, onError) {
     mode: 'sync', user: '',
     contacts: makeColl('contacts'),
     briefings: makeColl('briefings'),
+    partners: makeColl('partnerships'),
     async signIn(email, pass) { await authM.signInWithEmailAndPassword(auth, email, pass); },
-    async signOut() { store.unsubscribe(); store.contacts.unsubscribe(); store.briefings.unsubscribe(); await authM.signOut(auth); }
+    async signOut() { store.unsubscribe(); store.contacts.unsubscribe(); store.briefings.unsubscribe(); store.partners.unsubscribe(); await authM.signOut(auth); }
   });
   authM.onAuthStateChanged(auth, user => {
     if (user) { store.user = user.email || 'You'; onSignedIn(store); }
@@ -1191,8 +1282,8 @@ async function createFirebaseStore(cfg, onSignedIn, onSignedOut, onError) {
 
 
 /* ---------- state ---------- */
-const VIEWS = { home: 'Home', leads: 'Leads', contacts: 'Contacts', pipeline: 'Pipeline', followups: 'Follow-ups', analytics: 'Analytics', revenue: 'Revenue', news: 'News brief' };
-const state = { briefings: [], nsel: null, ntab: 'script', type: '', ayear: '', ascope: 'open', contacts: [], interest: null, cowner: '', ccheck: '', csort: { k: 'name', dir: 1 }, cediting: null, cisNew: false, leads: [], view: 'home', stage: null, group: '', owner: '', q: '', sort: { k: 'opp', dir: 1 }, editing: null, isNew: false };
+const VIEWS = { home: 'Home', leads: 'Leads', contacts: 'Contacts', partners: 'Partnerships', pipeline: 'Pipeline', followups: 'Follow-ups', analytics: 'Analytics', revenue: 'Revenue', news: 'News brief' };
+const state = { partners: [], ptype: '', powner: '', pq: '', pediting: null, pisNew: false, briefings: [], nsel: null, ntab: 'script', type: '', ayear: '', ascope: 'open', contacts: [], interest: null, cowner: '', ccheck: '', csort: { k: 'name', dir: 1 }, cediting: null, cisNew: false, leads: [], view: 'home', stage: null, group: '', owner: '', q: '', sort: { k: 'opp', dir: 1 }, editing: null, isNew: false };
 let store = null;
 let lastFocus = null;
 const OPEN_STAGES = STAGES.filter(s => s.id !== 'won' && s.id !== 'lost');
@@ -1742,10 +1833,10 @@ function render() {
   if (v !== 'news') newsStop();
   $('#page-title').textContent = VIEWS[v];
   $('#app').classList.toggle('board-view', v === 'pipeline');
-  $('#btn-new .newlbl').textContent = v === 'contacts' ? 'New contact' : 'New lead';
+  $('#btn-new .newlbl').textContent = v === 'contacts' ? 'New contact' : v === 'partners' ? 'New partnership' : 'New lead';
   const longDate = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
   $('#page-sub').textContent = { home: longDate, leads: 'Every opportunity in the pipeline', pipeline: 'Drag cards up and down, or across to another stage',
-    followups: 'Overdue, today and the rest of the week', analytics: 'How the pipeline is moving', revenue: 'Expected revenue by month, spread from each close date', contacts: 'People you know at each organisation', news: 'Daily industry briefing from the research agent' }[v];
+    followups: 'Overdue, today and the rest of the week', analytics: 'How the pipeline is moving', revenue: 'Expected revenue by month, spread from each close date', contacts: 'People you know at each organisation', partners: 'Strategic relationships: joint R&D, facility partners, strategic customers and consortia', news: 'Daily industry briefing from the research agent' }[v];
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   renderBadges();
   const listView = v === 'leads' || v === 'pipeline' || v === 'followups';
@@ -1760,6 +1851,7 @@ function render() {
   else if (v === 'revenue') renderRevenue(host);
   else if (v === 'news') renderNews(host);
   else if (v === 'contacts') renderContacts(host);
+  else if (v === 'partners') renderPartners(host);
   else if (!state.leads.length) host.innerHTML = emptyHtml();
   else {
     const list = state.leads.filter(l => matches(l));
@@ -2989,6 +3081,210 @@ function bindContacts() {
   });
 }
 
+/* ---------- strategic partnerships ---------- */
+const P_TYPES = ['Joint R&D', 'Facility partnership', 'Strategic customer', 'Consortium'];
+const P_TEXT = [
+  ['overview', 'Overview', 'What the partnership is and why it matters to Astral'],
+  ['status', 'Current status / dependency', 'Where it stands now, and anything it is waiting on'],
+  ['strategy', 'Strategy', ''],
+  ['model', 'Partnership model', ''],
+  ['plan', 'Plan', '']
+];
+function blankPartner() { const now = new Date().toISOString(); return { id: 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), title: '', org: '', types: [], owner: '', overview: '', status: '', strategy: '', model: '', plan: '', actions: [], created: now, updated: now, updatedBy: '' }; }
+function normalisePartner(raw) {
+  const p = Object.assign(blankPartner(), raw || {});
+  ['title', 'org', 'owner', 'overview', 'status', 'strategy', 'model', 'plan', 'updatedBy'].forEach(k => p[k] = p[k] == null ? '' : String(p[k]));
+  p.types = (Array.isArray(p.types) ? p.types : []).filter(t => P_TYPES.includes(t));
+  p.actions = (Array.isArray(p.actions) ? p.actions : []).filter(a => a && a.text).map(a => ({ id: a.id || 'a' + Math.random().toString(36).slice(2, 9), text: String(a.text), due: a.due || '', owner: a.owner || '', done: !!a.done, doneAt: a.doneAt || '', by: a.by || '', at: a.at || '' }));
+  return p;
+}
+const pOwners = cur => [...new Set((CFG.owners || []).concat(CFG.partnerOwners || ['Tom Wallace Smith', 'Tom Haywood'], cur || []).filter(Boolean))];
+const pTypeClass = t => 'pt' + P_TYPES.indexOf(t);
+function pmatches(p, ignoreType) {
+  if (!ignoreType && state.ptype && !p.types.includes(state.ptype)) return false;
+  if (state.powner && (p.owner || 'Unassigned') !== state.powner) return false;
+  if (state.pq) {
+    const hay = [p.title, p.org, p.owner, p.types.join(' '), p.overview, p.status, p.strategy, p.model, p.plan, p.actions.map(a => a.text + ' ' + a.owner).join(' ')].join(' ').toLowerCase();
+    if (!state.pq.toLowerCase().split(/\s+/).filter(Boolean).every(w => hay.includes(w))) return false;
+  }
+  return true;
+}
+function pLinked(p) {
+  const k = orgKey(p.org);
+  return { leads: k ? state.leads.filter(l => orgKey(l.company) === k) : [], contacts: k ? state.contacts.filter(c => orgKey(c.company) === k) : [] };
+}
+function renderPartners(host) {
+  const P = state.partners;
+  if (state.partnersBlocked) { host.innerHTML = `<div class="empty"><h2>Partnerships need one more step</h2><p>Ask an admin to add the partnerships section to the Firestore rules, then reload.</p></div>`; return; }
+  if (!P.length) {
+    host.innerHTML = `<div class="empty"><img class="mark" src="${$('.logo-mark').getAttribute('src')}" alt=""><h2>No strategic partnerships yet</h2>
+      <p>Keep one record for each strategic relationship: joint R&amp;D, facility partners, strategic customers and consortia. Each one links to the leads and contacts at that organisation.</p>
+      <div class="row"><button class="btn primary" type="button" data-pact="new">${icon('plus')}Add a partnership</button>${store && store.mode === 'demo' ? `<button class="btn" type="button" data-pact="examples">Load example partnerships</button>` : ''}</div></div>`;
+    return;
+  }
+  const base = P.filter(p => pmatches(p, true));
+  const chip = (id, label, n) => `<button type="button" class="ichip" data-ptype="${esc(id)}" aria-pressed="${(state.ptype || '') === id}">${esc(label)} <b>${n}</b></button>`;
+  const owners = [...new Set(P.map(p => p.owner || 'Unassigned'))].sort((a, b) => a === 'Unassigned' ? 1 : b === 'Unassigned' ? -1 : a.localeCompare(b));
+  if (state.powner && !owners.includes(state.powner)) state.powner = '';
+  const list = P.filter(p => pmatches(p)).sort((a, b) => (b.updated || '').localeCompare(a.updated || ''));
+  const card = p => {
+    const ln = pLinked(p), lv = ln.leads.filter(l => !isClosed(l)).reduce((a, l) => a + l.value, 0);
+    return `<article class="pcard" data-pid="${esc(p.id)}">
+      <div class="pc-top">${logoHtml({ company: p.org, website: '' }, 36)}<div class="pc-h"><button type="button" class="co" data-popen="${esc(p.id)}">${esc(p.title || p.org || 'Untitled partnership')}</button><div class="sub">${esc(p.org)}</div></div></div>
+      <div class="pc-types">${p.types.map(t => `<span class="ptag ${pTypeClass(t)}">${esc(t)}</span>`).join('') || '<span class="muted" style="font-size:12.5px">No type set</span>'}</div>
+      ${p.overview ? `<p class="pc-ov">${esc(p.overview)}</p>` : ''}
+      ${pNextHtml(p)}
+      ${p.status ? `<div class="pc-st"><span class="pc-l">Status</span>${esc(p.status)}</div>` : ''}
+      <div class="pc-foot">${p.owner ? ownerHtml(p.owner) : '<span class="muted">No owner</span>'}<span class="grow"></span>
+        <span class="pc-meta">${ln.leads.length ? `${plural(ln.leads.length, 'lead')}${lv ? ' · ' + moneyC(lv) + ' open' : ''}` : ''}${ln.leads.length && ln.contacts.length ? ' · ' : ''}${ln.contacts.length ? plural(ln.contacts.length, 'contact') : ''}</span></div>
+      <div class="pc-up">Updated ${esc(rel(p.updated))}${p.updatedBy ? ' by ' + esc(personName(p.updatedBy)) : ''}</div>
+    </article>`;
+  };
+  host.innerHTML = `<div class="toolbar ptools">
+      <div class="fsearch"><svg class="i"><use href="#i-search"/></svg><input type="search" id="pq" placeholder="Search title, organisation or notes" aria-label="Search partnerships" value="${esc(state.pq || '')}"></div>
+      <select id="p-fowner" aria-label="Relationship owner"><option value="">All owners</option>${owners.map(o => `<option${o === state.powner ? ' selected' : ''}>${esc(o)}</option>`).join('')}</select>
+      <button type="button" class="btn" data-pact="export">${icon('export')}Export</button>
+      <span class="count">${plural(list.length, 'partnership')}</span>
+    </div>
+    <div class="ichips">${chip('', 'All', base.length)}${P_TYPES.map(t => chip(t, t, base.filter(p => p.types.includes(t)).length)).join('')}</div>
+    ${list.length ? `<div class="pgrid">${list.map(card).join('')}</div>` : '<div class="empty"><h2>No partnerships match</h2><p>Try a different search, type or owner.</p></div>'}`;
+}
+function openPartner(id) {
+  if (!store) { toast('Sign in first'); return; }
+  const ex = id ? state.partners.find(p => p.id === id) : null;
+  state.pisNew = !ex;
+  state.pediting = ex ? normalisePartner(JSON.parse(JSON.stringify(ex))) : blankPartner();
+  const p = state.pediting;
+  lastFocus = document.activeElement;
+  $('#p-title-h').textContent = state.pisNew ? 'New partnership' : (p.title || p.org || 'Partnership');
+  $('#p-logo').innerHTML = state.pisNew ? '' : logoHtml({ company: p.org, website: '' }, 32);
+  $('#p-title').value = p.title; $('#p-org').value = p.org;
+  $('#p-types').innerHTML = '<legend>Type <span class="muted" style="font-weight:400">(choose all that apply)</span></legend>' + P_TYPES.map(t => `<label><input type="checkbox" value="${esc(t)}"${p.types.includes(t) ? ' checked' : ''}>${esc(t)}</label>`).join('');
+  $('#p-owner').innerHTML = '<option value="">Not set</option>' + pOwners(p.owner).map(o => `<option${o === p.owner ? ' selected' : ''}>${esc(o)}</option>`).join('');
+  P_TEXT.forEach(([k]) => $('#p-' + k).value = p[k]);
+  pLinkedHtml();
+  pTab('details'); pActionsHtml();
+  $('#p-meta').textContent = state.pisNew ? '' : `Added ${new Date(p.created).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}. Last updated ${rel(p.updated)}${p.updatedBy ? ' by ' + personName(p.updatedBy) : ''}.`;
+  $('#p-delete').hidden = state.pisNew;
+  $('#dl-orgs').innerHTML = [...new Set(state.contacts.map(x => x.company).concat(state.leads.map(x => x.company), state.partners.map(x => x.org)).filter(Boolean))].sort().map(o => `<option value="${esc(o)}">`).join('');
+  $('#scrim').hidden = false;
+  const d = $('#pdrawer'); d.classList.add('open'); d.setAttribute('aria-hidden', 'false'); d.querySelector('.dr-body').scrollTop = 0;
+  setTimeout(() => { if (!d.contains(document.activeElement)) $('#p-title').focus(); }, 30);
+}
+function pLinkedHtml() {
+  const ln = pLinked({ org: $('#p-org').value.trim() });
+  $('#p-linked').innerHTML = (ln.leads.length ? `<h3>Leads at this organisation</h3><ul class="opp-list">${ln.leads.map(l => `<li><button type="button" data-plead="${esc(l.id)}"><span><b>${esc(oppTitle(l))}</b><small>${esc([l.oppId, stageOf(l.stage).label].filter(Boolean).join(' · '))}</small></span><span class="money">${l.value ? moneyC(l.value) : ''}</span></button></li>`).join('')}</ul>` : '') +
+    (ln.contacts.length ? `<h3>People at this organisation</h3><ul class="lcl">${ln.contacts.map(c => `<li><button type="button" data-pcon="${esc(c.id)}"><span class="pav" aria-hidden="true">${esc(initials(cName(c) || c.company))}</span><span><b>${esc(cName(c) || 'Organisation contact')}</b><small>${esc([c.role, c.email].filter(Boolean).join(' · ') || 'No details')}</small></span></button></li>`).join('')}</ul>` : '');
+}
+function pOpenActions(p) { return p.actions.filter(a => !a.done).sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999')); }
+function pDueText(d) {
+  if (!d) return { t: 'No date', c: '' };
+  const t = today(), days = Math.round((parseYmd(d) - parseYmd(t)) / 86400000);
+  const f = parseYmd(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  return days < 0 ? { t: `${f}, ${plural(-days, 'day')} overdue`, c: 'late' } : days === 0 ? { t: 'Due today', c: 'today' } : { t: 'Due ' + f, c: '' };
+}
+function pNextHtml(p) {
+  const open = pOpenActions(p); if (!open.length) return '';
+  const a = open[0], d = pDueText(a.due);
+  return `<div class="pc-act ${d.c}"><span class="pc-l">Next action</span>${esc(a.text)}<span class="pc-due">${esc(d.t)}${a.owner ? ' · ' + esc(a.owner) : ''}</span>${open.length > 1 ? `<span class="pc-more">+${open.length - 1} more</span>` : ''}</div>`;
+}
+function pTab(t) {
+  document.querySelectorAll('#pdrawer [data-ptab]').forEach(b => b.setAttribute('aria-selected', b.dataset.ptab === t));
+  document.querySelectorAll('#pdrawer [data-ppanel]').forEach(x => x.hidden = x.dataset.ppanel !== t);
+  $('#pdrawer .dr-body').scrollTop = 0;
+}
+function pActionsHtml() {
+  const p = state.pediting; if (!p) return;
+  const open = pOpenActions(p), done = p.actions.filter(a => a.done).sort((a, b) => (b.doneAt || '').localeCompare(a.doneAt || ''));
+  $('#pt-count').textContent = open.length ? String(open.length) : '';
+  $('#pa-owner').innerHTML = '<option value="">Owner</option>' + pOwners(p.owner).map(o => `<option${o === (p.owner || '') ? ' selected' : ''}>${esc(o)}</option>`).join('');
+  const row = a => { const d = pDueText(a.due); return `<li class="pa${a.done ? ' done' : ''}"><label class="pa-chk"><input type="checkbox" data-pa-done="${esc(a.id)}"${a.done ? ' checked' : ''} aria-label="Mark done"></label>
+    <div class="pa-m"><div class="pa-t">${esc(a.text)}</div><div class="pa-s ${a.done ? '' : d.c}">${a.done ? 'Done ' + esc(a.doneAt ? new Date(a.doneAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '') : esc(d.t)}${a.owner ? ' · ' + esc(a.owner) : ''}</div></div>
+    <button type="button" class="pa-x" data-pa-del="${esc(a.id)}" aria-label="Remove action">Remove</button></li>`; };
+  $('#pa-list').innerHTML = (open.length ? `<ul class="pal">${open.map(row).join('')}</ul>` : '<p class="muted pa-empty">No open actions. Add the next step above.</p>') +
+    (done.length ? `<h3>Done</h3><ul class="pal">${done.map(row).join('')}</ul>` : '');
+}
+async function pActionsChanged() {
+  pActionsHtml();
+  if (state.pisNew) return;   // a new partnership keeps its actions until it is saved
+  const stored = state.partners.find(x => x.id === state.pediting.id); if (!stored) return;
+  const upd = Object.assign(normalisePartner(JSON.parse(JSON.stringify(stored))), { actions: state.pediting.actions, updated: new Date().toISOString(), updatedBy: who() });
+  try { await store.partners.save(upd); } catch (err) { toast('Could not save the action: ' + (err.message || err)); }
+}
+function closePartner() {
+  const d = $('#pdrawer'); d.classList.remove('open'); d.setAttribute('aria-hidden', 'true');
+  $('#scrim').hidden = true; state.pediting = null;
+  if (lastFocus && lastFocus.focus && document.contains(lastFocus)) lastFocus.focus();
+}
+async function savePartner(e) {
+  if (e) e.preventDefault();
+  const p = Object.assign({}, state.pediting, { title: $('#p-title').value.trim(), org: $('#p-org').value.trim(), owner: $('#p-owner').value, types: [...$('#p-types').querySelectorAll('input:checked')].map(x => x.value) });
+  P_TEXT.forEach(([k]) => p[k] = $('#p-' + k).value.trim());
+  if (!p.title && !p.org) { $('#p-title').focus(); toast('Add a title or an organisation first'); return; }
+  if (!p.title) p.title = p.org;
+  p.updated = new Date().toISOString(); p.updatedBy = who();
+  try { await store.partners.save(p); closePartner(); toast('Partnership saved'); }
+  catch (err) { toast('Could not save: ' + (err.message || err)); }
+}
+async function deletePartner() {
+  const p = state.pediting; if (!p || state.pisNew) return;
+  if (!confirm(`Delete "${p.title || p.org}"? This cannot be undone.`)) return;
+  try { await store.partners.remove(p.id); closePartner(); toast('Partnership deleted'); }
+  catch (err) { toast('Could not delete: ' + (err.message || err)); }
+}
+function exportPartners() {
+  const head = ['Title', 'Organisation', 'Type', 'Relationship owner', 'Overview', 'Current status / dependency', 'Strategy', 'Partnership model', 'Plan', 'Open actions', 'Last updated'];
+  const rows = state.partners.filter(p => pmatches(p)).map(p => [p.title, p.org, p.types.join('; '), p.owner, p.overview, p.status, p.strategy, p.model, p.plan, pOpenActions(p).map(a => a.text + (a.due ? ' (' + a.due + (a.owner ? ', ' + a.owner : '') + ')' : a.owner ? ' (' + a.owner + ')' : '')).join('; '), p.updated]);
+  download(`astral-partnerships-${today()}.csv`, [head].concat(rows).map(r => r.map(csvCell).join(',')).join('\r\n'));
+}
+async function loadExamplePartners() {
+  const [o1, o2] = [CFG.owners[0] || '', CFG.owners[1] || CFG.owners[0] || ''];
+  const ex = [
+    { title: 'Example: materials testing partnership', org: 'UKAEA (Culham Campus)', types: ['Joint R&D', 'Facility partnership'], owner: o1,
+      overview: 'Example record. Joint programme to qualify blanket and first-wall materials using Astral neutron sources alongside UKAEA facilities.', status: 'Waiting on their FY27 budget sign-off before the second campaign can be scheduled.',
+      strategy: 'Become the default UK route for early-stage neutron irradiation of fusion materials.', model: 'Co-funded campaigns, with shared access to post-irradiation examination.', plan: 'Q1: agree campaign 2 scope. Q2: joint grant application. Q3: publish first results together.', actions: [{ text: 'Send campaign 2 scope for review', due: ymd(new Date(Date.now() + 5 * 864e5)), owner: o1 }, { text: 'Book a call with their programme lead', due: ymd(new Date(Date.now() - 2 * 864e5)), owner: o2 }] },
+    { title: 'Example: device supply framework', org: 'Tokamak Energy', types: ['Strategic customer'], owner: o2,
+      overview: 'Example record. Framework for repeat device orders and test time for HTS magnet components.', status: 'Framework draft with their procurement team.',
+      strategy: 'Lock in repeat orders and a reference customer in private fusion.', model: 'Three-year framework with call-off orders.', plan: 'Agree pricing schedule, then first call-off order before year end.' },
+    { title: 'Example: fusion materials consortium', org: 'University of Birmingham', types: ['Consortium', 'Joint R&D'], owner: o1,
+      overview: 'Example record. University-led consortium bid on irradiation damage modelling, with Astral as the industrial partner.', status: 'Depends on the funding call opening in spring.',
+      strategy: 'Build academic credibility and access to PhD pipeline.', model: 'Astral provides irradiation in kind; university leads the bid.', plan: 'Letter of support now; full bid when the call opens.' }
+  ].map((x, i) => normalisePartner(Object.assign(blankPartner(), x, { updated: new Date(Date.now() - i * 86400000 * 3).toISOString(), updatedBy: who() })));
+  await store.partners.saveMany(ex); toast('Example partnerships added');
+}
+function bindPartners() {
+  const view = $('#view');
+  view.addEventListener('click', e => {
+    if (state.view !== 'partners') return;
+    const a = e.target.closest('[data-pact]');
+    if (a) { const k = a.dataset.pact; if (k === 'new') openPartner(null); else if (k === 'examples') loadExamplePartners(); else if (k === 'export') exportPartners(); return; }
+    const t = e.target.closest('[data-ptype]'); if (t) { state.ptype = t.dataset.ptype || ''; render(); return; }
+    const o = e.target.closest('[data-popen]') || e.target.closest('.pcard'); if (o) openPartner(o.dataset.popen || o.dataset.pid);
+  });
+  view.addEventListener('input', e => { if (e.target.id !== 'pq') return; state.pq = e.target.value; const pos = e.target.selectionStart; render(); const q = $('#pq'); if (q) { q.focus(); try { q.setSelectionRange(pos, pos); } catch {} } });
+  view.addEventListener('change', e => { if (e.target.id === 'p-fowner') { state.powner = e.target.value; render(); } });
+  $('#partner-form').addEventListener('submit', savePartner);
+  $('#p-close').addEventListener('click', closePartner);
+  $('#p-delete').addEventListener('click', deletePartner);
+  $('#pdrawer').addEventListener('click', e => { const t = e.target.closest('[data-ptab]'); if (t) pTab(t.dataset.ptab); });
+  $('#pa-add').addEventListener('click', () => {
+    const text = $('#pa-text').value.trim(); if (!text) { $('#pa-text').focus(); toast('Write the action first'); return; }
+    state.pediting.actions.push({ id: 'a' + Date.now().toString(36), text, due: $('#pa-due').value, owner: $('#pa-owner').value, done: false, doneAt: '', by: who(), at: new Date().toISOString() });
+    $('#pa-text').value = ''; $('#pa-due').value = ''; pActionsChanged(); toast(state.pisNew ? 'Action added. Save the partnership to keep it.' : 'Action added');
+  });
+  $('#pa-text').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#pa-add').click(); } });
+  $('#pa-list').addEventListener('change', e => { const id = e.target.dataset.paDone; if (!id) return; const a = state.pediting.actions.find(x => x.id === id); a.done = e.target.checked; a.doneAt = a.done ? new Date().toISOString() : ''; pActionsChanged(); });
+  $('#pa-list').addEventListener('click', e => { const b = e.target.closest('[data-pa-del]'); if (!b) return; state.pediting.actions = state.pediting.actions.filter(x => x.id !== b.dataset.paDel); pActionsChanged(); });
+  $('#p-org').addEventListener('change', () => { pLinkedHtml(); $('#p-logo').innerHTML = $('#p-org').value.trim() ? logoHtml({ company: $('#p-org').value.trim(), website: '' }, 32) : ''; });
+  $('#p-linked').addEventListener('click', e => {
+    const l = e.target.closest('[data-plead]'), c = e.target.closest('[data-pcon]');
+    if (l) { closePartner(); openDrawer(l.dataset.plead); } else if (c) { closePartner(); openContact(c.dataset.pcon); }
+  });
+  $('#scrim').addEventListener('click', () => { if ($('#pdrawer').classList.contains('open')) closePartner(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#pdrawer').classList.contains('open')) { e.stopImmediatePropagation(); closePartner(); } }, true);
+}
+function onPartners(arr) { state.partners = arr.map(normalisePartner); render(); }
+
 /* ---------- example data ---------- */
 async function loadExamples() {
   if (!store) { toast('Sign in first'); return; }
@@ -3082,6 +3378,7 @@ function bindUI() {
   $('#tq').addEventListener('input', e => onSearch(e.target.value));
   $('#cq').addEventListener('input', e => { $('#tq').value = e.target.value; onSearch(e.target.value); });
   bindContacts();
+  bindPartners();
   $('#flt-group').addEventListener('change', e => { state.group = e.target.value; render(); });
   $('#flt-owner').addEventListener('change', e => { state.owner = e.target.value; render(); });
   $('#flt-type').addEventListener('change', e => { state.type = e.target.value; render(); });
@@ -3161,7 +3458,7 @@ function bindUI() {
   view.addEventListener('focusin', e => { const el = e.target.closest('[data-tip]'); if (el) { const r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top); } });
   view.addEventListener('focusout', () => { tip.hidden = true; });
 
-  $('#btn-new').addEventListener('click', () => state.view === 'contacts' ? openContact(null) : openDrawer(null));
+  $('#btn-new').addEventListener('click', () => state.view === 'contacts' ? openContact(null) : state.view === 'partners' ? openPartner(null) : openDrawer(null));
   $('#btn-import').addEventListener('click', () => { setNav(false); $('#file').click(); });
   $('#file').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) importFile(f); });
   $('#btn-export').addEventListener('click', () => { setNav(false); exportCSV(); });
@@ -3229,12 +3526,14 @@ async function start() {
     store = createLocalStore();
     store.contacts = createLocalStore('astral-bd-contacts-v1');
     store.briefings = createLocalStore('astral-bd-briefings-v1');
+    store.partners = createLocalStore('astral-bd-partnerships-v1');
     setStatus(false, 'Demo mode', 'Saved in this browser');
     setUser('');
     setBanner('Demo mode: leads are saved in this browser only. Add your Firebase details in config.js to share the pipeline with the team.');
     store.subscribe(onData);
     store.contacts.subscribe(onContacts);
     store.briefings.subscribe(onBriefings);
+    store.partners.subscribe(onPartners);
     return;
   }
   setStatus(false, 'Connecting', 'Firebase');
@@ -3260,9 +3559,10 @@ async function start() {
         s.subscribe(onData);
         s.contacts.subscribe(onContacts);
         s.briefings.subscribe(onBriefings);
+        s.partners.subscribe(onPartners);
       },
       () => {
-        store = null; state.leads = []; state.contacts = []; state.briefings = []; render();
+        store = null; state.leads = []; state.contacts = []; state.briefings = []; state.partners = []; render();
         setStatus(false, 'Signed out', 'Sign in to see leads');
         setUser('');
         if (!dlg.open) dlg.showModal();
@@ -3270,6 +3570,7 @@ async function start() {
       (err, coll) => {
         const denied = err && err.code === 'permission-denied';
         if (denied && coll === 'briefings') { state.newsBlocked = true; if (state.view === 'news') render(); return; }
+        if (denied && coll === 'partnerships') { state.partnersBlocked = true; if (state.view === 'partners') render(); return; }
         if (denied && coll === 'contacts') { setBanner('Contacts are blocked by the Firestore rules. Paste the updated rules (with the contacts section) into Firestore, Rules, then click Publish.', true); return; }
         setBanner(denied ? 'This account is not on the access list for the pipeline. Ask an admin to add your email to the Firestore rules, then sign in again.' : 'Could not load leads: ' + (err.message || err), true);
       });
