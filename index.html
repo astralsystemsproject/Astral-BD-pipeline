@@ -224,7 +224,7 @@ svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-widt
 /* ---------- pipeline strip (orbit line) ---------- */
 .beamcard{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:16px 14px 14px;overflow-x:auto;margin-bottom:16px}
 .beam{position:relative;display:grid;grid-template-columns:repeat(8,1fr);min-width:680px}
-.beam::before{content:'';position:absolute;left:6.25%;right:6.25%;bottom:23px;height:4px;border-radius:2px;background:var(--sky)}
+.beam::before{content:'';position:absolute;left:var(--bl,6.25%);right:var(--br,6.25%);bottom:23px;height:4px;border-radius:2px;background:var(--sky)}
 .stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;padding:8px 4px 0;border-radius:12px;cursor:pointer}
 .stage:hover{background:var(--hover)}
 .stage .n{font-size:24px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
@@ -235,6 +235,12 @@ svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .stage[aria-pressed="true"]{background:var(--wash)}
 .stage[aria-pressed="true"] .l{color:var(--blue-ink);font-weight:600}
 .stage[aria-pressed="true"] .dot{box-shadow:0 0 0 5px rgba(59,124,246,.22)}
+.stage.disq{opacity:.62;margin-left:10px}
+.stage.disq::before{content:'';position:absolute;left:-6px;top:10px;bottom:10px;border-left:1px dashed var(--line-strong)}
+.stage.disq .n{font-size:18px}
+.stage.disq .v{font-weight:500;color:var(--ink-3)}
+.stage.disq .dot{width:12px;height:12px;border-width:3px;margin:13px 0 12px}
+.stage.disq:hover,.stage.disq[aria-pressed="true"]{opacity:1}
 
 /* ---------- toolbar ---------- */
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
@@ -310,6 +316,8 @@ td .pill i{flex:none}
 .col h3 .pill{background:transparent;padding:0;font-size:13.5px}
 .col h3 .c{color:var(--ink-2);font-weight:700;font-size:12px;background:var(--card);border-radius:999px;padding:1px 9px}
 .colbar{height:3px;border-radius:2px;background:var(--c);margin:0 4px 4px}
+.col.disq{opacity:.72}
+.col.disq:hover,.col.disq.over{opacity:1}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin-top:9px;cursor:grab;box-shadow:0 1px 2px rgba(19,34,26,.05);transition:box-shadow .12s}
 .card:hover{box-shadow:0 8px 20px rgba(19,34,26,.1)}
 .card:active{cursor:grabbing}
@@ -1055,16 +1063,19 @@ const DEFAULT_STAGES = [
   { id: 'proposal',     label: 'Proposal in development', prob: 50,  color: '#3B7CF6' },
   { id: 'negotiation',  label: 'Negotiation',             prob: 75,  color: '#2558C9' },
   { id: 'won',          label: 'Closed (won)',            prob: 100, color: '#23794A', closed: 'won' },
-  { id: 'lost',         label: 'Closed (lost)',           prob: 0,   color: '#8E9891', closed: 'lost' }
+  { id: 'lost',         label: 'Closed (lost)',           prob: 0,   color: '#8E9891', closed: 'lost' },
+  // tracking only: kept out of the pipeline, analytics and revenue
+  { id: 'disqualified', label: 'Disqualified',            prob: 0,   color: '#B4BCB7', closed: 'disqualified' }
 ];
 // earlier stage ids, so leads saved before the switch still land in the right column
 const STAGE_ALIASES = { identified: 'initial', contacted: 'initial', replied: 'initial', call: 'requirements', quoted: 'proposal',
-  legacy: 'initial', 'not yet qualified': 'initial', hold: 'lost', 'on hold': 'lost', disqualified: 'lost',
+  legacy: 'initial', 'not yet qualified': 'initial', hold: 'lost', 'on hold': 'lost',
   'initial lead': 'initial', 'requirement capture': 'requirements', 'proposal in development': 'proposal', 'closed won': 'won', 'closed lost': 'lost' };
 const STATUS_HINTS = {
   won: ['Initial project involvement', 'Project planning', 'Project in progress', 'Irradiation complete - report/certificate to send', 'Delivered - handover to Ops', 'Delivered - irradiation and report'],
   hold: ['Project on hold', 'Waiting on customer funding'],
-  lost: ['Cancelled', 'Cancelled - missed opportunity', 'Cancelled - unfunded', 'Disqualified']
+  lost: ['Cancelled', 'Cancelled - missed opportunity', 'Cancelled - unfunded'],
+  disqualified: ['Not a fit', 'No funding', 'No response', 'Duplicate']
 };
 const CFG = Object.assign({
   appName: 'BD pipeline',
@@ -1090,6 +1101,8 @@ const OPEN_STAGE_IDS = STAGES.filter(st => !st.closed).map(st => st.id);
 const stageOf = id => STAGES.find(s => s.id === id) || STAGES[0];
 const closedKind = l => stageOf(l.stage).closed || '';
 const isClosed = l => !!closedKind(l);
+const isDisq = l => closedKind(l) === 'disqualified';
+const inAnalytics = l => !isDisq(l);   // disqualified leads are for reference only
 const probOf = l => stageOf(l.stage).prob / 100;
 const weightedOf = l => (l.value || 0) * probOf(l);
 const oppTitle = l => l.opportunity || l.company || '(untitled)';
@@ -1286,7 +1299,7 @@ const VIEWS = { home: 'Home', leads: 'Leads', contacts: 'Contacts', partners: 'P
 const state = { partners: [], ptype: '', powner: '', pq: '', pediting: null, pisNew: false, briefings: [], nsel: null, ntab: 'script', type: '', ayear: '', ascope: 'open', contacts: [], interest: null, cowner: '', ccheck: '', csort: { k: 'name', dir: 1 }, cediting: null, cisNew: false, leads: [], view: 'home', stage: null, group: '', owner: '', q: '', sort: { k: 'opp', dir: 1 }, editing: null, isNew: false };
 let store = null;
 let lastFocus = null;
-const OPEN_STAGES = STAGES.filter(s => s.id !== 'won' && s.id !== 'lost');
+const OPEN_STAGES = STAGES.filter(s => !s.closed);
 const icon = (id, cls = 'i') => `<svg class="${cls}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
 
 /* ---------- small helpers for the new views ---------- */
@@ -1875,10 +1888,12 @@ function renderBeam() {
   const counts = {}, vals = {};
   STAGES.forEach(st => { counts[st.id] = 0; vals[st.id] = 0; });
   state.leads.filter(l => matches(l, true)).forEach(l => { counts[l.stage]++; vals[l.stage] += l.value; });
-  $('#beam').style.gridTemplateColumns = `repeat(${STAGES.length},1fr)`;
+  const main = STAGES.filter(st => st.closed !== 'disqualified').length, extra = STAGES.length - main, fr = main + extra * .8;
+  $('#beam').style.gridTemplateColumns = `repeat(${main},1fr)` + (extra ? ` repeat(${extra},.8fr)` : '');
+  $('#beam').style.setProperty('--bl', (.5 / fr * 100) + '%'); $('#beam').style.setProperty('--br', ((.5 + extra * .8) / fr * 100) + '%');
   $('#beam').innerHTML = STAGES.map(st =>
-    `<button type="button" class="stage ${counts[st.id] ? 'has' : 'zero'}" style="--c:${st.color}" data-stage="${st.id}" aria-pressed="${state.stage === st.id}" aria-label="${esc(st.label)}: ${plural(counts[st.id], 'lead')}, ${money(vals[st.id])}">` +
-    `<span class="n">${counts[st.id]}</span><span class="l">${esc(st.label)} <span class="pct">${st.prob}%</span></span><span class="v">${vals[st.id] ? moneyC(vals[st.id]) : '–'}</span><span class="dot" aria-hidden="true"></span></button>`).join('');
+    `<button type="button" class="stage ${counts[st.id] ? 'has' : 'zero'}${st.closed === 'disqualified' ? ' disq' : ''}" style="--c:${st.color}" data-stage="${st.id}" aria-pressed="${state.stage === st.id}" aria-label="${esc(st.label)}: ${plural(counts[st.id], 'lead')}, ${money(vals[st.id])}">` +
+    `<span class="n">${counts[st.id]}</span><span class="l">${esc(st.label)}${st.closed === 'disqualified' ? '' : ` <span class="pct">${st.prob}%</span>`}</span><span class="v">${st.closed === 'disqualified' ? 'Reference only' : vals[st.id] ? moneyC(vals[st.id]) : '–'}</span><span class="dot" aria-hidden="true"></span></button>`).join('');
 }
 
 function renderToolbar() {
@@ -2339,11 +2354,11 @@ function aTable(rows, labelHead, opts = {}) {
     `</tbody><tfoot><tr><td>Total</td>${opts.prob ? '<td></td>' : ''}<td class="num">${tot.n}</td><td class="num">${money(tot.v)}</td><td class="num">${money(tot.w)}</td><td class="num hide-sm">${hc(tot.h)}</td><td class="num hide-sm">${hc(tot.wh)}</td><td class="hide-sm"></td></tr></tfoot></table></div>`;
 }
 function analyticsData() {
-  const L = state.leads;
+  const L = state.leads.filter(inAnalytics);
   const scoped = L.filter(l => state.ascope === 'all' ? true : state.ascope === 'won' ? (!isClosed(l) || closedKind(l) === 'won') : !isClosed(l));
   const inYear = l => !state.ayear || (state.ayear === 'none' ? !l.closeDate : (l.closeDate || '').startsWith(state.ayear));
   const F = scoped.filter(inYear);
-  const visibleStages = STAGES.filter(st => state.ascope === 'all' || !st.closed || (state.ascope === 'won' && st.closed === 'won'));
+  const visibleStages = STAGES.filter(st => st.closed !== 'disqualified').filter(st => state.ascope === 'all' || !st.closed || (state.ascope === 'won' && st.closed === 'won'));
   const byStage = aggregate(F, l => l.stage, visibleStages.map(st => st.id)).map(r => { const st = stageOf(r.key); return Object.assign(r, { label: st.label, prob: st.prob, color: st.color }); });
   const bySector = aggregate(F, l => l.sector || 'Not set', CFG.sectors).filter(r => r.n || CFG.sectors.includes(r.key)).map(r => Object.assign(r, { label: r.key }));
   const byType = aggregate(F, l => l.type || 'Not set', CFG.types.map(t => t.label)).map(r => Object.assign(r, { label: r.key }));
@@ -2365,7 +2380,7 @@ function analyticsData() {
   return { F, byStage, bySector, byType, byMonth, undated, won, lost };
 }
 function renderAnalytics(host) {
-  const L = state.leads;
+  const L = state.leads.filter(inAnalytics);
   if (!L.length && !state.contacts.length) { host.innerHTML = emptyHtml(); return; }
   const years = [...new Set(L.map(l => (l.closeDate || '').slice(0, 4)).filter(Boolean))].sort();
   if (state.ayear && state.ayear !== 'none' && !years.includes(state.ayear)) state.ayear = '';
@@ -2462,7 +2477,8 @@ function renderBoard(host, list) {
   host.innerHTML = `<div class="boardnav"><span>Scroll across the stages</span><button type="button" class="iconbtn" data-bscroll="-1" aria-label="Scroll left" title="Scroll left"><svg class="i"><use href="#i-left"/></svg></button><button type="button" class="iconbtn" data-bscroll="1" aria-label="Scroll right" title="Scroll right"><svg class="i" style="transform:rotate(180deg)"><use href="#i-left"/></svg></button></div><div class="board">` + STAGES.map(st => {
     const items = boardOrder(list.filter(l => l.stage === st.id));
     const v = items.reduce((a, l) => a + l.value, 0);
-    return `<div class="col" data-stage="${st.id}"><div class="colbar" style="--c:${st.color}"></div><h3><span><span class="pill"><i style="background:${st.color}"></i>${esc(st.label)} <span class="pct">${st.prob}%</span></span><span class="tot">${v ? `${moneyC(v)} · ${moneyC(v * st.prob / 100)} weighted` : 'No value yet'}</span></span><span class="c">${items.length}</span></h3><div class="cards">` +
+    const dq = st.closed === 'disqualified';
+    return `<div class="col${dq ? ' disq' : ''}" data-stage="${st.id}"><div class="colbar" style="--c:${st.color}"></div><h3><span><span class="pill"><i style="background:${st.color}"></i>${esc(st.label)}${dq ? '' : ` <span class="pct">${st.prob}%</span>`}</span><span class="tot">${dq ? 'For reference only. Not counted anywhere' : v ? `${moneyC(v)} · ${moneyC(v * st.prob / 100)} weighted` : 'No value yet'}</span></span><span class="c">${items.length}</span></h3><div class="cards">` +
       items.map(l => {
         const b = bucket(l);
         return `<div class="card" draggable="true" data-id="${esc(l.id)}"><div class="cardtop">${logoHtml(l, 30)}<div><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
