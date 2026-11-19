@@ -241,6 +241,10 @@ svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .stage.disq .v{font-weight:500;color:var(--ink-3)}
 .stage.disq .dot{width:12px;height:12px;border-width:3px;margin:13px 0 12px}
 .stage.disq:hover,.stage.disq[aria-pressed="true"]{opacity:1}
+.disqtoggle{align-self:center;justify-self:end;width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink-3);display:grid;place-items:center;cursor:pointer;padding:0}
+.disqtoggle:hover{color:var(--ink);border-color:var(--line-strong)}
+.disqtoggle svg{width:15px;height:15px;transform:rotate(180deg)}
+.disqtoggle[aria-expanded="true"] svg{transform:none}
 
 /* ---------- toolbar ---------- */
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
@@ -1296,7 +1300,7 @@ async function createFirebaseStore(cfg, onSignedIn, onSignedOut, onError) {
 
 /* ---------- state ---------- */
 const VIEWS = { home: 'Home', leads: 'Leads', contacts: 'Contacts', partners: 'Partnerships', pipeline: 'Pipeline', followups: 'Follow-ups', analytics: 'Analytics', revenue: 'Revenue', news: 'News brief' };
-const state = { partners: [], ptype: '', powner: '', pq: '', pediting: null, pisNew: false, briefings: [], nsel: null, ntab: 'script', type: '', ayear: '', ascope: 'open', contacts: [], interest: null, cowner: '', ccheck: '', csort: { k: 'name', dir: 1 }, cediting: null, cisNew: false, leads: [], view: 'home', stage: null, group: '', owner: '', q: '', sort: { k: 'opp', dir: 1 }, editing: null, isNew: false };
+const state = { showDisq: (() => { try { return localStorage.getItem('astral-show-disqualified') === '1'; } catch { return false; } })(), partners: [], ptype: '', powner: '', pq: '', pediting: null, pisNew: false, briefings: [], nsel: null, ntab: 'script', type: '', ayear: '', ascope: 'open', contacts: [], interest: null, cowner: '', ccheck: '', csort: { k: 'name', dir: 1 }, cediting: null, cisNew: false, leads: [], view: 'home', stage: null, group: '', owner: '', q: '', sort: { k: 'opp', dir: 1 }, editing: null, isNew: false };
 let store = null;
 let lastFocus = null;
 const OPEN_STAGES = STAGES.filter(s => !s.closed);
@@ -1888,12 +1892,17 @@ function renderBeam() {
   const counts = {}, vals = {};
   STAGES.forEach(st => { counts[st.id] = 0; vals[st.id] = 0; });
   state.leads.filter(l => matches(l, true)).forEach(l => { counts[l.stage]++; vals[l.stage] += l.value; });
-  const main = STAGES.filter(st => st.closed !== 'disqualified').length, extra = STAGES.length - main, fr = main + extra * .8;
-  $('#beam').style.gridTemplateColumns = `repeat(${main},1fr)` + (extra ? ` repeat(${extra},.8fr)` : '');
-  $('#beam').style.setProperty('--bl', (.5 / fr * 100) + '%'); $('#beam').style.setProperty('--br', ((.5 + extra * .8) / fr * 100) + '%');
-  $('#beam').innerHTML = STAGES.map(st =>
+  const disqStages = STAGES.filter(st => st.closed === 'disqualified');
+  if (state.stage && disqStages.some(st => st.id === state.stage)) state.showDisq = true;
+  const shown = STAGES.filter(st => st.closed !== 'disqualified' || state.showDisq);
+  const main = STAGES.length - disqStages.length, extra = shown.length - main, T = disqStages.length ? 34 : 0;   // T: width of the show/hide button
+  $('#beam').style.gridTemplateColumns = `repeat(${main},1fr)` + (extra ? ` repeat(${extra},.8fr)` : '') + (T ? ` ${T}px` : '');
+  const fr = main + extra * .8;
+  $('#beam').style.setProperty('--bl', `calc((100% - ${T}px) * ${.5 / fr})`); $('#beam').style.setProperty('--br', `calc((100% - ${T}px) * ${(.5 + extra * .8) / fr} + ${T}px)`);
+  $('#beam').innerHTML = shown.map(st =>
     `<button type="button" class="stage ${counts[st.id] ? 'has' : 'zero'}${st.closed === 'disqualified' ? ' disq' : ''}" style="--c:${st.color}" data-stage="${st.id}" aria-pressed="${state.stage === st.id}" aria-label="${esc(st.label)}: ${plural(counts[st.id], 'lead')}, ${money(vals[st.id])}">` +
-    `<span class="n">${counts[st.id]}</span><span class="l">${esc(st.label)}${st.closed === 'disqualified' ? '' : ` <span class="pct">${st.prob}%</span>`}</span><span class="v">${st.closed === 'disqualified' ? 'Reference only' : vals[st.id] ? moneyC(vals[st.id]) : '–'}</span><span class="dot" aria-hidden="true"></span></button>`).join('');
+    `<span class="n">${counts[st.id]}</span><span class="l">${esc(st.label)}${st.closed === 'disqualified' ? '' : ` <span class="pct">${st.prob}%</span>`}</span><span class="v">${st.closed === 'disqualified' ? '&nbsp;' : vals[st.id] ? moneyC(vals[st.id]) : '–'}</span><span class="dot" aria-hidden="true"></span></button>`).join('') +
+    (T ? `<button type="button" class="disqtoggle" data-disqtoggle aria-expanded="${!!state.showDisq}" aria-label="${state.showDisq ? 'Hide' : 'Show'} disqualified" title="${state.showDisq ? 'Hide' : 'Show'} disqualified"><svg class="i"><use href="#i-left"/></svg></button>` : '');
 }
 
 function renderToolbar() {
@@ -2478,7 +2487,7 @@ function renderBoard(host, list) {
     const items = boardOrder(list.filter(l => l.stage === st.id));
     const v = items.reduce((a, l) => a + l.value, 0);
     const dq = st.closed === 'disqualified';
-    return `<div class="col${dq ? ' disq' : ''}" data-stage="${st.id}"><div class="colbar" style="--c:${st.color}"></div><h3><span><span class="pill"><i style="background:${st.color}"></i>${esc(st.label)}${dq ? '' : ` <span class="pct">${st.prob}%</span>`}</span><span class="tot">${dq ? 'For reference only. Not counted anywhere' : v ? `${moneyC(v)} · ${moneyC(v * st.prob / 100)} weighted` : 'No value yet'}</span></span><span class="c">${items.length}</span></h3><div class="cards">` +
+    return `<div class="col${dq ? ' disq' : ''}" data-stage="${st.id}"><div class="colbar" style="--c:${st.color}"></div><h3><span><span class="pill"><i style="background:${st.color}"></i>${esc(st.label)}${dq ? '' : ` <span class="pct">${st.prob}%</span>`}</span><span class="tot">${dq ? '' : v ? `${moneyC(v)} · ${moneyC(v * st.prob / 100)} weighted` : 'No value yet'}</span></span><span class="c">${items.length}</span></h3><div class="cards">` +
       items.map(l => {
         const b = bucket(l);
         return `<div class="card" draggable="true" data-id="${esc(l.id)}"><div class="cardtop">${logoHtml(l, 30)}<div><button type="button" class="co" data-open="${esc(l.id)}">${esc(oppTitle(l))}</button>` +
@@ -3385,6 +3394,12 @@ function bindUI() {
   window.addEventListener('hashchange', () => { state.view = routeFromHash(); render(); window.scrollTo(0, 0); });
 
   $('#beam').addEventListener('click', e => {
+    if (e.target.closest('[data-disqtoggle]')) {
+      state.showDisq = !state.showDisq;
+      if (!state.showDisq && stageOf(state.stage).closed === 'disqualified') state.stage = null;
+      try { localStorage.setItem('astral-show-disqualified', state.showDisq ? '1' : ''); } catch {}
+      render(); return;
+    }
     const b = e.target.closest('[data-stage]'); if (!b) return;
     state.stage = state.stage === b.dataset.stage ? null : b.dataset.stage;
     render();
